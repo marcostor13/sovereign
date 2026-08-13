@@ -1,7 +1,8 @@
 node_modules
 dist
 .astro
-data
+# Anclado a la raíz para no excluir `src/data/`, que es código fuente.
+/data
 .git
 .gitignore
 .env

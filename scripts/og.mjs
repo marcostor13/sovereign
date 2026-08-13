@@ -4,7 +4,7 @@ import sharp from 'sharp';
 const veil = Buffer.from(
   `<svg width="1200" height="630"><rect width="1200" height="630" fill="#050c16" opacity="0.45"/></svg>`
 );
-await sharp('src/assets/img/hero.png')
+await sharp('src/assets/img/hero.jpg')
   .resize(1200, 630, { fit: 'cover', position: 'attention' })
   .composite([{ input: veil, blend: 'over' }])
   .png({ quality: 88 })

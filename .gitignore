@@ -9,8 +9,10 @@ node_modules/
 .env.local
 .env.*.local
 
-# Solicitudes de contacto recibidas
-data/
+# Solicitudes de contacto recibidas.
+# La barra inicial es imprescindible: sin ella el patrón también excluiría
+# `src/data/`, que es código fuente.
+/data/
 
 # Ajustes locales de herramientas
 .claude/settings.local.json

@@ -11,8 +11,12 @@ FROM node:22-alpine AS build
 WORKDIR /app
 
 # Capa de dependencias separada: se reaprovecha mientras no cambie el lockfile.
+# Sólo dependencias de producción: astro y sus adaptadores bastan para
+# construir. Las devDependencies son utilidades de revisión local (Playwright,
+# astro check) que aquí sobran y además no instalan en Alpine.
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 COPY package*.json ./
-RUN npm ci --no-audit --no-fund
+RUN npm ci --omit=dev --no-audit --no-fund
 
 COPY . .
 
@@ -20,7 +24,7 @@ COPY . .
 ARG PUBLIC_SITE_URL=https://sovereign.marcostorresalarcon.com
 ENV PUBLIC_SITE_URL=$PUBLIC_SITE_URL
 
-RUN npm run build && npm prune --omit=dev
+RUN npm run build
 
 
 FROM node:22-alpine AS runtime
