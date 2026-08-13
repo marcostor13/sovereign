@@ -1,0 +1,613 @@
+@import './tokens.css';
+
+/* ===========================================================================
+   Reset acotado + primitivas compartidas
+   =========================================================================== */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+* { margin: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h-scrolled) + 2rem);
+}
+
+body {
+  background: var(--navy-850);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  font-weight: 380;
+  letter-spacing: 0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+body.is-locked { overflow: hidden; }
+
+img, picture, svg, video { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; color: inherit; }
+button { background: none; border: 0; cursor: pointer; }
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+p { text-wrap: pretty; }
+
+a { color: inherit; text-decoration: none; }
+
+::selection {
+  background: var(--gold-500);
+  color: var(--navy-950);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold-400);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------------------------------------------------------------------------
+   Layout
+   --------------------------------------------------------------------------- */
+
+.shell {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.shell-narrow {
+  width: 100%;
+  max-width: var(--page-narrow);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  position: relative;
+  padding-block: var(--section-y);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.section-lg { padding-block: var(--section-y-lg); }
+
+.section-light {
+  background:
+    radial-gradient(120% 80% at 50% 0%, #ffffff 0%, transparent 60%),
+    var(--bone-100);
+}
+
+.section-deep {
+  background:
+    radial-gradient(90% 60% at 15% 0%, rgba(201, 162, 39, 0.07), transparent 60%),
+    var(--navy-950);
+}
+
+.stack > * + * { margin-top: var(--stack-gap, 1rem); }
+
+/* ---------------------------------------------------------------------------
+   Tipografía utilitaria
+   --------------------------------------------------------------------------- */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.eyebrow::before {
+  content: '';
+  width: clamp(1.5rem, 4vw, 3rem);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-500));
+  flex: none;
+}
+
+.eyebrow-plain::before { display: none; }
+
+/* En pantallas estrechas el interletrado ancho partía los antetítulos en dos. */
+@media (max-width: 480px) {
+  .eyebrow { letter-spacing: var(--tracking-wider); }
+  .eyebrow::before { width: 1.2rem; }
+}
+
+.display {
+  font-family: var(--font-display);
+  font-size: var(--step-5);
+  line-height: 1.02;
+  letter-spacing: -0.018em;
+  font-weight: 500;
+}
+
+.display-xl { font-size: var(--step-6); }
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  line-height: 1.06;
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.25;
+  color: var(--fg);
+}
+
+.lead {
+  font-size: var(--step-1);
+  line-height: 1.6;
+  color: var(--fg-muted);
+  font-weight: 340;
+  max-width: 62ch;
+}
+
+.muted { color: var(--fg-muted); }
+.dim { color: var(--fg-dim); }
+
+.gold {
+  background: var(--gold-gradient);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.roman {
+  font-family: var(--font-roman);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.label {
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.index-num {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+}
+
+/* ---------------------------------------------------------------------------
+   Filetes y ornamentos de oro
+   --------------------------------------------------------------------------- */
+
+.hairline {
+  height: 1px;
+  border: 0;
+  background: var(--hair);
+}
+
+.hairline-gold {
+  height: 1px;
+  border: 0;
+  background: var(--gold-line);
+  opacity: 0.7;
+}
+
+.rule-short {
+  width: 68px;
+  height: 1px;
+  background: var(--gold-500);
+  opacity: 0.9;
+}
+
+/* Grano fino: da textura de impresión y evita el banding en los degradados */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Botones
+   --------------------------------------------------------------------------- */
+
+.btn {
+  --btn-py: 1.05em;
+  --btn-px: 1.9em;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85em;
+  padding: var(--btn-py) var(--btn-px);
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  line-height: 1;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+              transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  text-align: center;
+}
+
+.btn svg { flex: none; transition: transform var(--dur) var(--ease); }
+.btn:hover svg { transform: translateX(4px); }
+.btn:active { transform: translateY(1px); }
+
+/* Primario: oro sólido con barrido de brillo */
+.btn-gold {
+  color: var(--navy-950);
+  background: var(--gold-gradient);
+  background-size: 220% auto;
+  background-position: 0% center;
+  box-shadow: var(--shadow-gold);
+  transition: background-position 700ms var(--ease), transform var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+  font-weight: 600;
+}
+
+.btn-gold:hover {
+  background-position: 100% center;
+  transform: translateY(-2px);
+  box-shadow: 0 26px 60px -26px rgba(201, 162, 39, 0.6);
+}
+
+/* Secundario: contorno de oro que se rellena desde abajo */
+.btn-outline {
+  color: var(--fg);
+  border: 1px solid var(--hair-strong);
+  background: transparent;
+}
+
+.btn-outline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--gold-500);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--dur) var(--ease);
+}
+
+.btn-outline:hover {
+  color: var(--navy-950);
+  border-color: var(--gold-500);
+}
+
+.btn-outline:hover::before { transform: scaleY(1); }
+
+.on-light .btn-outline { color: var(--ink-900); border-color: rgba(201, 162, 39, 0.6); }
+.on-light .btn-outline:hover { color: var(--navy-950); }
+
+.btn-ghost {
+  padding: 0.6em 0;
+  color: var(--accent);
+  background: none;
+}
+
+.btn-ghost::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--gold-500);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur) var(--ease);
+}
+
+.btn-ghost:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.btn-block { width: 100%; }
+
+.btn-lg { --btn-py: 1.2em; --btn-px: 2.4em; font-size: var(--step-0); }
+
+/* Enlace con flecha, para pies de tarjeta */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.link-arrow svg { transition: transform var(--dur) var(--ease); }
+.link-arrow:hover svg { transform: translateX(5px); }
+
+/* ---------------------------------------------------------------------------
+   Tarjetas
+   --------------------------------------------------------------------------- */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 2.6vw, 2.4rem);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+  border: 1px solid var(--hair-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  isolation: isolate;
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+}
+
+/* Barrido de luz dorada en hover */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: radial-gradient(60% 50% at 50% 0%, rgba(201, 162, 39, 0.16), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.card:hover { border-color: var(--hair-strong); transform: translateY(-4px); box-shadow: var(--shadow); }
+.card:hover::before { opacity: 1; }
+
+.on-light .card {
+  background: #fff;
+  border-color: rgba(10, 22, 40, 0.08);
+  box-shadow: 0 1px 2px rgba(10, 22, 40, 0.04);
+}
+
+.on-light .card:hover {
+  border-color: rgba(201, 162, 39, 0.5);
+  box-shadow: 0 30px 60px -35px rgba(10, 22, 40, 0.35);
+}
+
+/* ---------------------------------------------------------------------------
+   Grillas
+   --------------------------------------------------------------------------- */
+
+.grid { display: grid; gap: clamp(1rem, 1.8vw, 1.75rem); }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+
+/* ---------------------------------------------------------------------------
+   Movimiento de entrada (IntersectionObserver añade .is-in)
+   --------------------------------------------------------------------------- */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition: opacity 900ms var(--ease-out), transform 900ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+[data-reveal='fade'] { transform: none; }
+[data-reveal='left'] { transform: translate3d(-24px, 0, 0); }
+[data-reveal='right'] { transform: translate3d(24px, 0, 0); }
+[data-reveal='scale'] { transform: scale(0.96); }
+
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Revelado tipo cortina para titulares: cada línea sube tras su máscara */
+.line-mask { display: block; overflow: hidden; }
+
+.line-mask > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 1100ms var(--ease-out);
+  transition-delay: var(--line-delay, 0ms);
+}
+
+.is-in .line-mask > span,
+.line-mask.is-in > span { transform: none; }
+
+/* Filete que se dibuja de izquierda a derecha al entrar en pantalla */
+.draw-line {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1200ms var(--ease-out);
+}
+
+.is-in .draw-line,
+.draw-line.is-in { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  [data-reveal] { opacity: 1; transform: none; }
+  .line-mask > span { transform: none; }
+  .draw-line { transform: scaleX(1); }
+}
+
+/* ---------------------------------------------------------------------------
+   Accesibilidad
+   --------------------------------------------------------------------------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -140%);
+  z-index: var(--z-top);
+  padding: 0.9em 1.6em;
+  background: var(--gold-500);
+  color: var(--navy-950);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  transition: transform var(--dur) var(--ease);
+}
+
+.skip-link:focus { transform: translate(-50%, 0); }
+
+/* ---------------------------------------------------------------------------
+   Prosa (artículos de la Academia y páginas legales)
+   --------------------------------------------------------------------------- */
+
+.prose {
+  font-size: var(--step-1);
+  line-height: 1.78;
+  color: var(--fg-muted);
+  font-weight: 340;
+}
+
+.prose > * + * { margin-top: 1.4em; }
+
+.prose h2 {
+  margin-top: 2.4em;
+  font-size: var(--step-3);
+  line-height: 1.15;
+  color: var(--fg);
+  letter-spacing: -0.015em;
+}
+
+.prose h2::before {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 1px;
+  margin-bottom: 0.85rem;
+  background: var(--gold-500);
+}
+
+.prose h3 {
+  margin-top: 2em;
+  font-size: var(--step-2);
+  color: var(--fg);
+}
+
+.prose strong { color: var(--fg); font-weight: 600; }
+
+.prose a {
+  color: var(--accent);
+  border-bottom: 1px solid var(--hair-strong);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.prose a:hover { border-color: var(--gold-400); }
+
+.prose ul, .prose ol {
+  padding-left: 0;
+  list-style: none;
+}
+
+.prose li + li { margin-top: 0.7em; }
+
+.prose ul > li {
+  position: relative;
+  padding-left: 1.7em;
+}
+
+.prose ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0.15em;
+  top: 0.72em;
+  width: 7px;
+  height: 7px;
+  background: var(--gold-500);
+  transform: rotate(45deg);
+}
+
+.prose ol { counter-reset: li; }
+
+.prose ol > li {
+  position: relative;
+  padding-left: 2.2em;
+  counter-increment: li;
+}
+
+.prose ol > li::before {
+  content: counter(li, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  font-family: var(--font-display);
+  color: var(--accent);
+  font-size: 0.95em;
+}
+
+.prose blockquote {
+  margin-block: 2.2em;
+  padding: clamp(1.4rem, 3vw, 2.2rem) clamp(1.4rem, 3vw, 2.6rem);
+  border-left: 2px solid var(--gold-500);
+  background: linear-gradient(100deg, rgba(201, 162, 39, 0.09), transparent 70%);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.4;
+  color: var(--fg);
+  font-style: italic;
+}
+
+.prose blockquote p + p { margin-top: 0.6em; }
+
+.prose hr {
+  margin-block: 2.6em;
+  border: 0;
+  height: 1px;
+  background: var(--hair);
+}
+
+/* Capitular en el primer párrafo del artículo */
+.prose-lead > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 3.9em;
+  line-height: 0.82;
+  margin: 0.08em 0.12em 0 0;
+  color: var(--accent);
+  font-weight: 500;
+}

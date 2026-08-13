@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /legal/
+
+Sitemap: https://sovereign.marcostorresalarcon.com/sitemap-index.xml

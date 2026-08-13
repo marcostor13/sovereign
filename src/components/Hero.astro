@@ -1,0 +1,311 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { hero, cta } from '../data/site';
+import heroImage from '../assets/img/hero.png';
+---
+
+<section class="hero grain" aria-labelledby="hero-title">
+  <div class="hero-media" data-parallax>
+    <Image
+      src={heroImage}
+      alt="Asesor patrimonial observando el skyline de Brickell, Miami, desde una oficina privada al atardecer"
+      widths={[900, 1440, 1920, 2560]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      quality={82}
+      format="avif"
+    />
+  </div>
+
+  <div class="hero-scrim" aria-hidden="true"></div>
+  <div class="hero-vignette" aria-hidden="true"></div>
+
+  <div class="shell hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow hero-eyebrow" data-reveal="fade">{hero.eyebrow}</p>
+
+      <h1 id="hero-title" class="hero-title" data-reveal="fade">
+        {hero.titleLines.map((line, i) => (
+          <span class="line-mask">
+            <span class:list={[line.accent && 'gold']} style={`--line-delay:${i * 110 + 120}ms`}>
+              {line.text}
+            </span>
+          </span>
+        ))}
+      </h1>
+
+      <div class="hero-rule" data-reveal="fade">
+        <i class="draw-line"></i>
+      </div>
+
+      <p class="lead hero-lead" data-reveal style="--reveal-delay:220ms">{hero.lead}</p>
+
+      <div class="hero-actions" data-reveal style="--reveal-delay:340ms">
+        <a class="btn btn-gold" href="/contacto">
+          {cta.primary}
+          <Icon name="arrow" size={16} />
+        </a>
+
+        <a class="btn btn-outline" href="/nosotros#metodo">
+          <Icon name="play" size={16} />
+          {cta.secondary}
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  {/* Franja de pilares: cierra el hero y ancla la propuesta de valor */}
+  <div class="hero-pillars" data-reveal-group data-stagger="70">
+    <div class="shell hero-pillars-inner">
+      {hero.pillars.map((p) => (
+        <div class="pillar" data-reveal-item data-reveal="fade">
+          <Icon name={p.icon} size={26} stroke={1.1} />
+          <span class="pillar-label">
+            <strong>{p.label}</strong>
+            <em>{p.sub}</em>
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <a class="hero-scroll" href="#quienes" aria-label={hero.scroll}>
+    <span>{hero.scroll}</span>
+    <i aria-hidden="true"></i>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: min(100svh, 58rem);
+    padding-top: calc(var(--header-h) + clamp(1.4rem, 3.4vw, 3.1rem));
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--navy-990);
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: -8% 0 0 0;
+    z-index: -3;
+    will-change: transform;
+  }
+
+  .hero-media :global(img) {
+    width: 100%;
+    height: 112%;
+    object-fit: cover;
+    object-position: 47% center;
+  }
+
+  /* Doble velo: uno direccional para la lectura, otro para asentar el color */
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      linear-gradient(96deg, rgba(3, 7, 16, 0.97) 0%, rgba(4, 10, 19, 0.93) 30%, rgba(5, 13, 24, 0.74) 52%, rgba(7, 19, 34, 0.34) 78%, rgba(7, 19, 34, 0.2) 100%),
+      linear-gradient(180deg, rgba(3, 7, 16, 0.8) 0%, transparent 26%, transparent 52%, rgba(3, 7, 16, 0.94) 100%);
+  }
+
+  .hero-vignette {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(120% 90% at 50% 45%, transparent 40%, rgba(3, 7, 16, 0.6) 100%);
+    mix-blend-mode: multiply;
+  }
+
+  .hero-inner {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    flex: 1;
+    padding-bottom: clamp(2rem, 4.5vw, 4rem);
+  }
+
+  .hero-copy { max-width: min(58rem, 100%); }
+
+  .hero-eyebrow { margin-bottom: clamp(0.9rem, 2vw, 1.5rem); }
+
+  .hero-title {
+    /* Ajustado para que cada línea del titular quepa sin partirse */
+    font-size: clamp(2.3rem, 5.05vw, 4.6rem);
+    line-height: 1.0;
+    letter-spacing: -0.024em;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #fff;
+    text-wrap: balance;
+  }
+
+  .hero-title .line-mask > span { padding-bottom: 0.06em; }
+
+  .hero-rule {
+    width: clamp(5rem, 16vw, 11rem);
+    height: 1px;
+    margin-block: clamp(1.1rem, 2.2vw, 1.8rem);
+    background: transparent;
+  }
+
+  .hero-rule i {
+    display: block;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-500), transparent);
+    transition-delay: 600ms;
+  }
+
+  .hero-lead {
+    max-width: 40rem;
+    color: #c8d1dd;
+    font-size: var(--step-1);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: clamp(1.4rem, 2.8vw, 2.2rem);
+  }
+
+  /* --- Franja de pilares ------------------------------------------------- */
+
+  .hero-pillars {
+    position: relative;
+    border-top: 1px solid var(--hair);
+    background: linear-gradient(180deg, rgba(3, 7, 16, 0.55), rgba(3, 7, 16, 0.9));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .hero-pillars-inner {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(9.5rem, 1fr);
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+
+  .hero-pillars-inner::-webkit-scrollbar { display: none; }
+
+  .pillar {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: clamp(1.1rem, 2.2vw, 1.6rem) clamp(0.9rem, 1.6vw, 1.4rem);
+    scroll-snap-align: start;
+    transition: background-color var(--dur) var(--ease);
+  }
+
+  .pillar + .pillar { border-left: 1px solid var(--hair-soft); }
+  .pillar:hover { background: rgba(201, 162, 39, 0.06); }
+  .pillar :global(svg) { color: var(--gold-400); }
+
+  .pillar-label { display: grid; line-height: 1.25; }
+
+  .pillar-label strong {
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bone-100);
+  }
+
+  .pillar-label em {
+    font-style: normal;
+    font-size: var(--step--2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+
+  /* --- Indicador de scroll ------------------------------------------------ */
+
+  .hero-scroll {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 9rem;
+    display: none;
+    align-items: center;
+    gap: 0.8rem;
+    writing-mode: vertical-rl;
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    z-index: 3;
+  }
+
+  .hero-scroll i {
+    width: 1px;
+    height: 3.2rem;
+    background: linear-gradient(180deg, var(--gold-500), transparent);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero-scroll i::after {
+    content: '';
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 1px;
+    height: 1rem;
+    background: var(--gold-200);
+    animation: scroll-cue 2.4s var(--ease-in-out) infinite;
+  }
+
+  @keyframes scroll-cue {
+    0% { transform: translateY(-100%); opacity: 0; }
+    35% { opacity: 1; }
+    100% { transform: translateY(320%); opacity: 0; }
+  }
+
+  @media (min-width: 1280px) {
+    .hero-scroll { display: flex; }
+  }
+
+  @media (max-width: 640px) {
+    .hero { min-height: auto; padding-bottom: 0; }
+    .hero-title { font-size: clamp(2rem, 8.4vw, 2.9rem); }
+  }
+</style>
+
+<script>
+  /* Parallax suave sobre la fotografía del hero. Se apaga si el usuario pidió
+     reducir el movimiento o si el dispositivo es táctil (coste/beneficio malo). */
+  const media = document.querySelector<HTMLElement>('[data-parallax]');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (media && !reduce && fine) {
+    let ticking = false;
+
+    const update = () => {
+      const y = window.scrollY;
+      if (y < window.innerHeight * 1.2) {
+        media.style.transform = `translate3d(0, ${y * 0.22}px, 0) scale(${1 + y * 0.00006})`;
+      }
+      ticking = false;
+    };
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+      },
+      { passive: true },
+    );
+  }
+</script>

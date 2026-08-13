@@ -1,0 +1,224 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { footer, contact, brand, values } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer grain">
+  <div class="footer-glow" aria-hidden="true"></div>
+
+  <div class="shell footer-main">
+    <div class="footer-brand">
+      <a href="/" aria-label="Sovereign Capital Solutions — Inicio">
+        <Logo size={54} />
+      </a>
+
+      <p class="footer-signature">{brand.signature}</p>
+      <p class="footer-promise">{brand.promise}</p>
+
+      <ul class="footer-social" aria-label="Redes sociales">
+        {contact.socials.map((s) => (
+          <li>
+            <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}>
+              <Icon name={s.id} size={17} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <nav class="footer-cols" aria-label="Navegación del pie de página">
+      {footer.columns.map((col) => (
+        <div class="footer-col">
+          <h2 class="footer-heading">{col.title}</h2>
+          <ul>
+            {col.links.map((link) => (
+              <li><a href={link.href}>{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <div class="footer-col">
+        <h2 class="footer-heading">{footer.contactTitle}</h2>
+        <ul class="footer-contact">
+          <li>
+            <a href={contact.phoneHref}><Icon name="phone" size={15} /><span>{contact.phone}</span></a>
+          </li>
+          <li>
+            <a href={`mailto:${contact.email}`}><Icon name="mail" size={15} /><span>{contact.email}</span></a>
+          </li>
+          <li>
+            <span class="footer-static"><Icon name="pin" size={15} /><span>{contact.address}</span></span>
+          </li>
+          <li>
+            <span class="footer-static"><Icon name="clock" size={15} /><span>{contact.hours}</span></span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <p class="footer-values shell">{values.join(' · ')}</p>
+
+  <div class="footer-bar">
+    <div class="shell footer-bar-inner">
+      <p>© {year} {brand.name} {brand.surname}. {footer.rights}</p>
+
+      <ul class="footer-legal">
+        {footer.legal.map((l) => (
+          <li><a href={l.href}>{l.label}</a></li>
+        ))}
+      </ul>
+
+      <p class="footer-credit">{footer.credit}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    background: linear-gradient(180deg, var(--navy-900) 0%, var(--navy-990) 100%);
+    border-top: 1px solid var(--hair);
+    overflow: hidden;
+  }
+
+  .footer-glow {
+    position: absolute;
+    inset: auto 0 -60% 0;
+    height: 120%;
+    background: radial-gradient(60% 50% at 50% 100%, rgba(201, 162, 39, 0.11), transparent 70%);
+    pointer-events: none;
+  }
+
+  .footer-main {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    padding-block: clamp(3.5rem, 7vw, 6rem) clamp(2rem, 4vw, 3rem);
+  }
+
+  .footer-brand { display: grid; gap: 1.2rem; align-content: start; max-width: 21rem; }
+
+  .footer-signature {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--gold-300);
+    letter-spacing: 0.01em;
+  }
+
+  .footer-promise {
+    font-size: var(--step--1);
+    line-height: 1.7;
+    color: var(--fg-dim);
+  }
+
+  .footer-social { display: flex; gap: 0.6rem; list-style: none; padding: 0; margin-top: 0.4rem; }
+
+  .footer-social a {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    color: var(--gold-300);
+    border: 1px solid var(--hair);
+    border-radius: 50%;
+    transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+                color var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+
+  .footer-social a:hover {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: var(--navy-950);
+    transform: translateY(-3px);
+  }
+
+  .footer-cols {
+    display: grid;
+    gap: clamp(1.6rem, 2.8vw, 2.4rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr));
+  }
+
+  .footer-heading {
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--hair-soft);
+    font-family: var(--font-sans);
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .footer-col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.7rem; }
+
+  .footer-col a,
+  .footer-static {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65em;
+    font-size: var(--step--1);
+    line-height: 1.5;
+    color: var(--fg-muted);
+    transition: color var(--dur) var(--ease), translate var(--dur) var(--ease);
+  }
+
+  .footer-col :global(svg) { margin-top: 0.2em; color: var(--accent); opacity: 0.75; }
+
+  .footer-col a:hover { color: var(--gold-300); translate: 3px 0; }
+
+  .footer-contact a span,
+  .footer-static span { word-break: break-word; }
+
+  .footer-values {
+    position: relative;
+    z-index: 2;
+    padding-block: clamp(1.5rem, 3vw, 2.5rem);
+    border-top: 1px solid var(--hair-soft);
+    text-align: center;
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--gold-600);
+  }
+
+  .footer-bar {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid var(--hair-soft);
+    background: rgba(3, 7, 16, 0.5);
+  }
+
+  .footer-bar-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem 2rem;
+    padding-block: 1.4rem;
+    font-size: var(--step--2);
+    color: var(--fg-dim);
+  }
+
+  .footer-legal { display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; list-style: none; padding: 0; }
+  .footer-legal a { transition: color var(--dur) var(--ease); }
+  .footer-legal a:hover { color: var(--gold-300); }
+
+  .footer-credit { color: var(--gold-700); }
+
+  @media (min-width: 900px) {
+    .footer-main { grid-template-columns: minmax(15rem, 20rem) 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .footer-bar-inner { justify-content: center; text-align: center; }
+    .footer-legal { justify-content: center; }
+  }
+</style>

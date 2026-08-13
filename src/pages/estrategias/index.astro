@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import StrategyGrid from '../../components/StrategyGrid.astro';
+import Method from '../../components/Method.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { strategiesSection } from '../../data/site';
+---
+
+<Base
+  title="Estrategias"
+  description="Protección patrimonial, acceso a liquidez, acumulación tax advantaged, planificación empresarial, legado y sucesión, y Banca Mía™. Seis disciplinas que se diseñan como una sola arquitectura."
+>
+  <PageHero
+    eyebrow={strategiesSection.eyebrow}
+    title={strategiesSection.title}
+    lead={strategiesSection.lead}
+    crumbs={[{ label: 'Estrategias' }]}
+    size="lg"
+  />
+
+  <StrategyGrid bare />
+  <Method />
+  <FinalCta />
+</Base>

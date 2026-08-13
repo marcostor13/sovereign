@@ -1,0 +1,366 @@
+---
+import Icon from './Icon.astro';
+import { resources } from '../data/site';
+
+const c = resources.calc;
+const f = c.fields;
+---
+
+<div class="calc" id="calculadora" data-calc>
+  <div class="calc-head">
+    <h3 class="calc-title">{c.title}</h3>
+    <p class="calc-lead">{c.lead}</p>
+  </div>
+
+  <div class="calc-body">
+    {/* --- Controles ---------------------------------------------------- */}
+    <form class="calc-controls" novalidate>
+      <div class="field">
+        <label for="calc-amount">{f.amount}</label>
+        <output data-out="amount">100.000 US$</output>
+        <input id="calc-amount" type="range" min="10000" max="1000000" step="10000" value="100000" data-in="amount" />
+      </div>
+
+      <div class="field">
+        <label for="calc-contribution">{f.contribution}</label>
+        <output data-out="contribution">24.000 US$</output>
+        <input id="calc-contribution" type="range" min="0" max="200000" step="2000" value="24000" data-in="contribution" />
+      </div>
+
+      <div class="field">
+        <label for="calc-years">{f.years}</label>
+        <output data-out="years">30 años</output>
+        <input id="calc-years" type="range" min="5" max="40" step="1" value="30" data-in="years" />
+      </div>
+
+      <div class="field">
+        <label for="calc-rateA">{f.rateA}</label>
+        <output data-out="rateA">5,0 %</output>
+        <input id="calc-rateA" type="range" min="1" max="12" step="0.1" value="5" data-in="rateA" />
+      </div>
+
+      <div class="field">
+        <label for="calc-rateB">{f.rateB}</label>
+        <output data-out="rateB">7,0 %</output>
+        <input id="calc-rateB" type="range" min="1" max="12" step="0.1" value="7" data-in="rateB" />
+      </div>
+    </form>
+
+    {/* --- Resultado ------------------------------------------------------ */}
+    <div class="calc-result">
+      <div class="calc-chart" aria-hidden="true">
+        <div class="bar is-a">
+          <i data-bar="a"></i>
+          <span data-val="a">—</span>
+        </div>
+        <div class="bar is-b">
+          <i data-bar="b"></i>
+          <span data-val="b">—</span>
+        </div>
+      </div>
+
+      <ul class="calc-legend">
+        <li><i class="dot is-a"></i>{c.labelA} <b data-val="a-txt">—</b></li>
+        <li><i class="dot is-b"></i>{c.labelB} <b data-val="b-txt">—</b></li>
+        <li class="is-muted"><i class="dot is-c"></i>{c.contributed} <b data-val="contrib">—</b></li>
+      </ul>
+
+      <p class="calc-diff">
+        <span class="label">{c.diff}</span>
+        <strong data-val="diff" aria-live="polite">—</strong>
+      </p>
+
+      <a class="btn btn-gold btn-block" href="/contacto">
+        Quiero mi cálculo real
+        <Icon name="arrow" size={16} />
+      </a>
+    </div>
+  </div>
+
+  <p class="calc-note">
+    <Icon name="doc" size={14} stroke={1.4} />
+    {c.note}
+  </p>
+</div>
+
+<style>
+  .calc {
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+    background: linear-gradient(165deg, var(--navy-800), var(--navy-950));
+    overflow: hidden;
+  }
+
+  .calc-head {
+    padding: clamp(1.5rem, 3vw, 2.4rem);
+    border-bottom: 1px solid var(--hair-soft);
+  }
+
+  .calc-title { font-size: var(--step-3); color: var(--fg); }
+  .calc-lead { margin-top: 0.7rem; color: var(--fg-muted); max-width: 46rem; }
+
+  .calc-body { display: grid; }
+
+  /* --- Controles ---------------------------------------------------------- */
+
+  .calc-controls {
+    display: grid;
+    gap: clamp(1.2rem, 2.4vw, 1.7rem);
+    padding: clamp(1.5rem, 3vw, 2.4rem);
+  }
+
+  .field {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem 1rem;
+  }
+
+  .field label {
+    font-size: var(--step--2);
+    font-weight: 450;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .field output {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1;
+    color: var(--gold-300);
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: 'lnum' 1, 'tnum' 1;
+  }
+
+  /* Deslizadores con la pista y el pulgar en oro de marca */
+  .field input[type='range'] {
+    grid-column: 1 / -1;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: var(--hair-strong);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .field input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--gold-400);
+    border: 3px solid var(--navy-950);
+    box-shadow: 0 0 0 1px var(--gold-500);
+    cursor: grab;
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .field input[type='range']::-webkit-slider-thumb:hover { transform: scale(1.18); }
+
+  .field input[type='range']::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--gold-400);
+    border: 3px solid var(--navy-950);
+    box-shadow: 0 0 0 1px var(--gold-500);
+    cursor: grab;
+  }
+
+  /* --- Resultado ---------------------------------------------------------- */
+
+  .calc-result {
+    display: grid;
+    gap: 1.2rem;
+    align-content: start;
+    padding: clamp(1.5rem, 3vw, 2.4rem);
+    border-top: 1px solid var(--hair-soft);
+    background: rgba(3, 7, 16, 0.45);
+  }
+
+  .calc-chart {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.2rem, 3vw, 2.4rem);
+    align-items: end;
+    height: clamp(11rem, 26vw, 16rem);
+    padding-inline: clamp(0rem, 3vw, 1.5rem);
+  }
+
+  /* La fila 1fr da altura definida a la barra: sin ella el `height` en
+     porcentaje del <i> no tiene contra qué resolver y colapsa a cero. */
+  .bar {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 0.6rem;
+    height: 100%;
+  }
+
+  .bar i {
+    display: block;
+    align-self: end;
+    width: 100%;
+    height: var(--h, 10%);
+    border-radius: 2px 2px 0 0;
+    transition: height 620ms var(--ease);
+  }
+
+  .bar.is-a i { background: linear-gradient(180deg, var(--navy-500), var(--navy-750)); }
+
+  .bar.is-b i {
+    background: linear-gradient(180deg, var(--gold-300), var(--gold-500) 55%, var(--gold-700));
+    box-shadow: var(--shadow-gold);
+  }
+
+  .bar span {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    text-align: center;
+    color: var(--fg-muted);
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: 'lnum' 1, 'tnum' 1;
+  }
+
+  .bar.is-b span { color: var(--gold-300); }
+
+  .calc-legend {
+    display: grid;
+    gap: 0.55rem;
+    list-style: none;
+    padding: 1rem 0 0;
+    margin: 0;
+    border-top: 1px solid var(--hair-soft);
+    font-size: var(--step--1);
+    color: var(--fg-muted);
+  }
+
+  .calc-legend li { display: flex; align-items: center; gap: 0.6em; }
+  .calc-legend li.is-muted { color: var(--fg-dim); }
+  .calc-legend b { margin-left: auto; color: var(--fg); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .calc-legend li.is-muted b { color: var(--fg-dim); }
+
+  .dot { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+  .dot.is-a { background: var(--navy-500); }
+  .dot.is-b { background: var(--gold-500); }
+  .dot.is-c { background: var(--navy-700); }
+
+  .calc-diff {
+    display: grid;
+    gap: 0.4rem;
+    padding: 1.1rem;
+    border: 1px solid var(--hair-strong);
+    border-radius: var(--radius);
+    background: linear-gradient(100deg, rgba(201, 162, 39, 0.12), transparent 75%);
+    text-align: center;
+  }
+
+  .calc-diff strong {
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1;
+    font-weight: 500;
+    background: var(--gold-gradient);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: 'lnum' 1, 'tnum' 1;
+  }
+
+  .calc-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65em;
+    padding: clamp(1rem, 2vw, 1.3rem) clamp(1.5rem, 3vw, 2.4rem);
+    border-top: 1px solid var(--hair-soft);
+    font-size: var(--step--2);
+    line-height: 1.6;
+    color: var(--fg-dim);
+  }
+
+  .calc-note :global(svg) { margin-top: 0.25em; color: var(--gold-700); flex: none; }
+
+  @media (min-width: 900px) {
+    .calc-body { grid-template-columns: minmax(0, 1fr) minmax(20rem, 26rem); }
+    .calc-result { border-top: 0; border-left: 1px solid var(--hair-soft); }
+  }
+</style>
+
+<script>
+  /* Calculadora de costo de oportunidad.
+     Interés compuesto anual con aportes al final de cada período. */
+  const root = document.querySelector<HTMLElement>('[data-calc]');
+
+  if (root) {
+    const money = new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+    });
+
+    const compact = (n: number) =>
+      n >= 1_000_000
+        ? `${(n / 1_000_000).toFixed(n < 10_000_000 ? 1 : 0).replace('.', ',')} M US$`
+        : money.format(Math.round(n / 1000) * 1000);
+
+    const inputs = {
+      amount: root.querySelector<HTMLInputElement>('[data-in="amount"]')!,
+      contribution: root.querySelector<HTMLInputElement>('[data-in="contribution"]')!,
+      years: root.querySelector<HTMLInputElement>('[data-in="years"]')!,
+      rateA: root.querySelector<HTMLInputElement>('[data-in="rateA"]')!,
+      rateB: root.querySelector<HTMLInputElement>('[data-in="rateB"]')!,
+    };
+
+    const out = (key: string) => root.querySelector<HTMLElement>(`[data-out="${key}"]`);
+    const val = (key: string) => root.querySelector<HTMLElement>(`[data-val="${key}"]`);
+    const bar = (key: string) => root.querySelector<HTMLElement>(`[data-bar="${key}"]`);
+
+    /** Valor futuro de un capital inicial más aportes anuales constantes. */
+    const future = (principal: number, yearly: number, rate: number, years: number) => {
+      const r = rate / 100;
+      const growth = Math.pow(1 + r, years);
+      if (r === 0) return principal + yearly * years;
+      return principal * growth + yearly * ((growth - 1) / r);
+    };
+
+    const pct = (n: number) => n.toFixed(1).replace('.', ',');
+
+    const update = () => {
+      const amount = Number(inputs.amount.value);
+      const contribution = Number(inputs.contribution.value);
+      const years = Number(inputs.years.value);
+      const rateA = Number(inputs.rateA.value);
+      const rateB = Number(inputs.rateB.value);
+
+      out('amount')!.textContent = money.format(amount);
+      out('contribution')!.textContent = money.format(contribution);
+      out('years')!.textContent = `${years} años`;
+      out('rateA')!.textContent = `${pct(rateA)} %`;
+      out('rateB')!.textContent = `${pct(rateB)} %`;
+
+      const a = future(amount, contribution, rateA, years);
+      const b = future(amount, contribution, rateB, years);
+      const contributed = amount + contribution * years;
+      const max = Math.max(a, b, 1);
+
+      // La barra menor nunca baja del 12% para que siga siendo legible.
+      bar('a')!.style.setProperty('--h', `${Math.max((a / max) * 100, 12)}%`);
+      bar('b')!.style.setProperty('--h', `${Math.max((b / max) * 100, 12)}%`);
+
+      val('a')!.textContent = compact(a);
+      val('b')!.textContent = compact(b);
+      val('a-txt')!.textContent = money.format(a);
+      val('b-txt')!.textContent = money.format(b);
+      val('contrib')!.textContent = money.format(contributed);
+      val('diff')!.textContent = money.format(Math.max(b - a, 0));
+    };
+
+    Object.values(inputs).forEach((el) => el.addEventListener('input', update));
+    update();
+  }
+</script>

@@ -1,0 +1,20 @@
+# Build
+dist/
+.astro/
+node_modules/
+
+# Entorno — nunca subir credenciales
+.env
+.env.deploy
+.env.local
+.env.*.local
+
+# Solicitudes de contacto recibidas
+data/
+
+# Ajustes locales de herramientas
+.claude/settings.local.json
+
+# Sistema
+.DS_Store
+*.log

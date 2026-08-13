@@ -1,0 +1,89 @@
+---
+import { brand } from '../data/site';
+
+/**
+ * Banda en movimiento con la tríada de marca del material impreso
+ * (Educamos · Diseñamos · Protegemos). Se detiene al pasar el cursor y
+ * queda estática si el usuario pidió reducir el movimiento.
+ */
+const items = brand.triad;
+// Dos pasadas idénticas: el bucle es continuo sin salto visible.
+const track = [...items, ...items, ...items, ...items];
+---
+
+<div class="marquee" role="presentation">
+  <div class="marquee-track">
+    {track.map((word, i) => (
+      <span class="marquee-item" aria-hidden={i >= items.length ? 'true' : undefined}>
+        {word}
+        <i class="marquee-sep" aria-hidden="true"></i>
+      </span>
+    ))}
+  </div>
+
+  <i class="marquee-fade marquee-fade-l" aria-hidden="true"></i>
+  <i class="marquee-fade marquee-fade-r" aria-hidden="true"></i>
+</div>
+
+<style>
+  .marquee {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(1.1rem, 2.2vw, 1.6rem);
+    border-block: 1px solid var(--hair);
+    background: linear-gradient(90deg, var(--navy-950), var(--navy-850), var(--navy-950));
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 38s linear infinite;
+  }
+
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-roman);
+    font-size: clamp(0.95rem, 1.6vw, 1.4rem);
+    font-weight: 500;
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--gold-600);
+    white-space: nowrap;
+    padding-inline: clamp(1.2rem, 3vw, 2.6rem);
+  }
+
+  .marquee-item:nth-child(3n + 1) { color: var(--gold-400); }
+
+  .marquee-sep {
+    width: 6px;
+    height: 6px;
+    margin-left: clamp(2.4rem, 6vw, 5.2rem);
+    background: var(--gold-500);
+    transform: rotate(45deg);
+    opacity: 0.55;
+  }
+
+  .marquee-fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(3rem, 10vw, 9rem);
+    pointer-events: none;
+  }
+
+  .marquee-fade-l { left: 0; background: linear-gradient(90deg, var(--navy-950), transparent); }
+  .marquee-fade-r { right: 0; background: linear-gradient(270deg, var(--navy-950), transparent); }
+
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; justify-content: center; width: 100%; }
+    .marquee-item:nth-child(n + 4) { display: none; }
+  }
+</style>

@@ -1,0 +1,293 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import PostCard from '../../components/PostCard.astro';
+import Icon from '../../components/Icon.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { academySection } from '../../data/site';
+
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const categories = [...new Set(posts.map((p) => p.data.category))].sort((a, b) =>
+  a.localeCompare(b, 'es'),
+);
+---
+
+<Base
+  title="Academia Sovereign"
+  description="Artículos y análisis sobre protección patrimonial, liquidez, eficiencia fiscal, sucesión familiar y Banca Mía™. Educación que empodera, conocimiento que transforma."
+>
+  <PageHero
+    eyebrow={academySection.eyebrow}
+    title={academySection.title}
+    lead={academySection.lead}
+    crumbs={[{ label: 'Academia' }]}
+    size="lg"
+  />
+
+  <section class="section">
+    <div class="shell">
+      {/* --- Controles: filtro por categoría + búsqueda -------------------- */}
+      <div class="controls" data-reveal>
+        <div class="filters" role="group" aria-label="Filtrar por categoría">
+          <button class="chip is-active" type="button" data-filter="*">
+            {academySection.filterAll}
+            <span class="chip-count">{posts.length}</span>
+          </button>
+
+          {categories.map((cat) => (
+            <button class="chip" type="button" data-filter={cat}>
+              {cat}
+              <span class="chip-count">{posts.filter((p) => p.data.category === cat).length}</span>
+            </button>
+          ))}
+        </div>
+
+        <div class="search">
+          <Icon name="search" size={17} />
+          <label class="visually-hidden" for="academy-search">Buscar artículos</label>
+          <input
+            id="academy-search"
+            type="search"
+            placeholder={academySection.searchPlaceholder}
+            autocomplete="off"
+            data-search
+          />
+          <button class="search-clear" type="button" data-search-clear hidden>
+            <span class="visually-hidden">Limpiar búsqueda</span>
+            <Icon name="close" size={15} />
+          </button>
+        </div>
+      </div>
+
+      <p class="result-count" data-count-label aria-live="polite">
+        {posts.length} artículos
+      </p>
+
+      <ul class="posts" data-posts>
+        {posts.map((post) => (
+          <li
+            data-post
+            data-cat={post.data.category}
+            data-text={`${post.data.title} ${post.data.excerpt} ${post.data.category}`.toLowerCase()}
+          >
+            <PostCard post={post} />
+          </li>
+        ))}
+      </ul>
+
+      <p class="empty" data-empty hidden>
+        <Icon name="search" size={26} stroke={1} />
+        {academySection.empty}
+      </p>
+    </div>
+  </section>
+
+  <FinalCta />
+</Base>
+
+<style>
+  .controls {
+    display: grid;
+    gap: 1.2rem;
+    align-items: center;
+    padding-bottom: 1.4rem;
+    border-bottom: 1px solid var(--hair-soft);
+  }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    padding: 0.6em 1.05em;
+    border: 1px solid var(--hair-soft);
+    border-radius: 999px;
+    font-size: var(--step--2);
+    font-weight: 450;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    white-space: nowrap;
+    transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+                background-color var(--dur) var(--ease);
+  }
+
+  .chip:hover { color: var(--gold-300); border-color: var(--hair-strong); }
+
+  .chip.is-active {
+    color: var(--navy-950);
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    font-weight: 600;
+  }
+
+  .chip-count {
+    font-size: 0.85em;
+    opacity: 0.65;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--hair-soft);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.03);
+    transition: border-color var(--dur) var(--ease);
+  }
+
+  .search:focus-within { border-color: var(--hair-strong); }
+  .search > :global(svg) { color: var(--gold-600); flex: none; }
+
+  .search input {
+    flex: 1;
+    min-width: 0;
+    background: none;
+    border: 0;
+    outline: none;
+    font-size: var(--step--1);
+    color: var(--fg);
+  }
+
+  .search input::placeholder { color: var(--fg-dim); }
+  .search input::-webkit-search-cancel-button { display: none; }
+
+  .search-clear {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    color: var(--fg-dim);
+    transition: color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+  }
+
+  .search-clear:hover { color: var(--gold-300); background: rgba(201, 162, 39, 0.12); }
+  .search-clear[hidden] { display: none; }
+
+  .result-count {
+    margin-block: 1.2rem 1.8rem;
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+
+  .posts {
+    display: grid;
+    gap: clamp(1rem, 1.8vw, 1.6rem);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .posts > li {
+    height: 100%;
+    transition: opacity 320ms var(--ease), transform 320ms var(--ease);
+  }
+
+  .posts > li[hidden] { display: none; }
+
+  .empty {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    padding-block: clamp(3rem, 8vw, 6rem);
+    text-align: center;
+    font-size: var(--step-1);
+    color: var(--fg-muted);
+  }
+
+  .empty[hidden] { display: none; }
+  .empty :global(svg) { color: var(--gold-700); }
+
+  @media (min-width: 860px) {
+    .controls { grid-template-columns: 1fr minmax(15rem, 20rem); }
+  }
+</style>
+
+<script>
+  /* Filtrado en vivo por categoría y texto. Todo ocurre en el cliente sobre
+     el listado ya renderizado: sin peticiones, sin recarga y con la URL
+     sincronizada para poder compartir un filtro concreto. */
+  const items = [...document.querySelectorAll<HTMLElement>('[data-post]')];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+  const input = document.querySelector<HTMLInputElement>('[data-search]');
+  const clear = document.querySelector<HTMLButtonElement>('[data-search-clear]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  const countLabel = document.querySelector<HTMLElement>('[data-count-label]');
+
+  if (items.length && input) {
+    let category = '*';
+
+    const apply = () => {
+      const q = input.value.trim().toLowerCase();
+      let visible = 0;
+
+      items.forEach((item) => {
+        const matchCat = category === '*' || item.dataset.cat === category;
+        const matchText = !q || (item.dataset.text || '').includes(q);
+        const show = matchCat && matchText;
+        item.hidden = !show;
+        if (show) visible++;
+      });
+
+      if (empty) empty.hidden = visible > 0;
+      if (countLabel) {
+        countLabel.textContent = visible === 1 ? '1 artículo' : `${visible} artículos`;
+      }
+      if (clear) clear.hidden = !input.value;
+
+      // Refleja el estado en la URL sin ensuciar el historial.
+      const params = new URLSearchParams();
+      if (category !== '*') params.set('cat', category);
+      if (q) params.set('q', input.value.trim());
+      const qs = params.toString();
+      history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+    };
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        category = chip.dataset.filter || '*';
+        chips.forEach((c) => c.classList.toggle('is-active', c === chip));
+        apply();
+      });
+    });
+
+    let timer: ReturnType<typeof setTimeout>;
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(apply, 140);
+    });
+
+    clear?.addEventListener('click', () => {
+      input.value = '';
+      input.focus();
+      apply();
+    });
+
+    // Restaura el estado si se llega con parámetros en la URL.
+    const params = new URLSearchParams(location.search);
+    const cat = params.get('cat');
+    const q = params.get('q');
+
+    if (q) input.value = q;
+    if (cat) {
+      const match = chips.find((c) => c.dataset.filter === cat);
+      if (match) {
+        category = cat;
+        chips.forEach((c) => c.classList.toggle('is-active', c === match));
+      }
+    }
+    if (q || cat) apply();
+  }
+</script>

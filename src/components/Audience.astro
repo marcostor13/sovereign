@@ -1,0 +1,154 @@
+---
+import Icon from './Icon.astro';
+import SectionHead from './SectionHead.astro';
+import { audience } from '../data/site';
+---
+
+<section class="section section-light on-light" id="quienes">
+  <div class="shell">
+    <SectionHead
+      index={audience.index}
+      eyebrow={audience.eyebrow}
+      title={audience.title}
+      lead={audience.lead}
+      align="center"
+      size="lg"
+    />
+
+    <ul class="aud-grid" data-reveal-group data-stagger="90">
+      {audience.items.map((item, i) => (
+        <li class="aud-card card" data-reveal-item data-reveal id={item.id}>
+          <span class="aud-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+
+          <span class="aud-icon">
+            <Icon name={item.icon} size={26} stroke={1.1} />
+          </span>
+
+          <h3 class="aud-title">{item.title}</h3>
+          <p class="aud-text">{item.text}</p>
+
+          <ul class="aud-points">
+            {item.points.map((p) => (
+              <li><Icon name="check" size={13} stroke={2} />{p}</li>
+            ))}
+          </ul>
+
+          <i class="aud-sweep" aria-hidden="true"></i>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .aud-grid {
+    display: grid;
+    gap: clamp(1rem, 1.6vw, 1.5rem);
+    grid-template-columns: 1fr;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .aud-card {
+    position: relative;
+    gap: 1rem;
+    padding: clamp(1.6rem, 2.4vw, 2.1rem);
+    padding-top: clamp(1.9rem, 2.8vw, 2.4rem);
+  }
+
+  .aud-num {
+    position: absolute;
+    top: clamp(1rem, 2vw, 1.4rem);
+    right: clamp(1.1rem, 2vw, 1.5rem);
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201, 162, 39, 0.42);
+    transition: -webkit-text-stroke-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+
+  .aud-card:hover .aud-num { -webkit-text-stroke-color: rgba(201, 162, 39, 0.85); }
+
+  .aud-icon {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border: 1px solid rgba(201, 162, 39, 0.4);
+    border-radius: 50%;
+    color: var(--gold-600);
+    background: linear-gradient(160deg, rgba(201, 162, 39, 0.1), transparent);
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease),
+                border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+
+  .aud-card:hover .aud-icon {
+    background: var(--navy-850);
+    border-color: var(--navy-850);
+    color: var(--gold-400);
+    transform: translateY(-2px) rotate(-6deg);
+  }
+
+  .aud-title {
+    font-size: var(--step-2);
+    letter-spacing: 0.01em;
+    color: var(--ink-900);
+  }
+
+  .aud-text {
+    font-size: var(--step--1);
+    line-height: 1.65;
+    color: var(--ink-500);
+    flex: 1;
+  }
+
+  .aud-points {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem 0 0;
+    margin: 0;
+    border-top: 1px solid rgba(10, 22, 40, 0.08);
+    list-style: none;
+  }
+
+  .aud-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6em;
+    font-size: var(--step--2);
+    line-height: 1.5;
+    color: var(--ink-700);
+  }
+
+  .aud-points :global(svg) { margin-top: 0.35em; color: var(--gold-600); }
+
+  .aud-sweep {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background: var(--gold-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 520ms var(--ease);
+  }
+
+  .aud-card:hover .aud-sweep { transform: scaleX(1); }
+
+  @media (min-width: 620px) {
+    .aud-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 980px) {
+    .aud-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* Sólo con espacio real las cinco tarjetas comparten fila; por debajo de
+     eso el texto quedaba en columnas de tres palabras. */
+  @media (min-width: 1500px) {
+    .aud-grid { grid-template-columns: repeat(5, 1fr); }
+  }
+</style>

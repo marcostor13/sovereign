@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import Icon from '../components/Icon.astro';
+import { ui, nav, contact } from '../data/site';
+---
+
+<Base title={ui.notFound} description={ui.notFoundText} noIndex>
+  <section class="nf grain">
+    <div class="nf-glow" aria-hidden="true"></div>
+
+    <div class="shell nf-inner">
+      <Logo variant="stacked" size={72} />
+
+      <p class="nf-code" aria-hidden="true">404</p>
+
+      <h1 class="display nf-title">{ui.notFound}</h1>
+      <p class="lead nf-lead">{ui.notFoundText}</p>
+
+      <div class="nf-actions">
+        <a class="btn btn-gold" href="/">
+          <Icon name="arrow" size={16} class="flip" />
+          {ui.goHome}
+        </a>
+        <a class="btn btn-outline" href={`mailto:${contact.email}`}>
+          <Icon name="mail" size={16} />
+          Escríbenos
+        </a>
+      </div>
+
+      <nav class="nf-links" aria-label="Secciones del sitio">
+        {nav.filter((n) => n.href !== '/').map((n) => (
+          <a href={n.href}>{n.label}</a>
+        ))}
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding-block: calc(var(--header-h) + 3rem) 5rem;
+    overflow: hidden;
+    background: linear-gradient(170deg, var(--navy-800), var(--navy-990) 65%);
+    text-align: center;
+  }
+
+  .nf-glow {
+    position: absolute;
+    inset: -20% auto auto 50%;
+    translate: -50% 0;
+    width: min(60rem, 120%);
+    aspect-ratio: 1;
+    background: radial-gradient(circle, rgba(201, 162, 39, 0.14), transparent 62%);
+  }
+
+  .nf-inner {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 1.2rem;
+    max-width: 44rem;
+  }
+
+  .nf-code {
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 22vw, 14rem);
+    line-height: 0.85;
+    letter-spacing: 0.02em;
+    margin-top: 1rem;
+    background: var(--gold-gradient);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.7;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: 'lnum' 1;
+  }
+
+  .nf-title { font-size: var(--step-4); color: #fff; }
+  .nf-lead { color: var(--fg-muted); }
+
+  .nf-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.9rem; margin-top: 0.8rem; }
+  .nf-actions :global(.flip) { transform: rotate(180deg); }
+  .nf-actions :global(.btn:hover .flip) { transform: rotate(180deg) translateX(4px); }
+
+  .nf-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem 1.6rem;
+    padding-top: 1.8rem;
+    margin-top: 1.2rem;
+    border-top: 1px solid var(--hair-soft);
+    width: 100%;
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+
+  .nf-links a { transition: color var(--dur) var(--ease); }
+  .nf-links a:hover { color: var(--gold-300); }
+</style>

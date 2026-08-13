@@ -1,0 +1,144 @@
+---
+import Icon from './Icon.astro';
+
+/** Cabecera de las páginas interiores. */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  crumbs?: { label: string; href?: string }[];
+  meta?: string[];
+  align?: 'start' | 'center';
+  size?: 'md' | 'lg';
+}
+
+const { eyebrow, title, lead, crumbs = [], meta = [], align = 'start', size = 'md' } = Astro.props;
+---
+
+<section class:list={['phero grain', `is-${align}`, `is-${size}`]}>
+  <div class="phero-glow" aria-hidden="true"></div>
+  <div class="phero-grid" aria-hidden="true"></div>
+
+  <div class="shell phero-inner">
+    {crumbs.length > 0 && (
+      <nav class="crumbs" aria-label="Ruta de navegación">
+        <ol>
+          <li><a href="/">Inicio</a></li>
+          {crumbs.map((c) => (
+            <li>
+              <Icon name="chevron" size={12} stroke={1.6} class="crumb-sep" />
+              {c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
+    {eyebrow && <p class="eyebrow phero-eyebrow" data-reveal="fade">{eyebrow}</p>}
+
+    <h1 class:list={['phero-title', size === 'lg' ? 'display-xl' : 'display']} data-reveal>
+      <Fragment set:html={title.replace(/™/g, '<sup>™</sup>')} />
+    </h1>
+
+    {lead && <p class="lead phero-lead" data-reveal style="--reveal-delay:120ms">{lead}</p>}
+
+    {meta.length > 0 && (
+      <ul class="phero-meta" data-reveal style="--reveal-delay:200ms">
+        {meta.map((m) => <li>{m}</li>)}
+      </ul>
+    )}
+
+    <slot />
+  </div>
+</section>
+
+<style>
+  .phero {
+    position: relative;
+    padding-top: calc(var(--header-h) + clamp(2.5rem, 7vw, 6rem));
+    padding-bottom: clamp(2.5rem, 6vw, 5rem);
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(170deg, var(--navy-800) 0%, var(--navy-950) 62%);
+    border-bottom: 1px solid var(--hair-soft);
+  }
+
+  .phero.is-lg { padding-bottom: clamp(3.5rem, 8vw, 6.5rem); }
+
+  .phero-glow {
+    position: absolute;
+    inset: -30% -10% auto auto;
+    width: min(60rem, 90%);
+    aspect-ratio: 1;
+    background: radial-gradient(circle, rgba(201, 162, 39, 0.14), transparent 62%);
+    z-index: -1;
+  }
+
+  .phero-grid {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(201, 162, 39, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 162, 39, 0.055) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(110% 80% at 20% 100%, #000, transparent 70%);
+    -webkit-mask-image: radial-gradient(110% 80% at 20% 100%, #000, transparent 70%);
+  }
+
+  .phero-inner { display: grid; gap: clamp(1rem, 2vw, 1.5rem); max-width: 60rem; }
+
+  .phero.is-center .phero-inner { justify-items: center; text-align: center; margin-inline: auto; }
+
+  .crumbs { margin-bottom: 0.4rem; }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--step--2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+
+  .crumbs li { display: flex; align-items: center; gap: 0.5rem; }
+  .crumbs a { transition: color var(--dur) var(--ease); }
+  .crumbs a:hover { color: var(--gold-300); }
+  .crumbs [aria-current] { color: var(--gold-500); }
+  .crumb-sep { rotate: -90deg; opacity: 0.5; }
+
+  .phero-title { color: #fff; letter-spacing: -0.02em; }
+  .phero-title :global(sup) { font-size: 0.4em; vertical-align: super; }
+
+  .phero-lead { max-width: 46rem; }
+
+  .phero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    padding: 0.6rem 0 0;
+    margin: 0;
+    list-style: none;
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+
+  .phero-meta li { display: flex; align-items: center; gap: 1.4rem; }
+
+  .phero-meta li + li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: var(--gold-500);
+    transform: rotate(45deg);
+    opacity: 0.7;
+    margin-left: -0.9rem;
+  }
+</style>

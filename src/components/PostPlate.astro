@@ -1,0 +1,112 @@
+---
+/**
+ * Lámina gráfica para las tarjetas de la Academia.
+ *
+ * En lugar de fotografía de archivo genérica, cada artículo recibe una
+ * composición abstracta construida con el propio emblema de la marca. La
+ * variante se deriva del slug, así que es estable entre builds y distinta
+ * entre artículos vecinos.
+ */
+interface Props {
+  seed: string;
+  ratio?: string;
+  class?: string;
+}
+
+const { seed, ratio = '16 / 10', class: className = '' } = Astro.props;
+
+// Hash determinista: mismo slug, misma lámina, siempre.
+const hash = [...seed].reduce((acc, ch) => (acc * 31 + ch.charCodeAt(0)) >>> 0, 7);
+const variant = hash % 4;
+const rotation = (hash % 90) - 45;
+const petal = 'M50 18.5 C62.5 31.5 62.5 42.5 50 50 C37.5 42.5 37.5 31.5 50 18.5 Z';
+---
+
+<div
+  class:list={['plate', `plate-${variant}`, className]}
+  style={`--ratio:${ratio}; --rot:${rotation}deg`}
+  aria-hidden="true"
+>
+  <svg class="plate-art" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" fill="none">
+    <defs>
+      <linearGradient id={`pg-${hash}`} x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#C9A227" stop-opacity="0.85" />
+        <stop offset="0.5" stop-color="#EDDAA6" stop-opacity="0.5" />
+        <stop offset="1" stop-color="#8A6D28" stop-opacity="0.3" />
+      </linearGradient>
+    </defs>
+
+    <g stroke={`url(#pg-${hash})`} stroke-width="0.5" stroke-linejoin="round">
+      <circle cx="50" cy="50" r="45" />
+      <circle cx="50" cy="50" r="40.5" stroke-width="0.25" />
+      <circle cx="50" cy="50" r="30" stroke-width="0.25" />
+
+      {[0, 90, 180, 270].map((deg) => (
+        <path d={petal} transform={`rotate(${deg} 50 50)`} />
+      ))}
+      {[45, 135, 225, 315].map((deg) => (
+        <path
+          d="M50 27 C58 36.5 58 44.5 50 50 C42 44.5 42 36.5 50 27 Z"
+          transform={`rotate(${deg} 50 50)`}
+          stroke-width="0.35"
+        />
+      ))}
+    </g>
+  </svg>
+
+  <i class="plate-sweep"></i>
+  <i class="plate-grid"></i>
+</div>
+
+<style>
+  .plate {
+    position: relative;
+    aspect-ratio: var(--ratio);
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(150deg, var(--navy-750) 0%, var(--navy-950) 72%);
+  }
+
+  .plate-art {
+    position: absolute;
+    width: 118%;
+    height: 118%;
+    transform: rotate(var(--rot));
+    transition: transform 1400ms var(--ease);
+  }
+
+  /* Cada variante encuadra el emblema en un punto distinto del lienzo */
+  .plate-0 .plate-art { top: -34%; left: -18%; }
+  .plate-1 .plate-art { top: -12%; left: 34%; width: 92%; height: 92%; }
+  .plate-2 .plate-art { bottom: -40%; left: -6%; width: 130%; height: 130%; }
+  .plate-3 .plate-art { top: 12%; left: -34%; width: 104%; height: 104%; }
+
+  .plate-1 { background: linear-gradient(210deg, var(--navy-800) 0%, var(--navy-990) 78%); }
+  .plate-2 { background: linear-gradient(120deg, var(--navy-900) 0%, var(--navy-750) 100%); }
+  .plate-3 { background: linear-gradient(340deg, var(--navy-850) 0%, var(--navy-990) 70%); }
+
+  /* Barrido de luz dorada */
+  .plate-sweep {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(75% 60% at 22% 14%, rgba(201, 162, 39, 0.24), transparent 66%);
+    mix-blend-mode: screen;
+  }
+
+  /* Retícula fina: da sensación de plano técnico, no de fondo vacío */
+  .plate-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201, 162, 39, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 162, 39, 0.07) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: radial-gradient(120% 90% at 70% 100%, #000 10%, transparent 72%);
+    -webkit-mask-image: radial-gradient(120% 90% at 70% 100%, #000 10%, transparent 72%);
+  }
+
+  :global(a:hover) > .plate .plate-art,
+  :global(.card:hover) .plate .plate-art {
+    transform: rotate(calc(var(--rot) + 24deg)) scale(1.06);
+  }
+</style>

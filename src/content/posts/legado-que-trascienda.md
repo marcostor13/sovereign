@@ -1,0 +1,34 @@
+---
+title: Cómo crear un legado que trascienda generaciones
+excerpt: El 70% de las fortunas familiares desaparece en la segunda generación. El diseño es lo único que cambia esa estadística.
+category: Legado
+date: 2026-04-03
+read: 8
+featured: true
+---
+
+Existe una estadística incómoda y bien documentada: alrededor del 70% del patrimonio familiar se disuelve en la segunda generación y cerca del 90% en la tercera. No ocurre por falta de dinero. Ocurre por falta de estructura y de preparación.
+
+## Transferir capital no es transferir criterio
+
+Un heredero puede recibir un patrimonio considerable y no haber tomado nunca una decisión patrimonial. La transferencia de activos es un acto administrativo que se resuelve en semanas; la transferencia de criterio es un proceso de años que casi nadie empieza a tiempo.
+
+La primera generación construyó el patrimonio y, en el camino, construyó el juicio para administrarlo. La segunda recibe el resultado sin el proceso. Esa asimetría explica la estadística mucho mejor que cualquier factor económico.
+
+## Los tres pilares de un legado que dura
+
+- **Estructura:** vehículos que definen quién recibe qué, cuándo y bajo qué condiciones.
+- **Liquidez:** capital disponible para pagar impuestos y gastos sin rematar activos.
+- **Educación:** la siguiente generación entiende el sistema antes de heredarlo.
+
+Los tres son necesarios y ninguno es suficiente por sí solo. Una estructura impecable sin liquidez obliga a vender. Liquidez sin estructura se reparte mal. Ambas sin educación llegan a manos que no saben qué hacer con ellas.
+
+## Empieza por la conversación, no por el producto
+
+Antes de estructurar nada, la familia necesita responder qué quiere preservar, qué está dispuesta a cambiar y qué significa para ella el éxito dentro de treinta años. Ese documento vale más que cualquier instrumento financiero, y es el único que no puede redactar un asesor externo.
+
+Nuestra recomendación práctica es sencilla: una reunión familiar anual, con agenda y con acta. No para revisar cifras, sino para revisar intenciones.
+
+> Un legado no es lo que dejas. Es lo que la siguiente generación es capaz de sostener.
+
+El mejor momento para diseñarlo fue hace diez años. El segundo mejor momento es esta semana.

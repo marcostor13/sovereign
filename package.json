@@ -1,0 +1,27 @@
+{
+  "name": "sovereign-capital-solutions",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sovereign Capital Solutions — Private Wealth Strategies",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "start": "astro dev --host 0.0.0.0",
+    "build": "astro build",
+    "preview": "astro preview --host 0.0.0.0",
+    "serve": "node ./dist/server/entry.mjs",
+    "check": "node scripts/check.mjs",
+    "shots": "node scripts/shots.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.4.5",
+    "@astrojs/sitemap": "^3.7.0",
+    "astro": "^5.16.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "playwright": "^1.62.1",
+    "typescript": "^5.9.3"
+  }
+}

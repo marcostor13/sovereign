@@ -1,0 +1,398 @@
+---
+import Icon from './Icon.astro';
+import { contactPage, contact } from '../data/site';
+import { getCollection } from 'astro:content';
+
+const f = contactPage.form;
+const strategies = (await getCollection('strategies')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<form class="cform" data-form novalidate>
+  <fieldset class="cform-set">
+    <legend class="cform-legend">{f.legendA}</legend>
+
+    <div class="cform-grid">
+      <p class="fld">
+        <label for="cf-name">{f.name} <b aria-hidden="true">*</b></label>
+        <input id="cf-name" name="name" type="text" autocomplete="name" required />
+        <span class="fld-error" data-error-for="name"></span>
+      </p>
+
+      <p class="fld">
+        <label for="cf-email">{f.email} <b aria-hidden="true">*</b></label>
+        <input id="cf-email" name="email" type="email" autocomplete="email" required />
+        <span class="fld-error" data-error-for="email"></span>
+      </p>
+
+      <p class="fld">
+        <label for="cf-phone">{f.phone} <b aria-hidden="true">*</b></label>
+        <input id="cf-phone" name="phone" type="tel" autocomplete="tel" required />
+        <span class="fld-error" data-error-for="phone"></span>
+      </p>
+
+      <p class="fld">
+        <label for="cf-profile">{f.profile}</label>
+        <span class="select">
+          <select id="cf-profile" name="profile">
+            {f.profileOptions.map((o) => <option value={o}>{o}</option>)}
+          </select>
+          <Icon name="chevron" size={16} />
+        </span>
+      </p>
+    </div>
+  </fieldset>
+
+  <fieldset class="cform-set">
+    <legend class="cform-legend">{f.legendB}</legend>
+
+    <p class="fld">
+      <label for="cf-interest">{f.interest}</label>
+      <span class="select">
+        <select id="cf-interest" name="interest">
+          <option value="">{f.interestPlaceholder}</option>
+          {strategies.map((s) => <option value={s.data.title}>{s.data.title}</option>)}
+          <option value="Todavía no lo sé">Todavía no lo sé</option>
+        </select>
+        <Icon name="chevron" size={16} />
+      </span>
+    </p>
+
+    <p class="fld">
+      <label for="cf-message">{f.message}</label>
+      <textarea id="cf-message" name="message" rows="5" placeholder={f.messagePlaceholder}></textarea>
+    </p>
+  </fieldset>
+
+  {/* Campo trampa para bots: oculto y fuera del orden de tabulación. */}
+  <p class="hp" aria-hidden="true">
+    <label for="cf-company">No rellenar</label>
+    <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+  </p>
+
+  <p class="fld fld-check">
+    <label class="check">
+      <input type="checkbox" name="consent" required />
+      <span class="check-box" aria-hidden="true"><Icon name="check" size={12} stroke={2.6} /></span>
+      <span class="check-text">{f.consent}</span>
+    </label>
+    <span class="fld-error" data-error-for="consent"></span>
+  </p>
+
+  <button class="btn btn-gold btn-block btn-lg cform-submit" type="submit">
+    <span data-submit-label>{f.submit}</span>
+    <Icon name="arrow" size={17} />
+  </button>
+
+  {/* Estados de respuesta */}
+  <div class="cform-state is-ok" data-state-ok hidden role="status">
+    <Icon name="check" size={22} stroke={2} />
+    <div>
+      <p class="cform-state-title">{f.successTitle}</p>
+      <p>{f.success}</p>
+    </div>
+  </div>
+
+  <div class="cform-state is-err" data-state-err hidden role="alert">
+    <Icon name="close" size={20} stroke={2} />
+    <div>
+      <p class="cform-state-title">{f.errorTitle}</p>
+      <p>
+        {f.error}
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      </p>
+    </div>
+  </div>
+</form>
+
+<style>
+  .cform { display: grid; gap: clamp(1.5rem, 3vw, 2.2rem); }
+
+  .cform-set { border: 0; padding: 0; margin: 0; display: grid; gap: 1.1rem; }
+
+  .cform-legend {
+    padding: 0 0 0.8rem;
+    margin-bottom: 0.3rem;
+    width: 100%;
+    border-bottom: 1px solid var(--hair-soft);
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .cform-grid {
+    display: grid;
+    gap: 1.1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  }
+
+  .fld { display: grid; gap: 0.5rem; margin: 0; }
+
+  .fld label {
+    font-size: var(--step--2);
+    font-weight: 450;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .fld label b { color: var(--gold-500); font-weight: 400; }
+
+  .fld input,
+  .fld textarea,
+  .fld select {
+    width: 100%;
+    padding: 0.95rem 1.05rem;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid var(--hair-soft);
+    border-radius: var(--radius-sm);
+    color: var(--fg);
+    font-size: var(--step-0);
+    outline: none;
+    transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+  }
+
+  .fld textarea { resize: vertical; min-height: 7rem; line-height: 1.6; }
+
+  .fld input::placeholder,
+  .fld textarea::placeholder { color: var(--fg-dim); }
+
+  .fld input:focus,
+  .fld textarea:focus,
+  .fld select:focus {
+    border-color: var(--gold-500);
+    background: rgba(201, 162, 39, 0.05);
+  }
+
+  .fld input[aria-invalid='true'],
+  .fld textarea[aria-invalid='true'] { border-color: #c46a5a; }
+
+  .select { position: relative; display: block; }
+
+  .select select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2.8rem;
+    cursor: pointer;
+  }
+
+  .select option { background: var(--navy-850); color: var(--fg); }
+
+  .select :global(svg) {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    translate: 0 -50%;
+    color: var(--accent);
+    pointer-events: none;
+  }
+
+  .fld-error {
+    font-size: var(--step--2);
+    color: #e08f7e;
+    min-height: 1em;
+  }
+
+  .fld-error:empty { display: none; }
+
+  /* --- Casilla de consentimiento ----------------------------------------- */
+
+  .check {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: 0.8rem;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .check input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+  .check-box {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    margin-top: 0.15em;
+    border: 1px solid var(--hair-strong);
+    border-radius: 2px;
+    color: transparent;
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease),
+                border-color var(--dur) var(--ease);
+  }
+
+  .check input:checked + .check-box {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: var(--navy-950);
+  }
+
+  .check input:focus-visible + .check-box { outline: 2px solid var(--gold-400); outline-offset: 3px; }
+
+  .check-text {
+    font-size: var(--step--1);
+    line-height: 1.55;
+    color: var(--fg-muted);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .cform-submit { margin-top: 0.3rem; }
+  .cform-submit[disabled] { opacity: 0.65; pointer-events: none; }
+
+  /* --- Estados ------------------------------------------------------------ */
+
+  .cform-state {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: clamp(1.1rem, 2.4vw, 1.6rem);
+    border-radius: var(--radius);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+
+  .cform-state[hidden] { display: none; }
+
+  .cform-state-title {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    margin-bottom: 0.25rem;
+    color: var(--fg);
+  }
+
+  .cform-state.is-ok {
+    border: 1px solid var(--hair-strong);
+    background: linear-gradient(100deg, rgba(201, 162, 39, 0.14), transparent 70%);
+    color: var(--fg-muted);
+  }
+
+  .cform-state.is-ok :global(svg) { color: var(--gold-400); margin-top: 0.2em; }
+
+  .cform-state.is-err {
+    border: 1px solid rgba(196, 106, 90, 0.5);
+    background: rgba(196, 106, 90, 0.08);
+    color: var(--fg-muted);
+  }
+
+  .cform-state.is-err :global(svg) { color: #e08f7e; margin-top: 0.25em; }
+  .cform-state a { color: var(--gold-300); border-bottom: 1px solid var(--hair-strong); }
+</style>
+
+<script>
+  import { contactPage } from '../data/site';
+
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+
+  if (form) {
+    const t = contactPage.form;
+    const submit = form.querySelector<HTMLButtonElement>('[type="submit"]')!;
+    const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
+    const okBox = form.querySelector<HTMLElement>('[data-state-ok]')!;
+    const errBox = form.querySelector<HTMLElement>('[data-state-err]')!;
+    const original = label.textContent || '';
+
+    const showError = (field: string, msg: string) => {
+      const slot = form.querySelector<HTMLElement>(`[data-error-for="${field}"]`);
+      const input = form.querySelector<HTMLElement>(`[name="${field}"]`);
+      if (slot) slot.textContent = msg;
+      input?.setAttribute('aria-invalid', 'true');
+    };
+
+    const clearErrors = () => {
+      form.querySelectorAll<HTMLElement>('[data-error-for]').forEach((el) => (el.textContent = ''));
+      form.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
+    };
+
+    const validate = (data: Record<string, unknown>) => {
+      const errors: Record<string, string> = {};
+      const email = String(data.email || '');
+
+      if (!String(data.name || '').trim()) errors.name = t.required;
+      if (!email.trim()) errors.email = t.required;
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = t.invalidEmail;
+
+      const phone = String(data.phone || '').trim();
+      if (!phone) errors.phone = t.required;
+      else if (phone.replace(/\D/g, '').length < 7) errors.phone = t.invalidPhone;
+
+      if (!data.consent) errors.consent = t.consentRequired;
+
+      return errors;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors();
+      okBox.hidden = true;
+      errBox.hidden = true;
+
+      const fd = new FormData(form);
+      const data = {
+        name: fd.get('name'),
+        email: fd.get('email'),
+        phone: fd.get('phone'),
+        profile: fd.get('profile'),
+        interest: fd.get('interest'),
+        message: fd.get('message'),
+        company: fd.get('company'),
+        consent: fd.get('consent') === 'on',
+      };
+
+      const errors = validate(data);
+      if (Object.keys(errors).length) {
+        Object.entries(errors).forEach(([k, v]) => showError(k, v));
+        form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+        return;
+      }
+
+      submit.disabled = true;
+      label.textContent = t.sending;
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const body = await res.json().catch(() => ({}));
+
+        if (res.ok && body.ok) {
+          form.reset();
+          okBox.hidden = false;
+          okBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (res.status === 422 && body.errors) {
+          Object.keys(body.errors).forEach((k) => showError(k, t.required));
+        } else {
+          errBox.hidden = false;
+        }
+      } catch {
+        errBox.hidden = false;
+      } finally {
+        submit.disabled = false;
+        label.textContent = original;
+      }
+    });
+
+    // Limpia el error de un campo en cuanto el usuario lo corrige.
+    form.querySelectorAll<HTMLInputElement>('input, textarea, select').forEach((el) => {
+      el.addEventListener('input', () => {
+        const slot = form.querySelector<HTMLElement>(`[data-error-for="${el.name}"]`);
+        if (slot) slot.textContent = '';
+        el.removeAttribute('aria-invalid');
+      });
+    });
+  }
+</script>

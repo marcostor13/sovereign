@@ -1,0 +1,285 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Method from '../components/Method.astro';
+import Stats from '../components/Stats.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Icon from '../components/Icon.astro';
+import { about, brand, values } from '../data/site';
+import portrait from '../assets/img/profesionales.png';
+---
+
+<Base
+  title="Sobre Nosotros"
+  description="Sovereign Capital Solutions es una firma independiente de estrategia patrimonial. No vendemos productos: diseñamos arquitectura patrimonial con acompañamiento de por vida."
+>
+  <PageHero
+    eyebrow={about.eyebrow}
+    title={about.title}
+    lead={about.lead}
+    crumbs={[{ label: 'Sobre Nosotros' }]}
+    meta={[...values]}
+  />
+
+  {/* --- Relato + retrato ------------------------------------------------ */}
+  <section class="section section-light on-light">
+    <div class="shell story">
+      <div class="story-media" data-reveal="left">
+        <Image
+          src={portrait}
+          alt="Asesora de Sovereign Capital Solutions trabajando en su despacho"
+          widths={[560, 840, 1120]}
+          sizes="(min-width: 1000px) 40vw, 92vw"
+          loading="lazy"
+          quality={78}
+          format="avif"
+        />
+        <i class="story-frame" aria-hidden="true"></i>
+
+        <figure class="story-quote">
+          <blockquote>{brand.promise}</blockquote>
+          <figcaption>{brand.name} {brand.surname}</figcaption>
+        </figure>
+      </div>
+
+      <div class="story-copy" data-reveal="right">
+        {about.body.map((p) => <p>{p}</p>)}
+
+        <a class="btn btn-outline story-cta" href="/contacto">
+          Conversemos sobre tu caso
+          <Icon name="arrow" size={16} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* --- Principios ------------------------------------------------------ */}
+  <section class="section">
+    <div class="shell">
+      <SectionHead
+        eyebrow="Principios"
+        title={about.pillarsTitle}
+        lead={about.pillarsLead}
+        align="center"
+        size="lg"
+      />
+
+      <ul class="pillars" data-reveal-group data-stagger="90">
+        {about.pillars.map((p, i) => (
+          <li class="pillar-card card" data-reveal-item data-reveal>
+            <span class="pillar-n">{String(i + 1).padStart(2, '0')}</span>
+            <Icon name={p.icon} size={28} stroke={1.1} />
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* --- Comparativa ------------------------------------------------------ */}
+  <section class="section section-light on-light">
+    <div class="shell">
+      <SectionHead
+        eyebrow="Comparativa"
+        title={about.differenceTitle}
+        lead={about.differenceLead}
+        align="center"
+        size="lg"
+      />
+
+      <div class="compare" data-reveal>
+        <div class="compare-head">
+          <span class="compare-h is-old">{about.differenceHeads[0]}</span>
+          <span class="compare-h is-new">{about.differenceHeads[1]}</span>
+        </div>
+
+        <ul>
+          {about.difference.map((row) => (
+            <li class="compare-row">
+              <span class="compare-cell is-old">
+                <Icon name="minus" size={15} stroke={2} />
+                {row.a}
+              </span>
+              <span class="compare-cell is-new">
+                <Icon name="check" size={15} stroke={2} />
+                {row.b}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Method />
+  <Stats />
+  <FinalCta />
+</Base>
+
+<style>
+  /* --- Relato ------------------------------------------------------------ */
+
+  .story {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .story-media { position: relative; }
+
+  .story-media :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+
+  .story-frame {
+    position: absolute;
+    inset: clamp(0.9rem, 2vw, 1.4rem) calc(clamp(0.9rem, 2vw, 1.4rem) * -1)
+           calc(clamp(0.9rem, 2vw, 1.4rem) * -1) clamp(0.9rem, 2vw, 1.4rem);
+    border: 1px solid var(--gold-500);
+    opacity: 0.45;
+    z-index: -1;
+    border-radius: var(--radius);
+  }
+
+  .story-quote {
+    position: relative;
+    margin: -3.5rem 0 0 clamp(0rem, 2vw, 2rem);
+    padding: clamp(1.4rem, 2.6vw, 2rem);
+    background: linear-gradient(160deg, var(--navy-800), var(--navy-950));
+    border: 1px solid var(--hair-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .story-quote blockquote {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.35;
+    color: var(--bone-100);
+  }
+
+  .story-quote figcaption {
+    margin-top: 0.8rem;
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--gold-500);
+  }
+
+  .story-copy { display: grid; gap: 1.4rem; align-content: start; }
+
+  .story-copy p {
+    font-size: var(--step-1);
+    line-height: 1.75;
+    color: var(--ink-500);
+    font-weight: 340;
+  }
+
+  .story-copy p:first-child { color: var(--ink-700); }
+
+  .story-cta { justify-self: start; margin-top: 0.8rem; }
+
+  @media (min-width: 1000px) {
+    .story { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(3rem, 6vw, 6rem); }
+  }
+
+  /* --- Principios -------------------------------------------------------- */
+
+  .pillars {
+    display: grid;
+    gap: clamp(1rem, 1.6vw, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .pillar-card { gap: 0.9rem; }
+  .pillar-card :global(svg) { color: var(--gold-400); }
+
+  .pillar-n {
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    letter-spacing: 0.1em;
+    color: var(--gold-700);
+  }
+
+  .pillar-card h3 { font-size: var(--step-2); color: var(--fg); }
+
+  .pillar-card p {
+    font-size: var(--step--1);
+    line-height: 1.65;
+    color: var(--fg-muted);
+  }
+
+  /* --- Comparativa ------------------------------------------------------- */
+
+  .compare {
+    border: 1px solid rgba(10, 22, 40, 0.1);
+    border-radius: var(--radius);
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 30px 70px -50px rgba(10, 22, 40, 0.45);
+  }
+
+  .compare ul { list-style: none; padding: 0; margin: 0; }
+
+  .compare-head,
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .compare-head { border-bottom: 1px solid rgba(10, 22, 40, 0.1); }
+
+  .compare-h {
+    padding: 1.1rem clamp(1.1rem, 2.4vw, 1.9rem);
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .compare-h.is-old { color: #8b93a0; }
+
+  .compare-h.is-new {
+    color: var(--gold-700);
+    background: linear-gradient(100deg, rgba(201, 162, 39, 0.12), rgba(201, 162, 39, 0.04));
+  }
+
+  .compare-row + .compare-row { border-top: 1px solid rgba(10, 22, 40, 0.07); }
+
+  .compare-cell {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75em;
+    padding: clamp(0.9rem, 1.8vw, 1.25rem) clamp(1.1rem, 2.4vw, 1.9rem);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+
+  .compare-cell.is-old { color: #7c8595; }
+  .compare-cell.is-old :global(svg) { color: #b9c0cb; margin-top: 0.3em; }
+
+  .compare-cell.is-new {
+    color: var(--ink-900);
+    font-weight: 450;
+    background: rgba(201, 162, 39, 0.05);
+  }
+
+  .compare-cell.is-new :global(svg) { color: var(--gold-600); margin-top: 0.3em; }
+
+  @media (min-width: 780px) {
+    .compare-head,
+    .compare-row { grid-template-columns: 1fr 1fr; }
+    .compare-cell.is-new { border-left: 1px solid rgba(201, 162, 39, 0.25); }
+    .compare-h.is-new { border-left: 1px solid rgba(201, 162, 39, 0.25); }
+  }
+</style>

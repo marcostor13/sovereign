@@ -1,0 +1,105 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import { legalPages, footer, contact } from '../../data/site';
+
+export function getStaticPaths() {
+  return Object.entries(legalPages).map(([slug, page]) => ({
+    params: { slug },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+const { slug } = Astro.params;
+---
+
+<Base title={page.title} description={page.body[0].slice(0, 160)} noIndex>
+  <PageHero
+    eyebrow="Información legal"
+    title={page.title}
+    crumbs={[{ label: page.title }]}
+    meta={[page.updated]}
+  />
+
+  <section class="section">
+    <div class="shell legal">
+      <nav class="legal-nav" aria-label="Documentos legales">
+        <p class="legal-nav-title">Documentos</p>
+        <ul>
+          {footer.legal.map((l) => (
+            <li>
+              <a href={l.href} aria-current={l.href.endsWith(slug!) ? 'page' : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="legal-body prose" data-reveal>
+        {page.body.map((p) => <p>{p}</p>)}
+
+        <p class="legal-contact">
+          <Icon name="mail" size={16} />
+          ¿Dudas sobre este documento? Escríbenos a
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal { display: grid; gap: clamp(2rem, 4vw, 3.5rem); align-items: start; }
+
+  .legal-nav {
+    padding: clamp(1.2rem, 2.4vw, 1.6rem);
+    border: 1px solid var(--hair-soft);
+    border-radius: var(--radius);
+  }
+
+  .legal-nav-title {
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--hair-soft);
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .legal-nav ul { display: grid; gap: 0.6rem; list-style: none; padding: 0; margin: 0; }
+
+  .legal-nav a {
+    display: block;
+    font-size: var(--step--1);
+    color: var(--fg-muted);
+    transition: color var(--dur) var(--ease);
+  }
+
+  .legal-nav a:hover { color: var(--gold-300); }
+  .legal-nav a[aria-current='page'] { color: var(--gold-400); font-weight: 500; }
+
+  .legal-body { max-width: 44rem; }
+
+  .legal-contact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 2.5em !important;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--hair-soft);
+    font-size: var(--step--1);
+  }
+
+  .legal-contact :global(svg) { color: var(--gold-500); }
+
+  @media (min-width: 900px) {
+    .legal { grid-template-columns: minmax(13rem, 16rem) minmax(0, 1fr); gap: clamp(3rem, 5vw, 5rem); }
+    .legal-nav { position: sticky; top: calc(var(--header-h-scrolled) + 2rem); }
+  }
+</style>

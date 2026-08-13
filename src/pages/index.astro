@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Audience from '../components/Audience.astro';
+import Method from '../components/Method.astro';
+import StrategyGrid from '../components/StrategyGrid.astro';
+import Stats from '../components/Stats.astro';
+import AcademyTeaser from '../components/AcademyTeaser.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { brand } from '../data/site';
+---
+
+<Base
+  title={`${brand.name} ${brand.surname}`}
+  description="Diseñamos estrategias patrimoniales personalizadas que protegen, preservan y multiplican tu patrimonio. Protección, liquidez, crecimiento y legado para empresarios, profesionales, inversionistas y familias en Miami."
+  transparentHeader
+>
+  <Hero />
+  <Marquee />
+  <Audience />
+  <Method />
+  <StrategyGrid />
+  <Stats />
+  <AcademyTeaser />
+  <FinalCta />
+</Base>

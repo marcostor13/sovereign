@@ -1,0 +1,176 @@
+---
+import Icon from './Icon.astro';
+import SectionHead from './SectionHead.astro';
+import { method } from '../data/site';
+---
+
+<section class="section section-deep method grain" id="metodo">
+  <div class="shell">
+    <SectionHead
+      index={method.index}
+      eyebrow={method.eyebrow}
+      title={method.title}
+      lead={method.lead}
+      align="center"
+      size="lg"
+    />
+
+    <ol class="method-track" data-reveal-group data-stagger="140">
+      <i class="method-line draw-line" aria-hidden="true"></i>
+
+      {method.steps.map((step) => (
+        <li class="step" data-reveal-item data-reveal>
+          <span class="step-node">
+            <Icon name={step.icon} size={26} stroke={1.1} />
+            <i class="step-ring" aria-hidden="true"></i>
+          </span>
+
+          <span class="step-n">{step.n}</span>
+          <h3 class="step-title">{step.title}</h3>
+          <p class="step-text">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .method { overflow: hidden; }
+
+  .method-track {
+    position: relative;
+    display: grid;
+    gap: clamp(2.2rem, 4vw, 2.5rem);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: step;
+  }
+
+  /* Hilo de oro que conecta las cinco etapas */
+  .method-line {
+    position: absolute;
+    left: 27px;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--hair-strong) 12%, var(--hair-strong) 88%, transparent);
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform 1600ms var(--ease-out);
+  }
+
+  .method-track.is-in .method-line { transform: scaleY(1); }
+
+  .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    grid-template-areas:
+      'node n'
+      'node title'
+      'node text';
+    align-items: start;
+    gap: 0.35rem 1.4rem;
+  }
+
+  .step-node {
+    grid-area: node;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid var(--hair-strong);
+    background: var(--navy-950);
+    color: var(--gold-400);
+    transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+                background-color var(--dur) var(--ease);
+  }
+
+  .step-ring {
+    position: absolute;
+    inset: -7px;
+    border-radius: 50%;
+    border: 1px solid var(--hair-soft);
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+
+  .step:hover .step-node {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: var(--navy-950);
+  }
+
+  .step:hover .step-ring { opacity: 1; transform: none; }
+
+  .step-n {
+    grid-area: n;
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    letter-spacing: 0.14em;
+    color: var(--gold-600);
+    line-height: 1;
+  }
+
+  .step-title {
+    grid-area: title;
+    font-family: var(--font-roman);
+    font-size: var(--step-1);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bone-100);
+    line-height: 1.25;
+  }
+
+  .step-text {
+    grid-area: text;
+    margin-top: 0.35rem;
+    font-size: var(--step--1);
+    line-height: 1.65;
+    color: var(--fg-muted);
+    max-width: 34rem;
+  }
+
+  /* --- Escritorio: recorrido horizontal --------------------------------- */
+
+  @media (min-width: 900px) {
+    .method-track {
+      grid-template-columns: repeat(5, 1fr);
+      gap: clamp(1rem, 2vw, 2rem);
+      text-align: center;
+    }
+
+    .method-line {
+      left: 10%;
+      right: 10%;
+      top: 28px;
+      bottom: auto;
+      width: auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--hair-strong) 8%, var(--hair-strong) 92%, transparent);
+      transform-origin: left;
+      transform: scaleX(0);
+    }
+
+    .method-track.is-in .method-line { transform: scaleX(1); }
+
+    .step {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'node' 'n' 'title' 'text';
+      justify-items: center;
+      gap: 0.55rem;
+    }
+
+    .step-node { margin-bottom: 0.6rem; }
+    .step-text { margin-top: 0.2rem; padding-inline: 0.25rem; }
+
+    /* Reserva dos líneas para que las descripciones arranquen a la misma
+       altura aunque un título ocupe una sola línea. */
+    .step-title { min-height: 2.5em; display: flex; align-items: center; }
+  }
+</style>

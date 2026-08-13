@@ -1,0 +1,184 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Calculator from '../components/Calculator.astro';
+import Accordion from '../components/Accordion.astro';
+import Icon from '../components/Icon.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { resources } from '../data/site';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: resources.faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base
+  title="Recursos"
+  description="Guías, eBooks, webinars y una calculadora de costo de oportunidad para entender tu situación patrimonial antes de sentarte con un asesor."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline slot="head" />
+
+  <PageHero
+    eyebrow={resources.eyebrow}
+    title={resources.title}
+    lead={resources.lead}
+    crumbs={[{ label: 'Recursos' }]}
+    size="lg"
+  />
+
+  {/* --- Guías ----------------------------------------------------------- */}
+  <section class="section" id="guias">
+    <div class="shell">
+      <SectionHead index="01" eyebrow="Descargables" title={resources.guidesTitle} />
+
+      <ul class="guides" data-reveal-group data-stagger="90">
+        {resources.guides.map((g) => (
+          <li class="guide card" data-reveal-item data-reveal>
+            <span class="guide-icon"><Icon name={g.icon} size={26} stroke={1.1} /></span>
+            <p class="guide-tag">{g.tag}</p>
+            <h3 class="guide-title">
+              <Fragment set:html={g.title.replace(/™/g, '<sup>™</sup>')} />
+            </h3>
+            <p class="guide-text">{g.text}</p>
+            <a class="link-arrow guide-cta" href="/contacto">
+              {resources.guideCta}
+              <Icon name="download" size={15} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* --- Calculadora ------------------------------------------------------ */}
+  <section class="section section-deep">
+    <div class="shell">
+      <SectionHead index="02" eyebrow="Herramienta interactiva" title="Calculadora" />
+      <div data-reveal><Calculator /></div>
+    </div>
+  </section>
+
+  {/* --- Webinars --------------------------------------------------------- */}
+  <section class="section" id="webinars">
+    <div class="shell">
+      <SectionHead index="03" eyebrow="En vivo" title={resources.webinarsTitle} />
+
+      <ul class="webinars" data-reveal-group data-stagger="90">
+        {resources.webinars.map((w) => (
+          <li class="webinar card" data-reveal-item data-reveal>
+            <div class="webinar-main">
+              <p class="webinar-date">
+                <Icon name="calendar" size={15} />
+                {w.date}
+              </p>
+              <h3 class="webinar-title">
+                <Fragment set:html={w.title.replace(/™/g, '<sup>™</sup>')} />
+              </h3>
+              <p class="webinar-text">{w.text}</p>
+            </div>
+
+            <a class="btn btn-outline webinar-cta" href="/contacto">
+              {resources.webinarCta}
+              <Icon name="arrow" size={15} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* --- Preguntas frecuentes --------------------------------------------- */}
+  <section class="section section-light on-light" id="faq">
+    <div class="shell faq-shell">
+      <SectionHead index="04" eyebrow="Dudas habituales" title={resources.faqTitle} size="lg" />
+      <Accordion items={resources.faq} />
+    </div>
+  </section>
+
+  <FinalCta />
+</Base>
+
+<style>
+  /* --- Guías -------------------------------------------------------------- */
+
+  .guides {
+    display: grid;
+    gap: clamp(1rem, 1.8vw, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .guide { gap: 0.8rem; }
+
+  .guide-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 0.4rem;
+    color: var(--gold-400);
+    border: 1px solid var(--hair-strong);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+
+  .guide:hover .guide-icon { background: var(--gold-500); color: var(--navy-950); }
+
+  .guide-tag {
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--gold-700);
+  }
+
+  .guide-title { font-size: var(--step-2); color: var(--fg); }
+  .guide-title :global(sup) { font-size: 0.4em; vertical-align: super; }
+
+  .guide-text { flex: 1; font-size: var(--step--1); line-height: 1.65; color: var(--fg-muted); }
+
+  .guide-cta {
+    padding-top: 0.9rem;
+    margin-top: 0.3rem;
+    border-top: 1px solid var(--hair-soft);
+  }
+
+  /* --- Webinars ----------------------------------------------------------- */
+
+  .webinars {
+    display: grid;
+    gap: clamp(1rem, 1.8vw, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .webinar { gap: 1.3rem; }
+  .webinar-main { display: grid; gap: 0.6rem; }
+
+  .webinar-date {
+    display: flex;
+    align-items: center;
+    gap: 0.55em;
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .webinar-title { font-size: var(--step-2); color: var(--fg); }
+  .webinar-title :global(sup) { font-size: 0.4em; vertical-align: super; }
+  .webinar-text { font-size: var(--step--1); line-height: 1.65; color: var(--fg-muted); }
+  .webinar-cta { justify-self: start; margin-top: auto; }
+
+  .faq-shell { max-width: 68rem; }
+</style>

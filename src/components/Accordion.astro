@@ -1,0 +1,111 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  items: readonly { q: string; a: string }[];
+  /** Abre el primero por defecto. */
+  openFirst?: boolean;
+}
+
+const { items, openFirst = true } = Astro.props;
+---
+
+<div class="acc" data-reveal-group data-stagger="60">
+  {items.map((item, i) => (
+    <details class="acc-item" open={openFirst && i === 0} data-reveal-item data-reveal="fade">
+      <summary>
+        <span class="acc-n">{String(i + 1).padStart(2, '0')}</span>
+        <span class="acc-q">{item.q}</span>
+        <Icon name="plus" size={18} class="acc-icon" />
+      </summary>
+      <div class="acc-a"><p>{item.a}</p></div>
+    </details>
+  ))}
+</div>
+
+<style>
+  .acc { display: grid; }
+
+  .acc-item {
+    border-top: 1px solid var(--hair-soft);
+    transition: background-color var(--dur) var(--ease);
+  }
+
+  .acc-item:last-child { border-bottom: 1px solid var(--hair-soft); }
+  .acc-item[open] { background: linear-gradient(100deg, rgba(201, 162, 39, 0.05), transparent 60%); }
+
+  .acc-item summary {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: clamp(1.1rem, 2.2vw, 1.6rem) 0.2rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .acc-item summary::-webkit-details-marker { display: none; }
+
+  .acc-n {
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    letter-spacing: 0.08em;
+    color: var(--gold-700);
+    transition: color var(--dur) var(--ease);
+  }
+
+  .acc-item[open] .acc-n { color: var(--gold-400); }
+
+  .acc-q {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.3;
+    color: var(--fg);
+    transition: color var(--dur) var(--ease);
+  }
+
+  .acc-item summary:hover .acc-q { color: var(--gold-300); }
+
+  .acc-icon {
+    color: var(--accent);
+    transition: transform 380ms var(--ease);
+  }
+
+  .acc-item[open] .acc-icon { transform: rotate(135deg); }
+
+  .acc-a {
+    padding: 0 0 clamp(1.2rem, 2.4vw, 1.8rem);
+    padding-left: calc(var(--step-0) + 2.2rem);
+    max-width: 62ch;
+  }
+
+  .acc-a p {
+    font-size: var(--step-0);
+    line-height: 1.75;
+    color: var(--fg-muted);
+  }
+
+  .on-light .acc-a p { color: var(--ink-500); }
+  .on-light .acc-q { color: var(--ink-900); }
+  .on-light .acc-item summary:hover .acc-q { color: var(--gold-700); }
+
+  @media (max-width: 560px) {
+    .acc-a { padding-left: 0; }
+  }
+</style>
+
+<script>
+  /* Acordeón exclusivo: abrir una pregunta cierra la anterior. */
+  document.querySelectorAll<HTMLElement>('.acc').forEach((group) => {
+    const items = [...group.querySelectorAll<HTMLDetailsElement>('details')];
+
+    items.forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (!item.open) return;
+        items.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  });
+</script>

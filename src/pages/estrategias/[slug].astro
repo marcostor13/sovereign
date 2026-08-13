@@ -1,0 +1,256 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { ui } from '../../data/site';
+
+export async function getStaticPaths() {
+  const items = (await getCollection('strategies')).sort((a, b) => a.data.order - b.data.order);
+
+  return items.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      // Enlace circular a la siguiente estrategia: nadie termina en un callejón.
+      next: items[(i + 1) % items.length],
+      others: items.filter((s) => s.id !== entry.id),
+    },
+  }));
+}
+
+const { entry, next, others } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+
+<Base title={d.title} description={d.short} ogType="article">
+  <PageHero
+    eyebrow="Estrategia"
+    title={d.title}
+    lead={d.lead}
+    crumbs={[{ label: 'Estrategias', href: '/estrategias' }, { label: d.title }]}
+    meta={d.forWhom.length ? [`Para ${d.forWhom.join(', ').toLowerCase()}`] : []}
+    size="lg"
+  >
+    <span class="str-badge" aria-hidden="true">
+      <Icon name={d.icon} size={30} stroke={1.1} />
+    </span>
+  </PageHero>
+
+  <section class="section">
+    <div class="shell detail">
+      <div class="detail-main">
+        <div class="prose prose-lead" data-reveal>
+          <Content />
+        </div>
+
+        <div class="detail-outcome" data-reveal>
+          <p class="label">{ui.outcome}</p>
+          <p class="detail-outcome-text">{d.outcome}</p>
+        </div>
+      </div>
+
+      <aside class="detail-side">
+        <div class="detail-card" data-reveal="right">
+          <h2 class="detail-card-title">{ui.inThisStrategy}</h2>
+
+          <ul class="detail-list">
+            {d.bullets.map((b) => (
+              <li><Icon name="check" size={14} stroke={2} />{b}</li>
+            ))}
+          </ul>
+
+          <a class="btn btn-gold btn-block detail-cta" href="/contacto">
+            {ui.talkAbout}
+            <Icon name="arrow" size={16} />
+          </a>
+        </div>
+
+        <a class="detail-next" href={`/estrategias/${next.id}`} data-reveal="right">
+          <span class="label">Siguiente estrategia</span>
+          <span class="detail-next-title">
+            <Fragment set:html={next.data.title.replace(/™/g, '<sup>™</sup>')} />
+            <Icon name="arrow" size={18} />
+          </span>
+        </a>
+      </aside>
+    </div>
+  </section>
+
+  {/* --- Otras estrategias ------------------------------------------------ */}
+  <section class="section section-light on-light">
+    <div class="shell">
+      <h2 class="title others-title" data-reveal>{ui.otherStrategies}</h2>
+
+      <ul class="others" data-reveal-group data-stagger="70">
+        {others.map((s) => (
+          <li data-reveal-item data-reveal>
+            <a class="other card" href={`/estrategias/${s.id}`}>
+              <Icon name={s.data.icon} size={24} stroke={1.1} />
+              <span class="other-title">
+                <Fragment set:html={s.data.title.replace(/™/g, '<sup>™</sup>')} />
+              </span>
+              <Icon name="arrow" size={16} class="other-arrow" />
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <p class="others-back" data-reveal>
+        <a class="link-arrow" href="/estrategias">
+          <Icon name="arrow" size={15} class="flip" />
+          {ui.backToStrategies}
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <FinalCta />
+</Base>
+
+<style>
+  .str-badge {
+    display: grid;
+    place-items: center;
+    width: 68px;
+    height: 68px;
+    margin-top: 0.6rem;
+    color: var(--gold-400);
+    border: 1px solid var(--hair-strong);
+    border-radius: var(--radius);
+    background: linear-gradient(160deg, rgba(201, 162, 39, 0.12), transparent);
+  }
+
+  .detail {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .detail-main { min-width: 0; }
+
+  .detail-outcome {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding: clamp(1.5rem, 3vw, 2.2rem);
+    border: 1px solid var(--hair-strong);
+    border-left-width: 2px;
+    border-radius: var(--radius);
+    background: linear-gradient(100deg, rgba(201, 162, 39, 0.1), transparent 70%);
+  }
+
+  .detail-outcome-text {
+    margin-top: 0.7rem;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.35;
+    color: var(--bone-100);
+  }
+
+  .detail-side { display: grid; gap: 1rem; }
+
+  .detail-card {
+    padding: clamp(1.5rem, 2.8vw, 2.1rem);
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+    background: linear-gradient(165deg, var(--navy-800), var(--navy-950));
+  }
+
+  .detail-card-title {
+    padding-bottom: 0.9rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 1px solid var(--hair-soft);
+    font-family: var(--font-sans);
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .detail-list { display: grid; gap: 0.85rem; list-style: none; padding: 0; margin: 0; }
+
+  .detail-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7em;
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fg-muted);
+  }
+
+  .detail-list :global(svg) { margin-top: 0.35em; color: var(--gold-500); }
+
+  .detail-cta { margin-top: 1.5rem; }
+
+  .detail-next {
+    display: grid;
+    gap: 0.55rem;
+    padding: clamp(1.2rem, 2.4vw, 1.7rem);
+    border: 1px solid var(--hair-soft);
+    border-radius: var(--radius);
+    transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+  }
+
+  .detail-next:hover { border-color: var(--hair-strong); background: rgba(201, 162, 39, 0.05); }
+
+  .detail-next-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--fg);
+  }
+
+  .detail-next-title :global(sup) { font-size: 0.4em; vertical-align: super; }
+  .detail-next :global(svg) { color: var(--accent); transition: transform var(--dur) var(--ease); }
+  .detail-next:hover :global(svg) { transform: translateX(5px); }
+
+  @media (min-width: 1000px) {
+    .detail { grid-template-columns: minmax(0, 1fr) minmax(19rem, 24rem); gap: clamp(3rem, 5vw, 5rem); }
+    .detail-side { position: sticky; top: calc(var(--header-h-scrolled) + 2rem); }
+  }
+
+  /* --- Otras estrategias -------------------------------------------------- */
+
+  .others-title { font-size: var(--step-3); margin-bottom: clamp(1.5rem, 3vw, 2.2rem); }
+
+  .others {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .other {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1.1rem 1.3rem;
+    height: 100%;
+  }
+
+  .other > :global(svg:first-child) { color: var(--gold-600); }
+
+  .other-title {
+    flex: 1;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.2;
+    color: var(--ink-900);
+  }
+
+  .other-title :global(sup) { font-size: 0.42em; vertical-align: super; }
+
+  .other-arrow { color: var(--gold-600); transition: transform var(--dur) var(--ease); }
+  .other:hover .other-arrow { transform: translateX(4px); }
+
+  .others-back { margin-top: clamp(1.8rem, 3.5vw, 2.6rem); }
+  .others-back :global(.flip) { transform: rotate(180deg); }
+  .others-back :global(.link-arrow:hover svg) { transform: rotate(180deg) translateX(5px); }
+</style>
