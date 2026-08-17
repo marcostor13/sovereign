@@ -30,7 +30,7 @@ Esa combinación produce la escena clásica: la familia vende el mejor activo, c
 
 ## Transferir capital no es transferir criterio
 
-Existe una estadística incómoda y bien documentada: alrededor del 70% del patrimonio familiar se disuelve en la segunda generación y cerca del 90% en la tercera. No ocurre por falta de dinero, sino por falta de preparación.
+Construir patrimonio es sólo una parte del desafío. Preservarlo y transferirlo correctamente requiere planificación, y esa planificación rara vez falla por falta de dinero: falla por falta de preparación.
 
 Un heredero puede recibir un patrimonio considerable sin haber tomado nunca una decisión patrimonial. La transferencia de activos es un acto administrativo; la de criterio es un proceso de años que hay que empezar mucho antes.
 

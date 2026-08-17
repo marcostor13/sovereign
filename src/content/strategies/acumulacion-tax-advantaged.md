@@ -1,13 +1,13 @@
 ---
 title: Acumulación Tax Advantaged
-short: Diseñamos estructuras que te permiten crecer tu patrimonio de forma eficiente.
+short: 'Diseñamos estructuras orientadas a la acumulación eficiente de capital, aprovechando las ventajas fiscales disponibles según cada estrategia.'
 icon: coins
 order: 3
 lead: No es cuánto rinde. Es cuánto conservas después de impuestos, comisiones y volatilidad.
 bullets:
-  - Crecimiento con tratamiento fiscal eficiente dentro del marco legal vigente.
+  - Acumulación con tratamiento fiscal eficiente dentro del marco legal vigente y aplicable a tu caso.
   - Reducción del arrastre fiscal año tras año sobre el interés compuesto.
-  - Distribuciones diseñadas para minimizar el impacto impositivo en el retiro.
+  - Distribuciones diseñadas para procurar un impacto impositivo eficiente en la etapa de retiro.
   - Coordinación permanente con tu CPA y tu asesor legal.
 outcome: El mismo rendimiento bruto se convierte en un patrimonio neto materialmente mayor.
 forWhom:

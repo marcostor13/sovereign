@@ -24,7 +24,7 @@ Ninguna de las tres es un escenario extremo. Las tres son el resultado previsibl
 
 ## Cómo se resuelve
 
-El acuerdo se acompaña de una estructura que genera exactamente el capital necesario, en el momento exacto y libre de impuestos para el comprador. Cuesta una fracción del valor que protege.
+El acuerdo se acompaña de una estructura diseñada para generar el capital necesario en el momento en que se necesita, con el tratamiento fiscal que corresponda a la solución contratada y a la situación de las partes. Cuesta una fracción del valor que protege.
 
 Dos detalles que marcan la diferencia en la práctica: la valuación debe tener una fórmula acordada de antemano —no una cifra fija que envejece— y la cobertura debe revisarse cada vez que la empresa cambia de tamaño. Un acuerdo fondeado sobre una valuación de hace ocho años protege la empresa que ya no existe.
 

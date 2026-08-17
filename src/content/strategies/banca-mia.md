@@ -1,17 +1,17 @@
 ---
 title: Banca Mía™
-short: Nuestra metodología para convertir tu póliza en tu propio banco personal.
+short: 'Nuestra metodología para estructurar protección, acumulación y acceso estratégico a capital dentro de una solución diseñada alrededor de tus objetivos.'
 icon: lock
 order: 6
 featured: true
-lead: Deja de ser cliente del banco. Conviértete en tu propia fuente de financiamiento.
+lead: 'Tu capital puede hacer más que crecer. Puede convertirse en parte de tu estrategia de financiamiento.'
 bullets:
-  - Tu capital crece de forma garantizada mientras lo mantienes disponible.
-  - Financias autos, propiedades, inventario o proyectos desde tu propia estructura.
-  - Recuperas los intereses que hoy pagas a terceros.
-  - 'Control total: sin scoring, sin comités, sin justificar el destino del dinero.'
-  - La estructura se transfiere a la siguiente generación intacta.
-outcome: 'Cada dólar cumple dos funciones a la vez: sigue creciendo y además trabaja para ti.'
+  - Acumulación de capital con crecimiento definido contractualmente, manteniéndolo disponible como parte de la estrategia.
+  - Participas en el financiamiento de autos, propiedades, inventario o proyectos desde tu propia estructura.
+  - Reorientas hacia tu propia estructura parte de los intereses que hoy pagas a terceros.
+  - 'Mayor control sobre el uso del capital, dentro de las condiciones y características de la solución.'
+  - La estructura contempla la transferencia ordenada del patrimonio a la siguiente generación.
+outcome: 'Una misma estructura que integra protección, acumulación y acceso estratégico a liquidez.'
 forWhom:
   - Empresarios
   - Familias
@@ -32,9 +32,9 @@ Ese segundo costo —el de oportunidad— nunca aparece en el contrato y es sist
 
 ## Cómo funciona
 
-La metodología utiliza una estructura de capital de crecimiento garantizado sobre la que puedes tomar acceso a liquidez. La particularidad técnica, y la que cambia toda la aritmética, es que el capital dentro de la estructura continúa capitalizando sobre el total incluso mientras tú estás usando ese dinero fuera de ella.
+La metodología utiliza una estructura de acumulación con crecimiento definido contractualmente sobre la que puedes acceder a liquidez. La particularidad técnica, y la que cambia la aritmética, es que el capital dentro de la estructura puede continuar capitalizando sobre el total mientras utilizas esos fondos fuera de ella, de acuerdo con las condiciones de la solución.
 
-Tú defines el calendario de reposición. Los intereses que antes pagabas a un tercero regresan a tu propio sistema, y el sistema crece con cada ciclo.
+Tú defines el calendario de reposición dentro de las condiciones del contrato, y parte de los intereses que antes pagabas a un tercero se reorienta hacia tu propia estructura.
 
 ## Para quién tiene sentido
 
@@ -44,4 +44,4 @@ Requiere disciplina y un horizonte largo. No es una solución para quien necesit
 
 ## Lo que Banca Mía™ no es
 
-No es un esquema de rendimientos extraordinarios ni una forma de evitar impuestos. Es una capa de arquitectura patrimonial que mejora el flujo del capital que ya tienes. Y como toda arquitectura, necesita diseñarse antes de construirse.
+No es un esquema de rendimientos extraordinarios, no convierte una póliza en un banco y no es una forma de evitar impuestos. Es una capa de arquitectura patrimonial que ordena el flujo del capital que ya tienes. Y como toda arquitectura, necesita diseñarse antes de construirse. Las características, costos y consecuencias fiscales dependen de la solución contratada y de tu situación particular.

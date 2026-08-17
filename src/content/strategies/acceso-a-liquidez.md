@@ -1,14 +1,14 @@
 ---
 title: Acceso a Liquidez
-short: Accede a tu dinero de manera estratégica, sin penalidades ni impuestos.
+short: 'Diseñamos estrategias para acceder a liquidez de manera eficiente, sujeto a las condiciones y características de cada solución.'
 icon: drop
 order: 2
 lead: Tener patrimonio y no poder usarlo es una forma cara de pobreza. Construimos acceso sin desarmar la estrategia.
 bullets:
-  - Acceso al capital sin penalidades por retiro anticipado ni eventos imponibles.
-  - Liquidez disponible para oportunidades de negocio en días, no en meses.
-  - El capital sigue capitalizando mientras lo utilizas.
-  - Independencia de comités de crédito y de los ciclos bancarios.
+  - Acceso al capital diseñado para minimizar penalidades y eventos imponibles, según la estructura seleccionada.
+  - Liquidez prevista para oportunidades de negocio, dentro de los plazos y condiciones de cada solución.
+  - Estructuras en las que el capital puede continuar capitalizando mientras accedes a liquidez.
+  - Menor dependencia de comités de crédito y de los ciclos bancarios.
 outcome: Capital disponible cuando aparece la oportunidad, sin vender lo que no querías vender.
 forWhom:
   - Empresarios
@@ -23,13 +23,13 @@ Cada una de esas ventas forzadas tiene dos costos. El evidente —el precio cast
 
 ## Liquidez que no interrumpe la capitalización
 
-La arquitectura que diseñamos separa dos funciones que normalmente compiten: la de acumular y la de estar disponible. Utilizamos estructuras de capital garantizado sobre las que puedes tomar acceso a liquidez sin retirar el capital subyacente, de modo que éste continúa componiendo sobre el total.
+La arquitectura que diseñamos separa dos funciones que normalmente compiten: la de acumular y la de estar disponible. Utilizamos estructuras que permiten acceder a liquidez sin retirar el capital subyacente, de modo que éste puede continuar componiendo sobre el total según las condiciones de cada solución.
 
 En la práctica significa que un mismo dólar hace dos trabajos a la vez: sigue creciendo dentro de la estructura y financia lo que necesites fuera de ella.
 
 ## Sin comités, sin scoring, sin justificar el destino
 
-El acceso no depende de la aprobación de nadie ni de tu situación crediticia del momento. No hay expediente, no hay tasación, no hay explicación sobre el uso del dinero. El calendario de reposición lo defines tú.
+Según la estructura seleccionada, el acceso puede no depender de una evaluación crediticia ni de la aprobación de un comité, y el calendario de reposición lo defines tú dentro de las condiciones del contrato.
 
 Esa independencia importa especialmente en los momentos en que el crédito bancario se restringe, que suelen ser exactamente los mismos momentos en que aparecen las mejores oportunidades.
 

@@ -70,7 +70,7 @@ export const nav: NavItem[] = [
       { label: 'Acumulación Tax Advantaged', href: '/estrategias/acumulacion-tax-advantaged', desc: 'Crece por lo que conservas' },
       { label: 'Planificación Empresarial', href: '/estrategias/planificacion-empresarial', desc: 'Continuidad y sucesión del negocio' },
       { label: 'Legado y Sucesión', href: '/estrategias/legado-y-sucesion', desc: 'Transferencia por decisión, no por ley' },
-      { label: 'Banca Mía™', href: '/estrategias/banca-mia', desc: 'Conviértete en tu propia fuente de capital' },
+      { label: 'Banca Mía™', href: '/estrategias/banca-mia', desc: 'Protección, acumulación y acceso estratégico a capital' },
     ],
   },
   {
@@ -109,7 +109,7 @@ export const hero = {
     { text: 'Se diseñan', accent: true },
     { text: 'con estrategia.', accent: true },
   ] as HeroLine[],
-  lead: 'Diseñamos estrategias patrimoniales personalizadas que protegen, preservan y multiplican tu patrimonio con visión, objetividad y propósito.',
+  lead: 'Diseñamos estrategias patrimoniales personalizadas que protegen, preservan y fortalecen tu patrimonio con visión, objetividad y propósito.',
   scroll: 'Desliza',
   pillars: [
     { icon: 'shield' as IconName, label: 'Protección', sub: 'Patrimonial' },
@@ -177,8 +177,8 @@ export const method = {
     { n: '01', icon: 'search' as IconName, title: 'Discovery', text: 'Conocemos tu historia, tus objetivos y lo que realmente importa para ti.' },
     { n: '02', icon: 'doc' as IconName, title: 'Analysis', text: 'Analizamos tu situación financiera y patrimonial para identificar oportunidades y riesgos.' },
     { n: '03', icon: 'compass' as IconName, title: 'Architecture', text: 'Diseñamos una estrategia personalizada alineada con tus objetivos de vida y legado.' },
-    { n: '04', icon: 'gear' as IconName, title: 'Implementation', text: 'Implementamos la estrategia con las mejores compañías y estructuras disponibles en el mercado.' },
-    { n: '05', icon: 'infinity' as IconName, title: 'Lifetime Partnership', text: 'Te acompañamos de por vida, revisando, ajustando y optimizando tu estrategia continuamente.' },
+    { n: '04', icon: 'gear' as IconName, title: 'Implementation', text: 'Implementamos la estrategia utilizando compañías y estructuras cuidadosamente seleccionadas de acuerdo con las necesidades y objetivos del cliente.' },
+    { n: '05', icon: 'infinity' as IconName, title: 'Ongoing Partnership', text: 'Te acompañamos en el tiempo, revisando y ajustando tu estrategia conforme evolucionan tus objetivos y circunstancias.' },
   ],
 } as const;
 
@@ -213,19 +213,19 @@ export const academySection = {
 export const about = {
   eyebrow: 'Sobre nosotros',
   title: 'No vendemos productos. Diseñamos arquitectura patrimonial.',
-  lead: 'Sovereign Capital Solutions nació de una convicción incómoda: la mayoría de las familias con patrimonio no tienen una estrategia. Tienen productos sueltos, comprados en momentos distintos, a personas distintas, que nunca hablaron entre sí.',
+  lead: 'Sovereign Capital Solutions nació de una convicción: demasiadas familias construyen patrimonio sin una estrategia que conecte cada una de sus decisiones financieras. Acumulan productos adquiridos en momentos distintos, con objetivos distintos, que nunca fueron diseñados para trabajar como una sola estructura.',
   body: [
     'Nuestro trabajo empieza donde termina la venta tradicional. Antes de recomendar cualquier instrumento entendemos la historia completa: el negocio, la familia, las obligaciones, los miedos y lo que quieres que siga existiendo cuando tú ya no estés.',
-    'Somos independientes. No pertenecemos a ninguna institución que nos obligue a colocar su inventario, lo que nos permite acceder a las mejores compañías y estructuras disponibles en el mercado y elegir según tu caso, no según una cuota.',
-    'Y no desaparecemos después de implementar. Una estrategia patrimonial que no se revisa envejece mal: cambian tus ingresos, tu familia, la legislación y tus objetivos. Por eso la última etapa de nuestro método no termina nunca.',
+    'Nuestro proceso empieza con tus objetivos, no con un producto específico. Evaluamos las soluciones disponibles dentro de las compañías y productos a los que tenemos acceso para determinar cuáles pueden ajustarse mejor a tu situación, tu elegibilidad y tus objetivos.',
+    'Y no desaparecemos después de implementar. Una estrategia patrimonial que no se revisa envejece mal: cambian tus ingresos, tu familia, la legislación y tus objetivos. Por eso la última etapa de nuestro método es de acompañamiento continuo.',
   ],
   pillarsTitle: 'Los principios que no negociamos',
   pillarsLead: 'Cinco valores que funcionan como filtro de cada decisión que tomamos por ti.',
   pillars: [
     { icon: 'lock' as IconName, title: 'Discreción', text: 'Tu información financiera es tuya. Trabajamos con la reserva que exige un patrimonio serio.' },
     { icon: 'scale' as IconName, title: 'Ética', text: 'Si una estrategia no te conviene te lo decimos, aunque signifique no hacer negocio.' },
-    { icon: 'target' as IconName, title: 'Independencia', text: 'Sin cuotas de colocación ni lealtades a una sola compañía. Sólo criterio.' },
-    { icon: 'infinity' as IconName, title: 'Compromiso', text: 'Acompañamiento de por vida: revisamos, ajustamos y respondemos.' },
+    { icon: 'target' as IconName, title: 'Independencia', text: 'Primero la estrategia, después el producto. El criterio lo marca tu situación, nunca una cuota de colocación.' },
+    { icon: 'infinity' as IconName, title: 'Compromiso', text: 'Acompañamiento continuo: revisamos, ajustamos y respondemos.' },
     { icon: 'star' as IconName, title: 'Excelencia', text: 'Cada estructura se diseña como si fuera a auditarla la próxima generación. Porque lo hará.' },
   ],
   differenceTitle: 'La diferencia Sovereign',
@@ -238,6 +238,48 @@ export const about = {
     { a: 'Mide comisiones colocadas', b: 'Mide patrimonio protegido y transferido' },
     { a: 'Habla con una sola persona de la familia', b: 'Prepara a la siguiente generación para recibir' },
   ],
+} as const;
+
+/**
+ * Página del fundador. Una sola fotografía institucional: la firma trasciende a
+ * su fundador, pero el visitante debe poder ponerle rostro a la visión.
+ * Basta con dejar `founder.jpg` en `src/assets/img/` para que aparezca el
+ * retrato; sin ese archivo se muestra la lámina de marca.
+ */
+export const founder = {
+  eyebrow: 'El fundador',
+  name: 'Oswald Gonzalez',
+  role: 'Founder & CEO',
+  credentials: 'Civil Engineer · Real Estate Broker · Licensed Life, Health & Annuity Agent',
+  tagline: 'De la ingeniería de grandes proyectos a la arquitectura patrimonial.',
+  photoAlt: 'Oswald Gonzalez, fundador de Sovereign Capital Solutions',
+  intro: 'Aprendí a construir estructuras. Hoy diseño estrategias para proteger lo que otros tardaron una vida en construir.',
+  blocks: [
+    {
+      title: 'Dos décadas construyendo',
+      text: 'Mi carrera profesional estuvo vinculada a la ingeniería, la construcción y proyectos de gran escala en distintos países. Ese mundo me enseñó algo que todavía define mi manera de pensar.',
+    },
+    {
+      title: 'Nada importante debe construirse sin un diseño',
+      text: 'En ingeniería, antes de construir se estudia el terreno, se calculan los riesgos, se diseña la estructura y se proyecta cómo deberá responder durante décadas. Con el tiempo entendí que el patrimonio debería tratarse con la misma disciplina.',
+    },
+    {
+      title: 'Lo que vi en Real Estate',
+      text: 'Conocí personas capaces de generar ingresos, adquirir propiedades y construir empresas que, sin embargo, no tenían una estrategia integral para proteger lo construido, mantener liquidez y preparar la transferencia de su patrimonio.',
+    },
+    {
+      title: 'De esa visión nace Sovereign',
+      text: 'No para comenzar preguntando qué producto financiero comprar, sino para hacer primero las preguntas más importantes.',
+    },
+  ],
+  questions: [
+    '¿Qué estás construyendo?',
+    '¿Qué necesitas proteger?',
+    '¿Qué quieres conservar?',
+    '¿Y qué deseas dejar cuando ya no estés?',
+  ],
+  closing: 'Acumular patrimonio es solamente una parte de la historia. La verdadera estrategia consiste en diseñar qué ocurrirá con él durante tu vida y después de ella.',
+  quote: 'Durante años diseñé estructuras donde el margen de error era mínimo. Hoy aplico esa misma disciplina al diseño de estrategias para proteger patrimonio, crear liquidez y construir legado.',
 } as const;
 
 export const resources = {
@@ -276,12 +318,34 @@ export const resources = {
   },
   faqTitle: 'Preguntas frecuentes',
   faq: [
-    { q: '¿Cuál es el patrimonio mínimo para trabajar con ustedes?', a: 'No fijamos un mínimo rígido. Trabajamos con quienes tienen algo que proteger y disposición a seguir un proceso. En la primera conversación evaluamos juntos si nuestro enfoque aporta valor a tu caso; si no lo aporta, te lo decimos.' },
-    { q: '¿Cómo cobran ustedes?', a: 'Nuestra compensación proviene de las compañías con las que implementamos, no de un honorario que salga de tu bolsillo. Te explicamos con total transparencia cómo funciona antes de que tomes cualquier decisión.' },
-    { q: '¿Sustituyen a mi contador o a mi abogado?', a: 'No. Trabajamos con ellos. La arquitectura patrimonial funciona cuando el diseño financiero, el fiscal y el legal apuntan en la misma dirección. Coordinamos con tus asesores actuales o te presentamos profesionales de confianza.' },
-    { q: '¿Cuánto tiempo toma implementar una estrategia?', a: 'El diseño suele tomar entre dos y cuatro semanas desde la sesión de Discovery. La implementación depende de las estructuras involucradas y de los procesos de suscripción: típicamente entre cuatro y ocho semanas adicionales.' },
-    { q: '¿Qué pasa si mi situación cambia?', a: 'Se ajusta. La quinta etapa del Método Sovereign™ es acompañamiento de por vida: revisamos la estrategia al menos una vez al año y cada vez que ocurre un cambio relevante en tu vida, tu negocio o la legislación.' },
-    { q: '¿Trabajan con personas fuera de Estados Unidos?', a: 'Sí. Atendemos a familias y empresarios de varios países. Las estructuras disponibles varían según la residencia fiscal y lo evaluamos caso por caso en la consulta inicial.' },
+    {
+      q: '¿Necesito tener un patrimonio mínimo para trabajar con Sovereign?',
+      a: 'No establecemos un patrimonio mínimo. Trabajamos con personas, familias y empresarios que desean proteger lo que han construido, fortalecer su posición financiera o comenzar a desarrollar una estrategia patrimonial de largo plazo. La consulta inicial nos permite determinar si podemos aportar valor a tu situación.',
+    },
+    {
+      q: '¿Sovereign trabaja con una sola compañía?',
+      a: 'Nuestro proceso comienza con tus objetivos, no con un producto específico. Evaluamos las soluciones disponibles dentro de las compañías y productos a los que tenemos acceso para determinar cuáles pueden ajustarse mejor a tu situación, elegibilidad y objetivos.',
+    },
+    {
+      q: '¿Cómo somos compensados?',
+      a: 'Dependiendo de la estrategia y de los productos implementados, Sovereign Capital Solutions puede recibir compensación de las compañías proveedoras. Antes de cualquier implementación, explicamos de manera clara cómo funciona nuestra compensación y los costos asociados al producto o estrategia seleccionada.',
+    },
+    {
+      q: '¿Sustituyen a mi contador o a mi abogado?',
+      a: 'No. Nuestro trabajo no sustituye el asesoramiento legal, contable o fiscal. La arquitectura patrimonial funciona cuando el diseño financiero, el fiscal y el legal apuntan en la misma dirección: cuando una estrategia involucra esas áreas, recomendamos que sea revisada con los profesionales correspondientes y podemos colaborar con tus asesores actuales cuando resulte apropiado.',
+    },
+    {
+      q: '¿Cuánto tiempo toma implementar una estrategia?',
+      a: 'Cada estrategia es diferente. Después de la sesión inicial analizamos tus objetivos y diseñamos las alternativas apropiadas. El tiempo de implementación dependerá de las soluciones seleccionadas, los requisitos de las compañías y, cuando corresponda, los procesos de suscripción. Te acompañamos durante cada etapa del proceso.',
+    },
+    {
+      q: '¿Qué pasa si mi situación cambia?',
+      a: 'La estrategia puede evolucionar contigo. Nuestro enfoque contempla seguimiento periódico para revisar cambios relevantes en tu vida, tu negocio, tus objetivos o tus circunstancias y evaluar si corresponde realizar ajustes.',
+    },
+    {
+      q: '¿Trabajan con personas fuera de Estados Unidos?',
+      a: 'Podemos atender consultas de personas y familias internacionales. La disponibilidad e implementación de determinadas estrategias o productos dependerá del país de residencia, jurisdicción, elegibilidad y requisitos regulatorios aplicables. Cada caso se evalúa individualmente.',
+    },
   ],
 } as const;
 

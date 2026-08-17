@@ -40,8 +40,8 @@ markup para cambiar lo que dice el sitio**.
 ### 1. Copy institucional → `src/data/site.ts`
 
 Un único archivo tipado con la marca, el teléfono, la dirección, el menú, el
-hero, el Método Sovereign™, los valores, la comparativa, las preguntas
-frecuentes, el pie de página y los textos legales. Cambiar el teléfono es editar
+hero, el Método Sovereign™, los valores, la comparativa, la ficha del fundador
+(`founder`), las preguntas frecuentes, el pie de página y los textos legales. Cambiar el teléfono es editar
 una línea; aparecerá en la cabecera, el pie, la página de contacto y los datos
 estructurados a la vez.
 
@@ -94,10 +94,17 @@ AVIF en varios anchos. Sustituir un archivo manteniendo el nombre es suficiente.
 
 | Archivo | Dónde se usa |
 | --- | --- |
-| `hero.png` | Portada, a sangre completa |
-| `inversionistas.png` | Fondo de la banda de cifras |
-| `familias.png` | Fondo de la llamada a la acción final |
-| `profesionales.png` | Retrato de la página *Sobre Nosotros* |
+| `hero.jpg` | Portada, a sangre completa |
+| `inversionistas.jpg` | Fondo de la banda de cifras |
+| `familias.jpg` | Fondo de la llamada a la acción final |
+| `founder.jpg` | Retrato institucional del fundador (*Sobre Nosotros*) |
+
+**Retrato del fundador.** La página *Sobre Nosotros* lleva una sola fotografía
+—la del fundador— por decisión de marca. El archivo es opcional: mientras no
+exista `src/assets/img/founder.jpg` (también valen `.jpeg`, `.png` o `.webp`) la
+sección muestra una lámina de marca con el monograma. Basta con dejar la
+fotografía en esa carpeta con ese nombre para que aparezca el retrato, sin tocar
+el código.
 
 Las tarjetas de la Academia **no usan fotografía**: cada artículo recibe una
 lámina generada a partir del emblema de la marca (`PostPlate.astro`), estable por

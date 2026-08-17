@@ -31,7 +31,7 @@ const d = entry.data;
     title={d.title}
     lead={d.lead}
     crumbs={[{ label: 'Estrategias', href: '/estrategias' }, { label: d.title }]}
-    meta={d.forWhom.length ? [`Para ${d.forWhom.join(', ').toLowerCase()}`] : []}
+    meta={d.forWhom.length ? [`Para ${d.forWhom[0]}`, ...d.forWhom.slice(1)] : []}
     size="lg"
   >
     <span class="str-badge" aria-hidden="true">

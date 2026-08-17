@@ -7,13 +7,23 @@ import Method from '../components/Method.astro';
 import Stats from '../components/Stats.astro';
 import FinalCta from '../components/FinalCta.astro';
 import Icon from '../components/Icon.astro';
-import { about, brand, values } from '../data/site';
-import portrait from '../assets/img/profesionales.jpg';
+import { about, brand, founder, values } from '../data/site';
+
+/**
+ * Retrato del fundador. Se resuelve con `import.meta.glob` para que el sitio
+ * compile con o sin la fotografía: basta con dejar el archivo en
+ * `src/assets/img/founder.{jpg,jpeg,png,webp}` para que aparezca.
+ */
+const founderPhotos = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/img/founder.{jpg,jpeg,png,webp}',
+  { eager: true },
+);
+const founderPhoto = Object.values(founderPhotos)[0]?.default;
 ---
 
 <Base
   title="Sobre Nosotros"
-  description="Sovereign Capital Solutions es una firma independiente de estrategia patrimonial. No vendemos productos: diseñamos arquitectura patrimonial con acompañamiento de por vida."
+  description="Sovereign Capital Solutions es una firma de estrategia patrimonial fundada por Oswald Gonzalez. No vendemos productos: diseñamos arquitectura patrimonial con acompañamiento continuo."
 >
   <PageHero
     eyebrow={about.eyebrow}
@@ -27,21 +37,12 @@ import portrait from '../assets/img/profesionales.jpg';
   <section class="section section-light on-light">
     <div class="shell story">
       <div class="story-media" data-reveal="left">
-        <Image
-          src={portrait}
-          alt="Asesora de Sovereign Capital Solutions trabajando en su despacho"
-          widths={[560, 840, 1120]}
-          sizes="(min-width: 1000px) 40vw, 92vw"
-          loading="lazy"
-          quality={78}
-          format="avif"
-        />
-        <i class="story-frame" aria-hidden="true"></i>
-
         <figure class="story-quote">
+          <p class="story-signature">{brand.signature}</p>
           <blockquote>{brand.promise}</blockquote>
           <figcaption>{brand.name} {brand.surname}</figcaption>
         </figure>
+        <i class="story-frame" aria-hidden="true"></i>
       </div>
 
       <div class="story-copy" data-reveal="right">
@@ -114,6 +115,68 @@ import portrait from '../assets/img/profesionales.jpg';
     </div>
   </section>
 
+  {/* --- El fundador ------------------------------------------------------ */}
+  <section class="section founder-section" id="fundador">
+    <div class="shell founder">
+      <div class="founder-media" data-reveal="left">
+        <div class="founder-portrait">
+        {founderPhoto ? (
+          <Image
+            src={founderPhoto}
+            alt={founder.photoAlt}
+            widths={[520, 780, 1040]}
+            sizes="(min-width: 1000px) 38vw, 92vw"
+            loading="lazy"
+            quality={80}
+            format="avif"
+          />
+        ) : (
+          <div class="founder-plate" role="img" aria-label={founder.photoAlt}>
+            <span class="founder-monogram">SC</span>
+            <span class="founder-plate-name">{founder.name}</span>
+          </div>
+        )}
+          <i class="founder-frame" aria-hidden="true"></i>
+        </div>
+
+        <div class="founder-id">
+          <p class="founder-name">{founder.name}</p>
+          <p class="founder-role">{founder.role}</p>
+          <p class="founder-credentials">{founder.credentials}</p>
+        </div>
+      </div>
+
+      <div class="founder-copy" data-reveal="right">
+        <p class="eyebrow">{founder.eyebrow}</p>
+        <h2 class="title founder-tagline">{founder.tagline}</h2>
+        <p class="founder-intro">{founder.intro}</p>
+
+        <ul class="founder-blocks">
+          {founder.blocks.map((b) => (
+            <li>
+              <h3>{b.title}</h3>
+              <p>{b.text}</p>
+            </li>
+          ))}
+        </ul>
+
+        <ul class="founder-questions">
+          {founder.questions.map((q) => (
+            <li><Icon name="arrow" size={14} stroke={1.6} />{q}</li>
+          ))}
+        </ul>
+
+        <p class="founder-closing">{founder.closing}</p>
+
+        <figure class="founder-quote">
+          <Icon name="quote" size={26} stroke={1.1} />
+          <blockquote>{founder.quote}</blockquote>
+          <figcaption>{founder.name} · {founder.role}</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
   <Method />
   <Stats />
   <FinalCta />
@@ -128,15 +191,7 @@ import portrait from '../assets/img/profesionales.jpg';
     align-items: start;
   }
 
-  .story-media { position: relative; }
-
-  .story-media :global(img) {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    border-radius: var(--radius);
-  }
+  .story-media { position: relative; align-self: start; }
 
   .story-frame {
     position: absolute;
@@ -150,8 +205,7 @@ import portrait from '../assets/img/profesionales.jpg';
 
   .story-quote {
     position: relative;
-    margin: -3.5rem 0 0 clamp(0rem, 2vw, 2rem);
-    padding: clamp(1.4rem, 2.6vw, 2rem);
+    padding: clamp(1.8rem, 3.2vw, 2.6rem);
     background: linear-gradient(160deg, var(--navy-800), var(--navy-950));
     border: 1px solid var(--hair-strong);
     border-radius: var(--radius);
@@ -163,6 +217,14 @@ import portrait from '../assets/img/profesionales.jpg';
     font-size: var(--step-1);
     line-height: 1.35;
     color: var(--bone-100);
+  }
+
+  .story-signature {
+    margin-bottom: 1rem;
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--gold-500);
   }
 
   .story-quote figcaption {
@@ -217,6 +279,197 @@ import portrait from '../assets/img/profesionales.jpg';
     font-size: var(--step--1);
     line-height: 1.65;
     color: var(--fg-muted);
+  }
+
+  /* --- El fundador -------------------------------------------------------- */
+
+  .founder-section { position: relative; }
+
+  .founder {
+    display: grid;
+    gap: clamp(2.8rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .founder-media { align-self: start; }
+
+  .founder-portrait { position: relative; }
+
+  .founder-media :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 30%;
+    border-radius: var(--radius);
+  }
+
+  .founder-frame {
+    position: absolute;
+    inset: clamp(0.9rem, 2vw, 1.4rem) calc(clamp(0.9rem, 2vw, 1.4rem) * -1)
+           calc(clamp(0.9rem, 2vw, 1.4rem) * -1) clamp(0.9rem, 2vw, 1.4rem);
+    border: 1px solid var(--gold-500);
+    opacity: 0.4;
+    z-index: -1;
+    border-radius: var(--radius);
+  }
+
+  /* Lámina de marca mientras no exista la fotografía institucional. */
+  .founder-plate {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1rem;
+    aspect-ratio: 4 / 5;
+    border: 1px solid var(--hair-strong);
+    border-radius: var(--radius);
+    background: linear-gradient(160deg, var(--navy-800), var(--navy-990));
+  }
+
+  .founder-monogram {
+    font-family: var(--font-roman);
+    font-size: clamp(3rem, 7vw, 4.5rem);
+    letter-spacing: 0.08em;
+    color: var(--gold-500);
+  }
+
+  .founder-plate-name {
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+
+  .founder-id {
+    position: relative;
+    margin-top: clamp(1.2rem, 2.4vw, 1.8rem);
+    padding-left: 1.1rem;
+    border-left: 2px solid var(--gold-500);
+  }
+
+  .founder-name {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.2;
+    color: var(--fg);
+  }
+
+  .founder-role {
+    margin-top: 0.25rem;
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--gold-500);
+  }
+
+  .founder-credentials {
+    margin-top: 0.6rem;
+    font-size: var(--step--2);
+    line-height: 1.6;
+    color: var(--fg-dim);
+  }
+
+  .founder-copy { display: grid; gap: 1.2rem; align-content: start; }
+
+  .founder-tagline { font-size: var(--step-3); line-height: 1.2; }
+
+  .founder-intro {
+    font-size: var(--step-1);
+    line-height: 1.7;
+    color: var(--fg-muted);
+    font-weight: 340;
+  }
+
+  .founder-blocks {
+    display: grid;
+    gap: clamp(1.2rem, 2.2vw, 1.8rem);
+    margin: 0.6rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .founder-blocks li {
+    padding-left: 1.2rem;
+    border-left: 1px solid var(--hair-strong);
+  }
+
+  .founder-blocks h3 {
+    font-size: var(--step-0);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--fg);
+  }
+
+  .founder-blocks p {
+    margin-top: 0.45rem;
+    font-size: var(--step--1);
+    line-height: 1.7;
+    color: var(--fg-muted);
+  }
+
+  .founder-questions {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0.4rem 0 0;
+    padding: clamp(1.1rem, 2.2vw, 1.5rem);
+    list-style: none;
+    border: 1px solid var(--hair-soft);
+    border-radius: var(--radius);
+    background: linear-gradient(100deg, rgba(201, 162, 39, 0.08), transparent 70%);
+  }
+
+  .founder-questions li {
+    display: flex;
+    align-items: center;
+    gap: 0.65em;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.4;
+    color: var(--bone-100);
+  }
+
+  .founder-questions :global(svg) { color: var(--gold-500); flex: none; }
+
+  .founder-closing {
+    font-size: var(--step--1);
+    line-height: 1.7;
+    color: var(--fg-muted);
+  }
+
+  .founder-quote {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0.6rem 0 0;
+    padding: clamp(1.4rem, 2.6vw, 2rem);
+    border: 1px solid var(--hair-strong);
+    border-radius: var(--radius);
+    background: linear-gradient(160deg, var(--navy-800), var(--navy-950));
+    box-shadow: var(--shadow-lg);
+  }
+
+  .founder-quote :global(svg) { color: var(--gold-500); }
+
+  .founder-quote blockquote {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.45;
+    color: var(--bone-100);
+  }
+
+  .founder-quote figcaption {
+    font-size: var(--step--2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--gold-500);
+  }
+
+  @media (min-width: 1000px) {
+    .founder {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: clamp(3rem, 6vw, 5.5rem);
+    }
+
+    .founder-media { position: sticky; top: calc(var(--header-h) + 2rem); }
   }
 
   /* --- Comparativa ------------------------------------------------------- */

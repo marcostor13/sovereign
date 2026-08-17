@@ -1,19 +1,19 @@
 ---
 title: Cómo crear un legado que trascienda generaciones
-excerpt: El 70% de las fortunas familiares desaparece en la segunda generación. El diseño es lo único que cambia esa estadística.
+excerpt: 'Construir patrimonio es sólo una parte del desafío. Preservarlo y transferirlo correctamente requiere planificación.'
 category: Legado
 date: 2026-04-03
 read: 8
 featured: true
 ---
 
-Existe una estadística incómoda y bien documentada: alrededor del 70% del patrimonio familiar se disuelve en la segunda generación y cerca del 90% en la tercera. No ocurre por falta de dinero. Ocurre por falta de estructura y de preparación.
+Construir patrimonio es sólo una parte del desafío. Preservarlo y transferirlo correctamente requiere planificación. Cuando un patrimonio familiar se disuelve entre generaciones rara vez ocurre por falta de dinero: ocurre por falta de estructura y de preparación.
 
 ## Transferir capital no es transferir criterio
 
 Un heredero puede recibir un patrimonio considerable y no haber tomado nunca una decisión patrimonial. La transferencia de activos es un acto administrativo que se resuelve en semanas; la transferencia de criterio es un proceso de años que casi nadie empieza a tiempo.
 
-La primera generación construyó el patrimonio y, en el camino, construyó el juicio para administrarlo. La segunda recibe el resultado sin el proceso. Esa asimetría explica la estadística mucho mejor que cualquier factor económico.
+La primera generación construyó el patrimonio y, en el camino, construyó el juicio para administrarlo. La segunda recibe el resultado sin el proceso. Esa asimetría explica mucho mejor lo que ocurre después que cualquier factor económico.
 
 ## Los tres pilares de un legado que dura
 
