@@ -20,3 +20,8 @@ node_modules/
 # Sistema
 .DS_Store
 *.log
+
+# Originales sin procesar de los que salen los recursos de marca
+# (isotipo y retrato del fundador ya están versionados en src/assets/img/).
+/image.png
+/WhatsApp Image *.jpeg

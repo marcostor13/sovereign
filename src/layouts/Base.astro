@@ -79,7 +79,11 @@ const orgSchema = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {/* El .ico lleva 16/32/48 con un encuadre propio por tamaño; el PNG es para
+        los navegadores que prefieren `image/png`. */}
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

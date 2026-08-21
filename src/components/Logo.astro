@@ -1,8 +1,12 @@
 ---
+import { Image } from 'astro:assets';
+import isotipo from '../assets/img/isotipo.png';
+
 /**
  * Marca Sovereign Capital Solutions.
- * El medallón se reconstruye como SVG vectorial —mismo emblema, misma paleta—
- * para que sea nítido en cualquier tamaño y animable en el encabezado.
+ * El isotipo es el medallón original con el fondo recortado, servido por
+ * `astro:assets` en varias densidades para que se vea nítido en pantallas
+ * retina sin cargar el maestro de 512 px.
  */
 interface Props {
   variant?: 'full' | 'mark' | 'stacked';
@@ -19,36 +23,16 @@ const { variant = 'full', size = 44, class: className = '', label = 'Sovereign C
     las media queries de abajo puedan reducirlo sin pelear con el estilo en
     línea (que siempre ganaría). */}
 <span class:list={['logo', `logo-${variant}`, className]} style={`--mark-base:${size}px`}>
-  <svg class="logo-mark" viewBox="0 0 100 100" role="img" aria-label={label} fill="none">
-    <defs>
-      <linearGradient id="sov-gold" x1="12" y1="6" x2="88" y2="94" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#A8862F" />
-        <stop offset="0.35" stop-color="#E0C377" />
-        <stop offset="0.55" stop-color="#F6ECD2" />
-        <stop offset="0.75" stop-color="#D4AF4F" />
-        <stop offset="1" stop-color="#A8862F" />
-      </linearGradient>
-    </defs>
-
-    <g stroke="url(#sov-gold)" stroke-linejoin="round">
-      <circle cx="50" cy="50" r="45" stroke-width="2.6" />
-      <circle cx="50" cy="50" r="40.5" stroke-width="0.7" opacity="0.5" />
-
-      {/* Roseta de ocho pétalos: cuatro mayores en los ejes, cuatro menores en las diagonales */}
-      <g stroke-width="2.1">
-        {[0, 90, 180, 270].map((deg) => (
-          <path d="M50 18.5 C62.5 31.5 62.5 42.5 50 50 C37.5 42.5 37.5 31.5 50 18.5 Z" transform={`rotate(${deg} 50 50)`} />
-        ))}
-      </g>
-      <g stroke-width="1.5" opacity="0.95">
-        {[45, 135, 225, 315].map((deg) => (
-          <path d="M50 27 C58 36.5 58 44.5 50 50 C42 44.5 42 36.5 50 27 Z" transform={`rotate(${deg} 50 50)`} />
-        ))}
-      </g>
-    </g>
-
-    <circle cx="50" cy="50" r="3.6" fill="url(#sov-gold)" />
-  </svg>
+  <Image
+    class="logo-mark"
+    src={isotipo}
+    alt={label}
+    width={size}
+    height={size}
+    densities={[2, 3]}
+    quality={92}
+    loading="eager"
+  />
 
   {variant !== 'mark' && (
     <span class="logo-type">
