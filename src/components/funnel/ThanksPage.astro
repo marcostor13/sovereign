@@ -1,0 +1,171 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import GuideModal from './GuideModal.astro';
+import { contact } from '../../data/site';
+
+/**
+ * Página de gracias tras agendar. Lee los parámetros que añade la agenda al
+ * redirigir (Cal.com: `attendeeName`, `startTime`, `endTime`, `title`) para
+ * personalizar el titular y ofrecer "Añadir al calendario".
+ */
+interface Props {
+  product: 'iul' | 'wl';
+  copy: {
+    titleWithDate: string;
+    title: string;
+    lead: string;
+    checklistTitle: string;
+    checklist: readonly string[];
+    meetingTitle: string;
+    meeting: readonly string[];
+  };
+  guideLabel: string;
+  videoId?: string;
+}
+
+const { product, copy, guideLabel, videoId } = Astro.props;
+const whatsapp = import.meta.env.PUBLIC_WHATSAPP_NUMBER as string | undefined;
+const eventTitle = product === 'iul' ? 'Consulta estratégica IUL · Sovereign Capital Solutions' : 'Diagnóstico de Capital Banca Mía™ · Sovereign Capital Solutions';
+---
+
+<Base
+  title={copy.title}
+  description="Tu consulta con Sovereign Capital Solutions está confirmada."
+  noIndex
+  landing={{ cta: { label: 'Llamar', href: contact.phoneHref }, disclosure: product === 'iul' ? 'iul' : 'wholeLife' }}
+>
+  <div class="lp" data-thanks data-template={copy.titleWithDate} data-event-title={eventTitle}>
+    <section class="lp-section lp-deep th-top">
+      <div class="lp-shell lp-narrow">
+        <span class="th-ok"><Icon name="check" size={30} stroke={2} /></span>
+        <h1 class="lp-h2 th-title" data-title>{copy.title}</h1>
+        <p class="lp-lead">{copy.lead}</p>
+
+        <div class="lp-actions th-actions">
+          <a class="btn btn-gold" data-gcal hidden target="_blank" rel="noopener">
+            <Icon name="calendar" size={16} />
+            Google Calendar
+          </a>
+          <button class="btn btn-outline" type="button" data-ics hidden>
+            <Icon name="download" size={16} />
+            Outlook / iCal
+          </button>
+          {whatsapp && (
+            <a class="btn btn-outline" href={`https://wa.me/${whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener">
+              <Icon name="phone" size={16} />
+              Guardar nuestro WhatsApp
+            </a>
+          )}
+        </div>
+
+        {videoId && (
+          <div class="th-video">
+            <iframe
+              src={`https://player.vimeo.com/video/${videoId}?texttrack=es&dnt=1`}
+              allow="fullscreen; picture-in-picture"
+              loading="lazy"
+              title="Qué va a pasar en nuestra reunión"
+            ></iframe>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <section class="lp-section lp-light">
+      <div class="lp-shell th-grid">
+        <div class="lp-card">
+          <h2 class="th-h">{copy.checklistTitle}</h2>
+          <ul class="th-list">
+            {copy.checklist.map((c) => <li><Icon name="check" size={17} stroke={2} />{c}</li>)}
+          </ul>
+        </div>
+        <div class="lp-card">
+          <h2 class="th-h">{copy.meetingTitle}</h2>
+          <ol class="th-steps">
+            {copy.meeting.map((c) => <li>{c}</li>)}
+          </ol>
+          <button class="btn btn-outline th-guide" type="button" data-guide-open={product}>
+            <Icon name="download" size={16} />
+            {guideLabel}
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <GuideModal />
+</Base>
+
+<script>
+  import { track } from '../../lib/client/track';
+  import { savedContact } from '../../lib/client/storage';
+
+  const root = document.querySelector<HTMLElement>('[data-thanks]')!;
+  const q = new URLSearchParams(location.search);
+  const name = (q.get('attendeeName') || q.get('name') || savedContact()?.nombre || '').split(/\s+/)[0];
+  const start = new Date(q.get('startTime') || q.get('start') || '');
+  const end = new Date(q.get('endTime') || q.get('end') || '');
+
+  if (!Number.isNaN(start.getTime())) {
+    const fecha = start.toLocaleDateString('es-US', { weekday: 'long', day: 'numeric', month: 'long' });
+    const hora = start.toLocaleTimeString('es-US', { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+    root.querySelector('[data-title]')!.textContent = (root.dataset.template || '')
+      .replace('{nombre}', name || '')
+      .replace(/^¡Listo, !/, '¡Listo!')
+      .replace('{fecha}', fecha)
+      .replace('{hora}', hora);
+
+    const finish = Number.isNaN(end.getTime()) ? new Date(start.getTime() + 45 * 60_000) : end;
+    const stamp = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const title = root.dataset.eventTitle || 'Consulta';
+
+    const gcal = root.querySelector<HTMLAnchorElement>('[data-gcal]')!;
+    gcal.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${stamp(start)}/${stamp(finish)}`;
+    gcal.hidden = false;
+
+    const ics = root.querySelector<HTMLButtonElement>('[data-ics]')!;
+    ics.hidden = false;
+    ics.addEventListener('click', () => {
+      const body = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Sovereign Capital Solutions//ES', 'BEGIN:VEVENT',
+        `UID:${stamp(start)}@sovereigncapitalsolutions.com`, `DTSTAMP:${stamp(new Date())}`,
+        `DTSTART:${stamp(start)}`, `DTEND:${stamp(finish)}`, `SUMMARY:${title}`, 'END:VEVENT', 'END:VCALENDAR',
+      ].join('\r\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([body], { type: 'text/calendar' }));
+      a.download = 'consulta-sovereign.ics';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  }
+
+  // `Schedule` también llega por webhook (CAPI) con id `booking-{uid}`: con el
+  // mismo id Meta deduplica. Sólo se envía si la agenda redirigió aquí.
+  if (!Number.isNaN(start.getTime())) {
+    const uid = q.get('uid') || q.get('bookingUid');
+    track('Schedule', { content_name: root.dataset.eventTitle }, uid ? `booking-${uid}` : undefined);
+  }
+</script>
+
+<style>
+  .th-top { text-align: left; }
+  .th-ok { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin-bottom: 1.2rem; border-radius: 50%; background: var(--gold-500); color: var(--navy-950); }
+  .th-title { color: #fff; margin-bottom: 0.8rem; font-size: var(--step-4); }
+  .th-actions { margin-top: 1.6rem; }
+  .th-actions [hidden] { display: none; }
+
+  .th-video { position: relative; aspect-ratio: 16 / 9; margin-top: 2rem; border-radius: 14px; overflow: hidden; border: 1px solid var(--hair); }
+  .th-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  .th-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+  .th-h { font-size: var(--step-2); color: var(--ink-900); margin-bottom: 0.6rem; }
+
+  .th-list { display: grid; gap: 0.7rem; list-style: none; padding: 0; margin: 0; }
+  .th-list li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; line-height: 1.55; color: var(--ink-700); }
+  .th-list :global(svg) { color: #2f7d5b; margin-top: 0.2em; }
+
+  .th-steps { display: grid; gap: 0.6rem; padding-left: 1.2rem; margin: 0; color: var(--ink-700); line-height: 1.55; }
+
+  .th-guide { justify-self: start; margin-top: 1rem; color: var(--ink-900); }
+</style>

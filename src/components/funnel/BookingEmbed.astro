@@ -1,0 +1,62 @@
+---
+import Icon from '../Icon.astro';
+import { contact } from '../../data/site';
+
+/**
+ * Hueco para la agenda embebida. El motor del formulario inyecta el iframe con
+ * la URL que devuelve el servidor (datos precargados). Sin agenda configurada
+ * se muestra la alternativa: llamada inmediata.
+ */
+interface Props {
+  note?: string;
+}
+
+const { note } = Astro.props;
+---
+
+<div class="booking" data-booking>
+  <div class="booking-frame" data-booking-frame hidden></div>
+
+  <div class="booking-fallback" data-booking-fallback hidden>
+    <p><strong>Un asesor te llamará en los próximos minutos</strong> (lunes a viernes, 9:00–18:00 EST) para elegir juntos el horario de tu consulta.</p>
+    <p>¿Prefieres adelantarte?</p>
+    <a class="btn btn-gold" href={contact.phoneHref}>
+      <Icon name="phone" size={16} />
+      Llamar al {contact.phone}
+    </a>
+  </div>
+
+  {note && <p class="booking-note"><Icon name="family" size={18} />{note}</p>}
+</div>
+
+<style>
+  .booking { display: grid; gap: 1rem; }
+
+  .booking-frame :global(iframe) {
+    display: block;
+    width: 100%;
+    height: min(46rem, 85dvh);
+    border: 1px solid rgba(10, 22, 40, 0.1);
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .booking-fallback {
+    display: grid;
+    gap: 0.7rem;
+    justify-items: start;
+    padding: 1.2rem;
+    border-radius: 12px;
+    background: #f7f4ee;
+    border: 1px solid rgba(168, 134, 47, 0.3);
+    font-size: var(--step-0);
+    color: var(--ink-700);
+  }
+
+  .booking-fallback[hidden], .booking-frame[hidden] { display: none; }
+
+  .booking-fallback .btn { border-radius: 10px; min-height: 3.25rem; }
+
+  .booking-note { display: flex; align-items: center; gap: 0.6rem; font-size: var(--step--1); color: var(--ink-500); }
+  .booking-note :global(svg) { color: var(--gold-700); flex: none; }
+</style>

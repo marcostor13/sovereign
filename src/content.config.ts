@@ -30,6 +30,8 @@ const posts = defineCollection({
     excerpt: z.string(),
     category: z.string(),
     date: z.coerce.date(),
+    /** Última revisión editorial y de compliance (por defecto, la fecha de publicación). */
+    reviewed: z.coerce.date().optional(),
     read: z.number(),
     featured: z.boolean().default(false),
   }),

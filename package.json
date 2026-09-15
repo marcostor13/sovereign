@@ -11,6 +11,7 @@
     "preview": "astro preview --host 0.0.0.0",
     "serve": "node ./dist/server/entry.mjs",
     "check": "node scripts/check.mjs",
+    "test": "node --test src/lib/funnels/qualify.test.ts",
     "shots": "node scripts/shots.mjs",
     "astro": "astro"
   },

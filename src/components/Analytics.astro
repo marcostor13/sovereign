@@ -1,0 +1,58 @@
+---
+/**
+ * Meta Pixel + GA4 con carga diferida: los stubs se definen al instante (los
+ * eventos quedan en cola) y las librerías se descargan tras la carga de la
+ * página, sin bloquear el render. Sin IDs configurados no se emite nada.
+ */
+const pixelId = import.meta.env.PUBLIC_META_PIXEL_ID;
+const gaId = import.meta.env.PUBLIC_GA4_ID;
+const config = JSON.stringify({ pixelId: pixelId || '', gaId: gaId || '' });
+---
+
+{(pixelId || gaId) && (
+  <script is:inline define:vars={{ config }}>
+    (function () {
+      var c = JSON.parse(config);
+      var load = function (src) {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = src;
+        document.head.appendChild(s);
+      };
+
+      if (c.pixelId) {
+        var n = (window.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        });
+        if (!window._fbq) window._fbq = n;
+        n.push = n;
+        n.loaded = true;
+        n.version = '2.0';
+        n.queue = [];
+        window.fbq('init', c.pixelId);
+        window.fbq('track', 'PageView');
+      }
+
+      if (c.gaId) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', c.gaId);
+      }
+
+      var start = function () {
+        if (c.pixelId) load('https://connect.facebook.net/en_US/fbevents.js');
+        if (c.gaId) load('https://www.googletagmanager.com/gtag/js?id=' + c.gaId);
+      };
+
+      var idle = window.requestIdleCallback || function (cb) { setTimeout(cb, 1200); };
+      if (document.readyState === 'complete') idle(start);
+      else window.addEventListener('load', function () { idle(start); });
+    })();
+  </script>
+)}
+
+<script>
+  import { captureAttribution } from '../lib/client/track';
+  captureAttribution();
+</script>

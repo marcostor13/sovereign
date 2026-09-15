@@ -1,0 +1,375 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import Accordion from '../Accordion.astro';
+import TrustBar from '../funnel/TrustBar.astro';
+import VideoFacade from '../funnel/VideoFacade.astro';
+import MoneyFlow from '../funnel/MoneyFlow.astro';
+import CapSimulator from '../funnel/CapSimulator.astro';
+import MythTable from '../funnel/MythTable.astro';
+import FitColumns from '../funnel/FitColumns.astro';
+import Advisor from '../funnel/Advisor.astro';
+import Testimonials from '../funnel/Testimonials.astro';
+import StepForm from '../funnel/StepForm.astro';
+import BookingEmbed from '../funnel/BookingEmbed.astro';
+import GuideModal from '../funnel/GuideModal.astro';
+import StickyCta from '../funnel/StickyCta.astro';
+import { contact } from '../../data/site';
+import { agent, disclosures, licensedStatesText, reviewedOn } from '../../data/compliance';
+import {
+  iulSeo, iulHeadlines, iulHero, iulTrust, iulProblem, iulWhat, iulFlow, iulSimulator,
+  iulMyths, iulFit, iulMethod, iulQuiz, iulFaq, iulFinal, type IulVariant,
+} from '../../data/iul';
+
+/**
+ * Landing del embudo IUL (docs/02_Landing_IUL.md). Cada variante del titular
+ * vive en su propia URL; todas apuntan a `/iul` como canónica.
+ */
+interface Props {
+  variant: IulVariant;
+  primary?: boolean;
+}
+
+const { variant, primary = false } = Astro.props;
+const videoId = import.meta.env.PUBLIC_ADVISOR_VIDEO_IUL;
+const site = Astro.site!;
+
+const faqItems = [
+  ...iulFaq,
+  { q: '¿Atienden en todo EE.UU.?', a: `Solo en los estados donde tenemos licencia vigente: ${licensedStatesText}.` },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: agent.name,
+    jobTitle: agent.title,
+    worksFor: { '@type': 'InsuranceAgency', name: 'Sovereign Capital Solutions', url: site.href },
+    knowsAbout: ['Indexed Universal Life', 'Seguro de vida', 'Whole Life', 'Planificación patrimonial'],
+    knowsLanguage: ['es', 'en'],
+  },
+];
+---
+
+<Base
+  title={`${iulSeo.title} | Sovereign Capital Solutions`}
+  rawTitle
+  description={iulSeo.description}
+  canonicalPath="/iul"
+  noIndex={!primary}
+  landing={{ cta: { label: 'Agendar consulta', href: '#diagnostico' }, disclosure: 'iul' }}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline slot="head" />
+
+  <div class="lp" data-landing="iul" data-variant={variant}>
+    {/* 1 · HERO ------------------------------------------------------------ */}
+    <section class="lp-hero">
+      <div class="lp-shell lp-hero-grid">
+        <div class="lp-hero-copy">
+          <p class="lp-tag">{iulHero.eyebrow}</p>
+          <h1 class="lp-title">{iulHeadlines[variant]}</h1>
+          {variant === 'C' && <p class="iul-nuance">{iulHero.nuance}</p>}
+          <p class="lp-hero-lead">{iulHero.lead}</p>
+
+          <ul class="lp-checks">
+            {iulHero.bullets.map((b) => <li><Icon name="check" size={18} stroke={2} />{b}</li>)}
+          </ul>
+
+          <div class="lp-actions">
+            <a class="btn btn-gold btn-lg" href="#diagnostico" data-cta="hero">
+              {iulHero.cta}
+              <Icon name="arrow" size={17} />
+            </a>
+            <button class="lp-textlink iul-alt" type="button" data-guide-open="iul">{iulHero.ctaAlt}</button>
+          </div>
+          <p class="lp-micro">{iulHero.micro}</p>
+        </div>
+
+        <div class="iul-hero-media">
+          <VideoFacade videoId={videoId} caption={iulHero.videoCaption} />
+        </div>
+      </div>
+    </section>
+
+    {/* 2 · Confianza ------------------------------------------------------- */}
+    <TrustBar items={iulTrust} />
+
+    {/* 3 · Problema -------------------------------------------------------- */}
+    <section class="lp-section lp-light">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">¿Te suena familiar?</p>
+          <h2 class="lp-h2">{iulProblem.title}</h2>
+        </header>
+        <ul class="lp-cards" data-reveal-group>
+          {iulProblem.cards.map((c) => (
+            <li class="lp-card" data-reveal-item data-reveal>
+              <h3>{c.title}</h3>
+              <p>{c.text}</p>
+            </li>
+          ))}
+        </ul>
+        <p class="lp-closing">{iulProblem.closing}</p>
+      </div>
+    </section>
+
+    {/* 4 · Qué es ----------------------------------------------------------- */}
+    <section class="lp-section lp-dark">
+      <div class="lp-shell lp-narrow">
+        <header class="lp-head">
+          <p class="lp-eyebrow">En 20 segundos</p>
+          <h2 class="lp-h2">{iulWhat.title}</h2>
+        </header>
+        <p class="lp-prose" set:html={iulWhat.body} />
+      </div>
+    </section>
+
+    {/* 5 · Cómo se mueve el dinero ----------------------------------------- */}
+    <section class="lp-section lp-white">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Cómo funciona</p>
+          <h2 class="lp-h2">{iulFlow.title}</h2>
+        </header>
+        <MoneyFlow steps={iulFlow.steps} />
+        <p class="lp-note">{iulFlow.note}</p>
+      </div>
+    </section>
+
+    {/* 6 · Simulador --------------------------------------------------------- */}
+    <section class="lp-section lp-light" id="simulador">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Con un ejemplo</p>
+          <h2 class="lp-h2">{iulSimulator.title}</h2>
+          <p class="lp-lead">{iulSimulator.lead}</p>
+        </header>
+        <CapSimulator />
+      </div>
+    </section>
+
+    {/* 7 · Mitos ------------------------------------------------------------- */}
+    <section class="lp-section lp-white">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Mito vs realidad</p>
+          <h2 class="lp-h2">{iulMyths.title}</h2>
+        </header>
+        <MythTable heads={iulMyths.heads} rows={iulMyths.rows} />
+      </div>
+    </section>
+
+    {/* 8 · ¿Es para ti? ------------------------------------------------------ */}
+    <section class="lp-section lp-light">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Idoneidad</p>
+          <h2 class="lp-h2">{iulFit.title}</h2>
+        </header>
+        <FitColumns yesTitle={iulFit.yesTitle} yes={iulFit.yes} noTitle={iulFit.noTitle} no={iulFit.no} />
+        <div class="iul-fit-foot">
+          <p>{iulFit.micro}</p>
+          <a class="btn btn-gold" href="#diagnostico" data-cta="fit">
+            {iulFit.cta}
+            <Icon name="arrow" size={16} />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {/* 9 · Método ------------------------------------------------------------ */}
+    <section class="lp-section lp-deep">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">{iulMethod.eyebrow}</p>
+          <h2 class="lp-h2">{iulMethod.title}</h2>
+        </header>
+        <ol class="lp-steps">
+          {iulMethod.steps.map((s) => (
+            <li>
+              <span class="n">{s.n}</span>
+              <Icon name={s.icon} size={24} stroke={1.2} />
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* 10 · Asesor ------------------------------------------------------------ */}
+    <section class="lp-section lp-white">
+      <div class="lp-shell">
+        <Advisor quote={agent.quoteIul} />
+      </div>
+    </section>
+
+    {/* 11 · Testimonios (sólo si existen) ------------------------------------ */}
+    <Testimonials product="iul" />
+
+    {/* 12 · Diagnóstico ------------------------------------------------------- */}
+    <section class="lp-section lp-sand" id="diagnostico">
+      <div class="lp-shell iul-quiz-shell">
+        <header class="lp-head is-center">
+          <p class="lp-eyebrow">Sin costo · 2 minutos</p>
+          <h2 class="lp-h2">{iulQuiz.title}</h2>
+          <p class="lp-lead">{iulQuiz.lead}</p>
+        </header>
+
+        <div class="lp-formcard">
+          <StepForm
+            id={`quiz-iul-${variant.toLowerCase()}`}
+            steps={iulQuiz.steps}
+            endpoint="/api/leads/iul"
+            product="iul"
+            variant={variant}
+            submit={iulQuiz.submit}
+            consentKind="iul"
+            startEvent="QuizStart"
+          >
+            <div slot="results">
+              <div class="lp-result" data-result="A" hidden>
+                <h3 data-fill-name={iulQuiz.results.A.title}>{iulQuiz.results.A.title.replace('{nombre}', '')}</h3>
+                <p>{iulQuiz.results.A.text}</p>
+                <BookingEmbed note={iulQuiz.results.A.partner} />
+              </div>
+
+              <div class="lp-result" data-result="B" hidden>
+                <h3 data-fill-name={iulQuiz.results.B.title}>{iulQuiz.results.B.title.replace('{nombre}', '')}</h3>
+                <p>{iulQuiz.results.B.text}</p>
+                <div class="lp-actions">
+                  <button class="btn btn-gold" type="button" data-guide-open="iul">
+                    <Icon name="download" size={16} />
+                    {iulQuiz.results.B.guide}
+                  </button>
+                  <a class="btn btn-outline" href={contact.phoneHref}>
+                    <Icon name="phone" size={16} />
+                    {iulQuiz.results.B.talk}
+                  </a>
+                </div>
+              </div>
+
+              <div class="lp-result" data-result="C" hidden>
+                <h3 data-fill-name={iulQuiz.results.C.title}>{iulQuiz.results.C.title.replace('{nombre}', '')}</h3>
+                <p>{iulQuiz.results.C.text}</p>
+                <div class="lp-actions">
+                  <button class="btn btn-gold" type="button" data-guide-open="iul">
+                    <Icon name="download" size={16} />
+                    {iulQuiz.results.C.guide}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </StepForm>
+        </div>
+
+        <p class="lp-legal lp-center">{disclosures.iulShort} Sovereign Capital Solutions.</p>
+      </div>
+    </section>
+
+    {/* 13 · FAQ -------------------------------------------------------------- */}
+    <section class="lp-section lp-dark">
+      <div class="lp-shell lp-narrow">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Preguntas frecuentes</p>
+          <h2 class="lp-h2">Lo que más nos preguntan del IUL</h2>
+        </header>
+        <Accordion items={faqItems} openFirst={false} />
+        <p class="iul-cross">
+          ¿Te importan más las garantías que la flexibilidad?
+          <a href="/banca-mia">Conoce Banca Mía™, la estrategia con seguro de vida Whole Life <Icon name="arrow" size={14} /></a>
+        </p>
+      </div>
+    </section>
+
+    {/* 14 · CTA final --------------------------------------------------------- */}
+    <section class="lp-section lp-deep lp-center">
+      <div class="lp-shell lp-narrow">
+        <h2 class="lp-h2 iul-final-title">{iulFinal.title}</h2>
+        <p class="lp-lead iul-final-lead">{iulFinal.text}</p>
+        <div class="lp-actions">
+          <a class="btn btn-gold btn-lg" href="#diagnostico" data-cta="final">
+            {iulFinal.cta}
+            <Icon name="arrow" size={17} />
+          </a>
+          <button class="btn btn-outline" type="button" data-guide-open="iul">
+            <Icon name="download" size={16} />
+            {iulFinal.guide}
+          </button>
+        </div>
+        <p class="lp-legal">Contenido revisado en {reviewedOn}. {disclosures.iulShort}</p>
+      </div>
+    </section>
+  </div>
+
+  <StickyCta label="Hacer mi diagnóstico (2 min)" href="#diagnostico" />
+  <GuideModal />
+</Base>
+
+<script>
+  import { track } from '../../lib/client/track';
+
+  // ViewContent al 50% de scroll (una sola vez).
+  let sent = false;
+  const onScroll = () => {
+    if (sent) return;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    if (max > 0 && scrollY / max >= 0.5) {
+      sent = true;
+      track('ViewContent', { content_name: 'landing_iul' });
+      removeEventListener('scroll', onScroll);
+    }
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+<style>
+  .iul-nuance {
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--gold-500);
+    font-size: var(--step--1);
+    color: var(--bone-200);
+  }
+
+  .iul-alt { color: var(--gold-300); }
+
+  .iul-hero-media { max-width: 26rem; width: 100%; justify-self: center; }
+
+  @media (max-width: 999px) {
+    .iul-hero-media { max-width: 18rem; }
+  }
+
+  .iul-fit-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 1.5rem;
+  }
+
+  .iul-fit-foot p { max-width: 36rem; color: var(--ink-500); }
+
+  .iul-quiz-shell { max-width: 44rem; }
+
+  .iul-cross {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: 2rem;
+    padding: 1.2rem 1.3rem;
+    border: 1px solid var(--hair);
+    border-radius: 12px;
+    color: var(--fg-muted);
+  }
+
+  .iul-cross a { display: inline-flex; align-items: center; gap: 0.4em; min-height: 44px; color: var(--gold-300); }
+
+  .iul-final-title { font-size: var(--step-3); line-height: 1.2; color: #fff; }
+  .iul-final-lead { margin: 1rem auto 1.6rem; }
+</style>

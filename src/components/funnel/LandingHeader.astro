@@ -1,0 +1,68 @@
+---
+import Logo from '../Logo.astro';
+import Icon from '../Icon.astro';
+import { contact } from '../../data/site';
+
+/** Barra superior mínima de las landings: sin menú ni enlaces de salida. */
+interface Props {
+  cta: { label: string; href: string };
+}
+
+const { cta } = Astro.props;
+---
+
+<header class="lh" data-landing-header>
+  <div class="shell lh-inner">
+    <span class="lh-logo"><Logo size={40} /></span>
+
+    <div class="lh-actions">
+      <a class="lh-phone" href={contact.phoneHref} aria-label={`Llamar al ${contact.phone}`}>
+        <Icon name="phone" size={16} />
+        <span>{contact.phone}</span>
+      </a>
+      <a class="btn btn-outline lh-cta" href={cta.href}>{cta.label}</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .lh {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background: rgba(5, 12, 22, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--hair);
+  }
+
+  .lh-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.25rem; }
+
+  .lh-actions { display: flex; align-items: center; gap: clamp(0.6rem, 2vw, 1.4rem); }
+
+  .lh-phone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
+    color: var(--bone-200);
+  }
+
+  .lh-phone :global(svg) { color: var(--gold-400); }
+  .lh-phone:hover { color: var(--gold-300); }
+
+  .lh-cta { --btn-py: 0.9em; --btn-px: 1.2em; font-size: var(--step--2); border-radius: 8px; white-space: nowrap; }
+
+  @media (max-width: 640px) {
+    .lh-phone span { display: none; }
+    .lh-phone { border: 1px solid var(--hair); border-radius: 50%; }
+  }
+
+  @media (max-width: 400px) {
+    .lh-cta { display: none; }
+  }
+</style>

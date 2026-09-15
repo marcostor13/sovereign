@@ -6,6 +6,7 @@ import PostCard from '../../components/PostCard.astro';
 import Icon from '../../components/Icon.astro';
 import FinalCta from '../../components/FinalCta.astro';
 import { ui, academySection, brand } from '../../data/site';
+import { agent, licensedStatesText } from '../../data/compliance';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('posts')).sort(
@@ -33,11 +34,10 @@ const { entry, related } = Astro.props;
 const { Content, headings } = await render(entry);
 const d = entry.data;
 
-const formatted = d.date.toLocaleDateString('es-ES', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-});
+const fmt = (date: Date) =>
+  date.toLocaleDateString('es-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const formatted = fmt(d.date);
+const reviewed = d.reviewed ?? d.date;
 
 const articleSchema = {
   '@context': 'https://schema.org',
@@ -45,8 +45,10 @@ const articleSchema = {
   headline: d.title,
   description: d.excerpt,
   datePublished: d.date.toISOString(),
+  dateModified: reviewed.toISOString(),
   articleSection: d.category,
-  author: { '@type': 'Organization', name: `${brand.name} ${brand.surname}` },
+  inLanguage: 'es-US',
+  author: { '@type': 'Person', name: agent.name, jobTitle: agent.title },
   publisher: { '@type': 'Organization', name: `${brand.name} ${brand.surname}` },
 };
 
@@ -61,10 +63,16 @@ const sections = headings.filter((h) => h.depth === 2);
     title={d.title}
     lead={d.excerpt}
     crumbs={[{ label: 'Academia', href: '/academia' }, { label: d.title }]}
-    meta={[`${ui.publishedOn} ${formatted}`, `${d.read} ${academySection.minRead} de lectura`]}
+    meta={[`Por ${agent.name}`, `${ui.publishedOn} ${formatted}`, `${d.read} ${academySection.minRead} de lectura`]}
   />
 
   <section class="section">
+    <div class="shell article-byline">
+      <p>
+        <strong>{agent.name}</strong>, {agent.title.toLowerCase()} en {licensedStatesText}.
+        Revisado el {fmt(reviewed)}. Contenido educativo; no sustituye asesoría legal, fiscal ni una ilustración oficial.
+      </p>
+    </div>
     <div class="shell article">
       {sections.length > 1 && (
         <aside class="toc" data-reveal="left">
@@ -117,6 +125,19 @@ const sections = headings.filter((h) => h.depth === 2);
   }
 
   .article-body { min-width: 0; max-width: 44rem; }
+
+  .article-byline { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+
+  .article-byline p {
+    padding: 0.9rem 1.1rem;
+    border-left: 2px solid var(--gold-500);
+    background: rgba(201, 162, 39, 0.05);
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--fg-muted);
+  }
+
+  .article-byline strong { color: var(--fg); font-weight: 500; }
 
   /* --- Índice lateral ----------------------------------------------------- */
 

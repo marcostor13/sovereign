@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import StepForm from '../../components/funnel/StepForm.astro';
+import BookingEmbed from '../../components/funnel/BookingEmbed.astro';
+import GuideModal from '../../components/funnel/GuideModal.astro';
+import { contact } from '../../data/site';
+import { disclosures } from '../../data/compliance';
+import { wlDiagnostico as d } from '../../data/banca-mia';
+---
+
+<Base
+  title="Diagnóstico de Capital Banca Mía™"
+  description="Aplica al Diagnóstico de Capital Banca Mía™: 10 preguntas para saber si una estrategia con seguro de vida Whole Life encaja con tu negocio."
+  noIndex
+  landing={{ cta: { label: 'Ver masterclass', href: '/banca-mia' }, disclosure: 'wholeLife' }}
+>
+  <div class="lp">
+    <section class="lp-section lp-sand dg">
+      <div class="lp-shell dg-shell">
+        <header class="lp-head is-center">
+          <p class="lp-eyebrow">Sin costo · 3 minutos</p>
+          <h1 class="lp-h2"><Fragment set:html={d.title.replace(/™/g, '<sup>™</sup>')} /></h1>
+          <p class="lp-lead">{d.lead}</p>
+        </header>
+
+        <div class="lp-formcard">
+          <StepForm
+            id="wl-diagnostico"
+            steps={d.steps}
+            endpoint="/api/leads/banca-mia/diagnostico"
+            product="wl-diagnostico"
+            submit={d.submit}
+            consentKind="wholeLife"
+            startEvent="InicioDiagnostico"
+          >
+            <div slot="results">
+              <div class="lp-result" data-result="A" hidden>
+                <h3 data-fill-name={d.results.A.title}>{d.results.A.title.replace('{nombre}', '')}</h3>
+                <p>{d.results.A.text}</p>
+                <BookingEmbed note={d.guests} />
+              </div>
+
+              <div class="lp-result" data-result="D" hidden>
+                <h3 data-fill-name={d.results.D.title}>{d.results.D.title.replace('{nombre}', '')}</h3>
+                <p>{d.results.D.text}</p>
+                <BookingEmbed note={d.guests} />
+              </div>
+
+              <div class="lp-result" data-result="B" hidden>
+                <h3 data-fill-name={d.results.B.title}>{d.results.B.title.replace('{nombre}', '')}</h3>
+                <p>{d.results.B.text}</p>
+                <div class="lp-actions">
+                  <button class="btn btn-gold" type="button" data-guide-open="wl">
+                    <Icon name="download" size={16} />
+                    {d.results.B.guide}
+                  </button>
+                  <a class="btn btn-outline" href={contact.phoneHref}>
+                    <Icon name="phone" size={16} />
+                    {d.results.B.talk}
+                  </a>
+                </div>
+              </div>
+
+              <div class="lp-result" data-result="C" hidden>
+                <h3 data-fill-name={d.results.C.title}>{d.results.C.title.replace('{nombre}', '')}</h3>
+                <p>{d.results.C.text}</p>
+                <div class="lp-actions">
+                  <button class="btn btn-gold" type="button" data-guide-open="wl">
+                    <Icon name="download" size={16} />
+                    {d.results.C.guide}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </StepForm>
+        </div>
+
+        <p class="lp-legal lp-center">{disclosures.wholeLifeShort} Sovereign Capital Solutions.</p>
+      </div>
+    </section>
+  </div>
+
+  <GuideModal />
+</Base>
+
+<style>
+  .dg { min-height: calc(100dvh - 4.25rem); padding-block: clamp(2rem, 5vw, 4rem); }
+  .dg-shell { max-width: 44rem; }
+</style>

@@ -130,6 +130,39 @@ volumen en ese directorio (ver `Dockerfile`) o define el webhook.
 
 ---
 
+## Embudos de Meta Ads: `/iul` y `/banca-mia`
+
+Especificación en `docs/01`–`03`; resumen de lo implementado en
+`docs/04_Plan_de_implementacion.md`.
+
+| Ruta | Qué es | Indexable |
+| --- | --- | --- |
+| `/iul` | Landing IUL sin mitos + Diagnóstico de 2 minutos | Sí |
+| `/iul-a`, `/iul-b`, `/iul-c` | Variantes del titular (test A/B) | No (canónica `/iul`) |
+| `/iul/gracias` | Tras agendar | No |
+| `/banca-mia` | Landing de registro a la masterclass | Sí |
+| `/banca-mia-a`, `/banca-mia-b` | Variantes del titular | No |
+| `/banca-mia/masterclass` | Video con progreso, capítulos y CTA desde el minuto 20 | No |
+| `/banca-mia/diagnostico` | Diagnóstico de Capital (10 preguntas) | No |
+| `/banca-mia/gracias` | Tras agendar | No |
+
+- **Copy** → `src/data/iul.ts`, `src/data/banca-mia.ts`.
+- **Licencias, NPN, estados, textos TCPA y advertencias** → `src/data/compliance.ts`.
+  El build avisa mientras falten el NPN o números de licencia. Los estados de
+  `licenses` alimentan los formularios y la calificación.
+- **Reglas de calificación** → `src/lib/funnels/qualify.ts` (las mismas en
+  navegador y servidor). Tests: `npm test`.
+- **Testimonios** → `testimonials` en `src/data/funnels.ts`; vacía = sección oculta.
+
+Endpoints (servidor): `POST /api/leads/iul`, `/api/leads/banca-mia/registro`,
+`/api/leads/banca-mia/video-progress`, `/api/leads/banca-mia/diagnostico`,
+`/api/leads/guia` y `POST /api/webhooks/booking` (Cal.com). Cada uno valida,
+recalcula la calificación, guarda el consentimiento (texto, versión, IP, fecha)
+en `LEADS_LOG_PATH`, reenvía al CRM (`LEADS_WEBHOOK_URL`) y envía Meta
+Conversions API con el mismo `event_id` que el píxel.
+
+---
+
 ## Variables de entorno
 
 Copia `.env.example` a `.env` y ajusta:
@@ -140,6 +173,16 @@ Copia `.env.example` a `.env` y ajusta:
 | `HOST` / `PORT` | No | Interfaz y puerto del servidor Node |
 | `CONTACT_WEBHOOK_URL` | No | Reenvío de las solicitudes de contacto |
 | `CONTACT_LOG_PATH` | No | Archivo donde se registran las solicitudes |
+| `LEADS_WEBHOOK_URL` / `LEADS_LOG_PATH` | No | CRM y registro de los embudos |
+| `LEAD_TOKEN_SECRET` | Sí en producción | Firma del acceso a la masterclass |
+| `PUBLIC_BOOKING_URL_IUL` / `_WL` | Recomendada | Agenda embebida (Cal.com/Calendly) |
+| `CAL_WEBHOOK_SECRET` | No | Webhook de citas → CRM + evento `Schedule` |
+| `PUBLIC_META_PIXEL_ID` · `META_CAPI_TOKEN` · `PUBLIC_GA4_ID` | Antes de pautar | Medición |
+| `PUBLIC_TURNSTILE_SITE_KEY` · `TURNSTILE_SECRET_KEY` | No | Antispam |
+| `PUBLIC_MASTERCLASS_VIMEO_ID` y demás videos | Antes de pautar | Videos de los embudos |
+
+La lista completa y comentada está en `.env.example`. Las `PUBLIC_*` se hornean
+en el build (en Coolify, como build args).
 
 > `.env.deploy` contiene credenciales de **despliegue** (GitHub, Coolify,
 > Cloudflare) y no lo lee la aplicación. Está en `.gitignore` y debe seguir así.

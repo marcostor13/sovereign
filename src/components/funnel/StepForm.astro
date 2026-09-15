@@ -1,0 +1,420 @@
+---
+import Icon from '../Icon.astro';
+import { formUi as t, countryCodes, type Step } from '../../data/funnels';
+import { consent, legalLinks, licenses, usStates, type ConsentKind } from '../../data/compliance';
+import { contact as site } from '../../data/site';
+
+/**
+ * Formulario de embudo renderizado en el servidor (funciona como HTML
+ * semántico) y animado por `lib/client/step-form.ts`.
+ *
+ * Los resultados se pasan por el slot `results` como bloques
+ * `<div data-result="A|B|C|D" hidden>`.
+ */
+interface Props {
+  id: string;
+  steps: readonly Step[];
+  endpoint: string;
+  product: string;
+  submit: string;
+  consentKind: ConsentKind;
+  mode?: 'steps' | 'card';
+  variant?: string;
+  startEvent?: string;
+  /** Tras un envío correcto navega a esta URL (registro → masterclass). */
+  redirect?: string;
+  title?: string;
+  lead?: string;
+}
+
+const {
+  id,
+  steps,
+  endpoint,
+  product,
+  submit,
+  consentKind,
+  mode = 'steps',
+  variant,
+  startEvent,
+  redirect,
+  title,
+  lead,
+} = Astro.props;
+
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const consentHtml = consent[consentKind]
+  .replace('Política de Privacidad', `<a href="${legalLinks.privacy}" target="_blank" rel="noopener">${t.privacy}</a>`)
+  .replace('Términos', `<a href="${legalLinks.terms}" target="_blank" rel="noopener">${t.terms}</a>`);
+const total = steps.length;
+---
+
+<div
+  class:list={['sf', `sf-${mode}`]}
+  id={id}
+  data-stepform
+  data-mode={mode}
+  data-endpoint={endpoint}
+  data-product={product}
+  data-variant={variant}
+  data-start-event={startEvent}
+  data-redirect={redirect}
+>
+  <form novalidate>
+    {(title || lead) && (
+      <header class="sf-head">
+        {title && <h3 class="sf-title">{title}</h3>}
+        {lead && <p class="sf-lead">{lead}</p>}
+      </header>
+    )}
+
+    {mode === 'steps' && (
+      <div class="sf-progress">
+        <span class="sf-bar" aria-hidden="true"><i data-progress style={`transform:scaleX(${1 / total})`}></i></span>
+        <span class="sf-count" data-count aria-live="polite">{t.stepOf(1, total)}</span>
+      </div>
+    )}
+
+    {steps.map((step, i) => (
+      <fieldset class:list={['sf-step', `is-${step.type}`]} data-step data-key={step.key} data-type={step.type} hidden={mode === 'steps' && i > 0}>
+        <legend class="sf-q" tabindex="-1">{step.question}</legend>
+        {step.hint && <p class="sf-hint">{step.hint}</p>}
+
+        {step.type === 'combo' && step.text && (
+          <p class="sf-field">
+            <label for={`${id}-${step.text.key}`}>{step.text.label}</label>
+            <input id={`${id}-${step.text.key}`} name={step.text.key} type="text" maxlength="120" placeholder={step.text.placeholder} />
+            <span class="sf-err" data-error-for={step.text.key}></span>
+          </p>
+        )}
+
+        {(step.type === 'single' || step.type === 'multi' || step.type === 'combo') && step.options && (
+          <div class:list={['sf-options', step.options.length > 4 && 'is-many']}>
+            {step.options.map((o) => (
+              <label class="sf-opt">
+                <input type={step.type === 'multi' ? 'checkbox' : 'radio'} name={step.key} value={o.value} />
+                <span class="sf-opt-box">
+                  <span class="sf-opt-mark" aria-hidden="true"><Icon name="check" size={13} stroke={2.4} /></span>
+                  <span class="sf-opt-label">{o.label}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
+
+        {step.type === 'state' && (
+          <>
+            <div class="sf-options">
+              {licenses.map((l) => (
+                <label class="sf-opt">
+                  <input type="radio" name={step.key} value={l.code} />
+                  <span class="sf-opt-box">
+                    <span class="sf-opt-mark" aria-hidden="true"><Icon name="check" size={13} stroke={2.4} /></span>
+                    <span class="sf-opt-label">{l.name}</span>
+                  </span>
+                </label>
+              ))}
+              <label class="sf-opt">
+                <input type="radio" name={step.key} value="otro" />
+                <span class="sf-opt-box">
+                  <span class="sf-opt-mark" aria-hidden="true"><Icon name="check" size={13} stroke={2.4} /></span>
+                  <span class="sf-opt-label">{t.otherState}</span>
+                </span>
+              </label>
+            </div>
+            <p class="sf-field" data-state-other hidden>
+              <label for={`${id}-${step.key}-otro`}>{t.otherStateSelect}</label>
+              <span class="sf-select">
+                <select id={`${id}-${step.key}-otro`} name={`${step.key}-otro`}>
+                  <option value="">—</option>
+                  {usStates.map((s) => <option value={s.code}>{s.name}</option>)}
+                </select>
+                <Icon name="chevron" size={16} />
+              </span>
+            </p>
+          </>
+        )}
+
+        {step.type === 'contact' && (
+          <div class="sf-contact">
+            <p class="sf-field">
+              <label for={`${id}-nombre`}>{t.name}</label>
+              <input id={`${id}-nombre`} name="nombre" type="text" autocomplete="given-name" maxlength="120" required />
+              <span class="sf-err" data-error-for="nombre"></span>
+            </p>
+            <p class="sf-field">
+              <label for={`${id}-email`}>{t.email}</label>
+              <input id={`${id}-email`} name="email" type="email" autocomplete="email" inputmode="email" maxlength="160" required />
+              <span class="sf-err" data-error-for="email"></span>
+            </p>
+            <div class="sf-field sf-phone">
+              <label for={`${id}-telefono`}>{t.phone}</label>
+              <div class="sf-phone-row">
+                <span class="sf-select">
+                  <select name="pais" aria-label={t.country}>
+                    {countryCodes.map((c) => <option value={c.code}>{c.label}</option>)}
+                  </select>
+                  <Icon name="chevron" size={14} />
+                </span>
+                <input id={`${id}-telefono`} name="telefono" type="tel" autocomplete="tel-national" inputmode="tel" maxlength="24" required />
+              </div>
+              <span class="sf-err" data-error-for="telefono"></span>
+            </div>
+
+            <p class="sf-consent">
+              <label class="sf-check">
+                <input type="checkbox" name="consent" />
+                <span class="sf-check-box" aria-hidden="true"><Icon name="check" size={12} stroke={2.6} /></span>
+                <span class="sf-check-text" set:html={consentHtml} />
+              </label>
+              <span class="sf-err" data-error-for="consent"></span>
+            </p>
+
+            {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-size="flexible"></div>}
+          </div>
+        )}
+
+        <p class="sf-err sf-step-err" data-step-error role="alert"></p>
+      </fieldset>
+    ))}
+
+    {/* Campo trampa: invisible para personas, irresistible para bots. */}
+    <p class="sf-hp" aria-hidden="true">
+      <label for={`${id}-website`}>No rellenar</label>
+      <input id={`${id}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
+    </p>
+
+    <div class="sf-nav">
+      {mode === 'steps' && (
+        <>
+          <button class="sf-back" type="button" data-back hidden>
+            <Icon name="arrow" size={15} />
+            {t.back}
+          </button>
+          <button class="btn btn-outline sf-next" type="button" data-next>
+            {t.next}
+            <Icon name="arrow" size={16} />
+          </button>
+        </>
+      )}
+      <button class="btn btn-gold sf-submit" type="submit" data-submit hidden={mode === 'steps' && total > 1}>
+        <span data-label>{submit}</span>
+        <Icon name="arrow" size={17} />
+      </button>
+    </div>
+
+    <p class="sf-fail" data-form-error role="alert" hidden>
+      {t.error} <a href={site.phoneHref}>{site.phone}</a>.
+    </p>
+  </form>
+
+  <div class="sf-results" data-results hidden aria-live="polite">
+    <slot name="results" />
+  </div>
+</div>
+
+{turnstileKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+
+<script>
+  import '../../lib/client/step-form';
+</script>
+
+<style>
+  .sf { --sf-ink: var(--ink-900); --sf-muted: var(--ink-500); --sf-line: rgba(10, 22, 40, 0.14); color: var(--sf-ink); }
+
+  .sf form { display: grid; gap: 1.2rem; }
+
+  .sf-head { display: grid; gap: 0.4rem; }
+  .sf-title { font-size: var(--step-2); color: var(--sf-ink); }
+  .sf-lead { font-size: var(--step--1); color: var(--sf-muted); line-height: 1.55; }
+
+  .sf-progress { display: grid; gap: 0.55rem; }
+  .sf-bar { display: block; height: 4px; background: rgba(10, 22, 40, 0.08); border-radius: 99px; overflow: hidden; }
+  .sf-bar i {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-600), var(--gold-400));
+    transform-origin: left;
+    transition: transform 420ms var(--ease);
+  }
+  .sf-count { font-size: var(--step--2); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--sf-muted); }
+
+  .sf-step { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; gap: 0.9rem; }
+  .sf-step[hidden] { display: none; }
+
+  .sf-q {
+    padding: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--sf-ink);
+    outline: none;
+    margin-bottom: 0.9rem;
+  }
+
+  .sf-card .sf-q { font-family: var(--font-sans); font-size: var(--step--1); font-weight: 500; line-height: 1.4; margin-bottom: 0.5rem; }
+  .sf-card .sf-step { gap: 0.55rem; }
+
+  .sf-hint { margin-top: -0.4rem; font-size: var(--step--1); color: var(--sf-muted); }
+
+  /* --- Opciones tipo tarjeta ------------------------------------------- */
+
+  .sf-options { display: grid; gap: 0.6rem; }
+  .sf-card .sf-options { grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr)); gap: 0.45rem; }
+
+  .sf-opt { position: relative; display: block; cursor: pointer; }
+  .sf-opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+
+  .sf-opt-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 3.35rem;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border: 1px solid var(--sf-line);
+    border-radius: 10px;
+    transition: border-color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  }
+
+  .sf-card .sf-opt-box { min-height: 2.9rem; padding: 0.55rem 0.75rem; gap: 0.6rem; }
+
+  .sf-opt:hover .sf-opt-box { border-color: var(--gold-500); }
+
+  .sf-opt-mark {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid rgba(10, 22, 40, 0.28);
+    border-radius: 50%;
+    color: transparent;
+    transition: background-color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  }
+
+  .is-multi .sf-opt-mark { border-radius: 5px; }
+
+  .sf-opt-label { font-size: var(--step-0); line-height: 1.35; color: var(--sf-ink); }
+  .sf-card .sf-opt-label { font-size: var(--step--1); }
+
+  .sf-opt input:checked + .sf-opt-box {
+    border-color: var(--gold-600);
+    background: #fffaf0;
+    box-shadow: 0 0 0 1px var(--gold-600) inset;
+  }
+
+  .sf-opt input:checked + .sf-opt-box .sf-opt-mark { background: var(--navy-850); border-color: var(--navy-850); color: var(--gold-300); }
+  .sf-opt input:focus-visible + .sf-opt-box { outline: 2px solid var(--gold-600); outline-offset: 2px; }
+
+  @media (min-width: 640px) {
+    .sf-steps .sf-options.is-many { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* --- Campos ------------------------------------------------------------ */
+
+  .sf-contact { display: grid; gap: 0.9rem; }
+  .sf-field { display: grid; gap: 0.4rem; margin: 0; }
+  .sf-field[hidden] { display: none; }
+
+  .sf-field label { font-size: var(--step--1); font-weight: 500; color: var(--ink-700); }
+
+  .sf input[type='text'],
+  .sf input[type='email'],
+  .sf input[type='tel'],
+  .sf select {
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.7rem 0.95rem;
+    background: #fff;
+    border: 1px solid var(--sf-line);
+    border-radius: 10px;
+    color: var(--sf-ink);
+    /* 16px evita el zoom automático de iOS al enfocar */
+    font-size: max(16px, var(--step-0));
+    outline: none;
+    transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  }
+
+  .sf input:focus, .sf select:focus { border-color: var(--gold-600); box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18); }
+  .sf [aria-invalid='true'] { border-color: #b4412f !important; }
+
+  .sf-select { position: relative; display: block; }
+  .sf-select select { appearance: none; -webkit-appearance: none; padding-right: 2.4rem; cursor: pointer; }
+  .sf-select :global(svg) { position: absolute; right: 0.85rem; top: 50%; translate: 0 -50%; pointer-events: none; color: var(--gold-700); }
+
+  .sf-phone-row { display: grid; grid-template-columns: minmax(6.5rem, 38%) 1fr; gap: 0.5rem; }
+  .sf-phone-row select { font-size: 15px; }
+
+  .sf-err { font-size: var(--step--1); color: #b4412f; min-height: 0; }
+  .sf-err:empty { display: none; }
+
+  /* --- Consentimiento ---------------------------------------------------- */
+
+  .sf-consent { display: grid; gap: 0.4rem; margin: 0.2rem 0 0; }
+
+  .sf-check { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; align-items: start; cursor: pointer; }
+  .sf-check input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+
+  .sf-check-box {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    margin-top: 0.1em;
+    border: 1.5px solid rgba(10, 22, 40, 0.35);
+    border-radius: 5px;
+    color: transparent;
+    background: #fff;
+  }
+
+  .sf-check input:checked + .sf-check-box { background: var(--navy-850); border-color: var(--navy-850); color: var(--gold-300); }
+  .sf-check input:focus-visible + .sf-check-box { outline: 2px solid var(--gold-600); outline-offset: 2px; }
+  .sf-check input[aria-invalid='true'] + .sf-check-box { border-color: #b4412f; }
+
+  .sf-check-text { font-size: 0.8rem; line-height: 1.55; color: var(--sf-muted); }
+  .sf-check-text :global(a) { color: var(--navy-700); text-decoration: underline; text-underline-offset: 2px; }
+
+  .sf-hp { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  /* --- Navegación -------------------------------------------------------- */
+
+  .sf-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.8rem; margin-top: 0.2rem; }
+  .sf-card .sf-nav { display: block; }
+
+  .sf-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    min-height: 3rem;
+    padding: 0 0.3rem;
+    font-size: var(--step--1);
+    color: var(--sf-muted);
+  }
+  .sf-back :global(svg) { transform: rotate(180deg); }
+  .sf-back:hover { color: var(--sf-ink); }
+  .sf-back[hidden] { display: none; }
+
+  .sf-next, .sf-submit { min-height: 3.35rem; border-radius: 10px; margin-left: auto; }
+  .sf-next[hidden], .sf-submit[hidden] { display: none; }
+  .sf .btn-outline { color: var(--ink-900); border-color: rgba(168, 134, 47, 0.7); }
+  .sf .btn-outline:hover { color: var(--navy-950); }
+  .sf-card .sf-submit { width: 100%; }
+  .sf-submit[disabled] { opacity: 0.7; pointer-events: none; }
+
+  .sf-fail {
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba(180, 65, 47, 0.35);
+    border-radius: 10px;
+    background: rgba(180, 65, 47, 0.06);
+    font-size: var(--step--1);
+    color: #7c2d21;
+  }
+  .sf-fail a { text-decoration: underline; }
+
+  @media (max-width: 480px) {
+    .sf-nav { flex-direction: row; }
+    .sf-steps .sf-next, .sf-steps .sf-submit { flex: 1; }
+  }
+</style>

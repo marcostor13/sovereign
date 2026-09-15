@@ -1,0 +1,62 @@
+---
+import { contact, brand } from '../../data/site';
+import { agent, agency, disclosures, legalLinks, licenseLines, licensedStatesText } from '../../data/compliance';
+
+/** Pie legal completo de las landings (NAIC 570 / FL 69B-150). */
+interface Props {
+  disclosure: 'iul' | 'wholeLife';
+}
+
+const { disclosure } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="lf">
+  <div class="shell lf-inner">
+    <p class="lf-id">
+      <strong>{agency.name}</strong> · {agency.area} · <a href={contact.phoneHref}>{contact.phone}</a> ·
+      <a href={`mailto:${contact.email}`}>{contact.email}</a>
+    </p>
+
+    <p>
+      {agent.name}, {agent.title.toLowerCase()} en {licensedStatesText}.
+      {agent.npn && <> NPN {agent.npn}.</>}
+      {licenseLines.length > 0 && <> Licencias: {licenseLines.join(', ')}.</>}
+      {' '}<a href={agent.verifyUrl} target="_blank" rel="noopener noreferrer">{agent.verifyLabel}</a>.
+    </p>
+
+    <p>{disclosures[disclosure]}</p>
+    <p>{disclosures.general}</p>
+
+    <ul class="lf-links">
+      <li><a href={legalLinks.privacy}>Política de Privacidad</a></li>
+      <li><a href={legalLinks.terms}>Términos</a></li>
+      <li><a href={legalLinks.consent}>Aviso de consentimiento de comunicaciones</a></li>
+      <li>© {year} {brand.name} {brand.surname}</li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .lf {
+    background: var(--navy-990);
+    border-top: 1px solid var(--hair);
+    padding-block: clamp(2.5rem, 5vw, 3.5rem) calc(clamp(2.5rem, 5vw, 3.5rem) + var(--sticky-space, 0px));
+  }
+
+  .lf-inner { display: grid; gap: 0.9rem; max-width: 62rem; }
+
+  .lf p, .lf li {
+    font-size: max(12px, 0.8rem);
+    line-height: 1.7;
+    color: var(--fg-dim);
+  }
+
+  .lf-id { color: var(--fg-muted) !important; }
+  .lf strong { color: var(--bone-100); font-weight: 600; }
+
+  .lf a { color: var(--gold-300); text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(224, 195, 119, 0.35); }
+  .lf a:hover { text-decoration-color: currentColor; }
+
+  .lf-links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; list-style: none; padding: 0.6rem 0 0; margin: 0; border-top: 1px solid var(--hair-soft); }
+</style>

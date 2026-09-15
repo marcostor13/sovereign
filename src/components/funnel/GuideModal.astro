@@ -1,0 +1,206 @@
+---
+import Icon from '../Icon.astro';
+import { consent, legalLinks } from '../../data/compliance';
+
+/**
+ * Modal de descarga de guía (nombre + email + consentimiento de email).
+ * Se abre con cualquier `[data-guide-open="iul|wl"]` de la página.
+ */
+const guides = {
+  iul: 'IUL de la A a la Z',
+  wl: 'Whole Life para Banca Infinita de la A a la Z',
+};
+
+const consentHtml = consent.guide.replace('Política de Privacidad', `<a href="${legalLinks.privacy}" target="_blank" rel="noopener">Política de Privacidad</a>`);
+---
+
+<dialog class="gm" data-guide-dialog aria-labelledby="gm-title">
+  <form class="gm-card" data-guide-form novalidate>
+    <button class="gm-close" type="button" data-guide-close aria-label="Cerrar">
+      <Icon name="close" size={20} />
+    </button>
+
+    <div data-guide-body>
+      <p class="gm-eyebrow">Guía gratuita · PDF</p>
+      <h2 class="gm-title" id="gm-title">“<span data-guide-name>{guides.iul}</span>”</h2>
+      <p class="gm-lead">Te la enviamos por email. Educación primero, sin letra chiquita.</p>
+
+      <input type="hidden" name="guide" value="iul" />
+
+      <p class="gm-field">
+        <label for="gm-nombre">Nombre</label>
+        <input id="gm-nombre" name="nombre" type="text" autocomplete="given-name" required />
+      </p>
+      <p class="gm-field">
+        <label for="gm-email">Email</label>
+        <input id="gm-email" name="email" type="email" autocomplete="email" inputmode="email" required />
+      </p>
+
+      <label class="gm-check">
+        <input type="checkbox" name="consent" />
+        <span class="gm-check-text" set:html={consentHtml} />
+      </label>
+
+      <p class="gm-hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off" /></p>
+
+      <p class="gm-error" data-guide-error role="alert" hidden></p>
+
+      <button class="btn btn-gold gm-submit" type="submit">
+        <span data-guide-label>Enviarme la guía</span>
+        <Icon name="download" size={16} />
+      </button>
+    </div>
+
+    <div class="gm-done" data-guide-done hidden role="status">
+      <Icon name="check" size={28} stroke={2} />
+      <h2 class="gm-title">¡Listo!</h2>
+      <p class="gm-lead" data-guide-done-text>Revisa tu email en unos minutos (y la carpeta de promociones).</p>
+      <a class="btn btn-gold gm-submit" data-guide-link hidden target="_blank" rel="noopener">
+        Descargar ahora
+        <Icon name="download" size={16} />
+      </a>
+    </div>
+  </form>
+</dialog>
+
+<script define:vars={{ guides }} is:inline>
+  window.__sovGuides = guides;
+</script>
+
+<script>
+  import { getTracking, newEventId, track } from '../../lib/client/track';
+
+  const dialog = document.querySelector<HTMLDialogElement>('[data-guide-dialog]');
+
+  if (dialog) {
+    const form = dialog.querySelector<HTMLFormElement>('[data-guide-form]')!;
+    const names = (window as unknown as { __sovGuides: Record<string, string> }).__sovGuides;
+    const error = form.querySelector<HTMLElement>('[data-guide-error]')!;
+    const label = form.querySelector<HTMLElement>('[data-guide-label]')!;
+
+    const open = (guide: string) => {
+      (form.elements.namedItem('guide') as HTMLInputElement).value = guide;
+      form.querySelector('[data-guide-name]')!.textContent = names[guide] || '';
+      form.querySelector<HTMLElement>('[data-guide-body]')!.hidden = false;
+      form.querySelector<HTMLElement>('[data-guide-done]')!.hidden = true;
+      error.hidden = true;
+      dialog.showModal();
+      form.querySelector<HTMLInputElement>('[name="nombre"]')?.focus();
+    };
+
+    document.addEventListener('click', (e) => {
+      const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-guide-open]');
+      if (!trigger) return;
+      e.preventDefault();
+      open(trigger.dataset.guideOpen || 'iul');
+    });
+
+    dialog.querySelector('[data-guide-close]')?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      error.hidden = true;
+      const fd = new FormData(form);
+      const nombre = String(fd.get('nombre') || '').trim();
+      const email = String(fd.get('email') || '').trim();
+
+      if (!nombre || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || fd.get('consent') !== 'on') {
+        error.textContent = 'Completa tu nombre, un email válido y acepta recibir la guía.';
+        error.hidden = false;
+        return;
+      }
+
+      const eventId = newEventId();
+      label.textContent = 'Enviando…';
+
+      try {
+        const res = await fetch('/api/leads/guia', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            guide: fd.get('guide'),
+            nombre,
+            email,
+            consent: { accepted: true },
+            website: fd.get('website') || '',
+            tracking: getTracking(),
+            eventId,
+            pageUrl: location.href,
+          }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok || !body.ok) throw new Error(body.error || res.status);
+
+        track('DescargaGuia', { guide: fd.get('guide') }, eventId);
+        form.querySelector<HTMLElement>('[data-guide-body]')!.hidden = true;
+        form.querySelector<HTMLElement>('[data-guide-done]')!.hidden = false;
+
+        const link = form.querySelector<HTMLAnchorElement>('[data-guide-link]')!;
+        if (body.downloadUrl) {
+          link.href = body.downloadUrl;
+          link.hidden = false;
+        }
+      } catch {
+        error.textContent = 'No pudimos procesar la solicitud. Inténtalo de nuevo en un momento.';
+        error.hidden = false;
+      } finally {
+        label.textContent = 'Enviarme la guía';
+      }
+    });
+  }
+</script>
+
+<style>
+  .gm {
+    width: min(30rem, calc(100% - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 0;
+    border: 0;
+    border-radius: 16px;
+    background: #fff;
+    color: var(--ink-900);
+    box-shadow: 0 40px 80px -30px rgba(3, 7, 16, 0.7);
+  }
+
+  .gm::backdrop { background: rgba(3, 7, 16, 0.7); backdrop-filter: blur(4px); }
+
+  .gm-card { position: relative; display: grid; gap: 0.9rem; padding: clamp(1.5rem, 4vw, 2.2rem); }
+  .gm-card [data-guide-body], .gm-done { display: grid; gap: 0.9rem; }
+  .gm-card [hidden] { display: none !important; }
+
+  .gm-close { position: absolute; top: 0.6rem; right: 0.6rem; display: grid; place-items: center; width: 44px; height: 44px; color: var(--ink-500); }
+
+  .gm-eyebrow { font-size: var(--step--2); letter-spacing: var(--tracking-wider); text-transform: uppercase; color: var(--gold-700); }
+  .gm-title { font-size: var(--step-3); line-height: 1.1; padding-right: 2rem; }
+  .gm-lead { font-size: var(--step--1); color: var(--ink-500); }
+
+  .gm-field { display: grid; gap: 0.35rem; }
+  .gm-field label { font-size: var(--step--1); font-weight: 500; color: var(--ink-700); }
+  .gm-field input {
+    min-height: 3.1rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid rgba(10, 22, 40, 0.16);
+    border-radius: 10px;
+    font-size: 16px;
+    color: var(--ink-900);
+    background: #fff;
+  }
+  .gm-field input:focus { outline: 2px solid var(--gold-600); outline-offset: 1px; }
+
+  .gm-check { display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: start; cursor: pointer; }
+  .gm-check input { width: 20px; height: 20px; margin-top: 0.1em; accent-color: var(--navy-850); }
+  .gm-check-text { font-size: 0.8rem; line-height: 1.5; color: var(--ink-500); }
+  .gm-check-text :global(a) { text-decoration: underline; }
+
+  .gm-hp { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+  .gm-error { font-size: var(--step--1); color: #a43d2c; }
+
+  .gm-submit { width: 100%; min-height: 3.25rem; border-radius: 10px; }
+
+  .gm-done { justify-items: center; text-align: center; }
+  .gm-done :global(svg) { color: #2f7d5b; }
+</style>

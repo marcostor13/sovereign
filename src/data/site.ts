@@ -9,6 +9,8 @@
  * como colecciones de contenido (Markdown) porque crecen con el tiempo.
  */
 
+import { consent } from './compliance';
+
 export type IconName =
   | 'shield' | 'drop' | 'growth' | 'legacy' | 'lock' | 'target' | 'scale'
   | 'briefcase' | 'user' | 'chart' | 'family' | 'star'
@@ -39,13 +41,17 @@ export const contact = {
   email: 'sovereigncapitalsolutions@gmail.com',
   address: 'Brickell, Miami, Florida',
   hours: 'Lunes a viernes · 9:00 – 18:00 EST',
+  /**
+   * Perfiles reales de la firma. Un ícono que lleva a la portada genérica de la
+   * red resta credibilidad: mientras `href` esté vacío, el ícono no se muestra.
+   */
   socials: [
-    { id: 'linkedin' as IconName, label: 'LinkedIn', href: 'https://www.linkedin.com/' },
-    { id: 'instagram' as IconName, label: 'Instagram', href: 'https://www.instagram.com/' },
-    { id: 'facebook' as IconName, label: 'Facebook', href: 'https://www.facebook.com/' },
-    { id: 'youtube' as IconName, label: 'YouTube', href: 'https://www.youtube.com/' },
-  ],
-} as const;
+    { id: 'linkedin' as IconName, label: 'LinkedIn', href: '' },
+    { id: 'instagram' as IconName, label: 'Instagram', href: '' },
+    { id: 'facebook' as IconName, label: 'Facebook', href: '' },
+    { id: 'youtube' as IconName, label: 'YouTube', href: '' },
+  ].filter((s) => s.href),
+};
 
 export const cta = {
   primary: 'Agenda tu consulta estratégica privada',
@@ -77,6 +83,8 @@ export const nav: NavItem[] = [
     label: 'Educación',
     href: '/academia',
     children: [
+      { label: 'IUL sin mitos', href: '/iul', desc: 'Diagnóstico de 2 minutos' },
+      { label: 'Masterclass Banca Mía™', href: '/banca-mia', desc: 'Whole Life para empresarios, gratis' },
       { label: 'Academia Sovereign', href: '/academia', desc: 'Artículos y análisis' },
       { label: 'Método Sovereign™', href: '/nosotros#metodo', desc: 'Nuestras cinco etapas' },
       { label: 'Webinars', href: '/recursos#webinars', desc: 'Sesiones en vivo' },
@@ -189,13 +197,18 @@ export const strategiesSection = {
   lead: 'Seis disciplinas que se combinan en una sola arquitectura. Ninguna se vende suelta: se diseñan juntas.',
 } as const;
 
+/**
+ * Cifras de la banda de números. Sólo datos verificables: en publicidad de
+ * seguros una cifra sin respaldo (familias, patrimonio, años) es un riesgo
+ * regulatorio y de credibilidad. Cuando existan datos reales y documentados,
+ * se añaden aquí.
+ */
 export const numbers = {
-  eyebrow: 'Sovereign en números',
+  eyebrow: 'Cómo trabajamos',
   items: [
-    { value: 250, prefix: '+', suffix: '', label: 'Familias asesoradas' },
-    { value: 75, prefix: '+', suffix: 'M', label: 'En patrimonio protegido' },
-    { value: 15, prefix: '+', suffix: '', label: 'Años de experiencia' },
-    { value: 100, prefix: '', suffix: '%', label: 'Compromiso con tu legado' },
+    { value: 45, prefix: '', suffix: ' min', label: 'Consulta inicial sin costo' },
+    { value: 5, prefix: '', suffix: '', label: 'Etapas del Método Sovereign™' },
+    { value: 2, prefix: '', suffix: '', label: 'Idiomas de asesoría: español e inglés' },
   ],
 } as const;
 
@@ -382,7 +395,7 @@ export const contactPage = {
     interestPlaceholder: 'Selecciona una opción',
     message: 'Cuéntanos brevemente tu situación',
     messagePlaceholder: 'Opcional. Mientras más contexto tengamos, mejor será la primera conversación.',
-    consent: 'Autorizo a Sovereign Capital Solutions a contactarme por los medios proporcionados.',
+    consent: consent.contact,
     submit: 'Solicitar consulta privada',
     sending: 'Enviando…',
     successTitle: 'Solicitud recibida',
@@ -437,9 +450,11 @@ export const footer = {
   legal: [
     { label: 'Aviso Legal', href: '/legal/aviso-legal' },
     { label: 'Privacidad', href: '/legal/privacidad' },
+    { label: 'Términos', href: '/legal/terminos' },
+    { label: 'Consentimiento de comunicaciones', href: '/legal/consentimiento-comunicaciones' },
     { label: 'Descargo de Responsabilidad', href: '/legal/descargo' },
   ],
-  credit: 'Sitio web diseñado por Sovereign CS',
+  regulatoryTitle: 'Información regulatoria',
 } as const;
 
 export const legalPages = {
@@ -450,17 +465,42 @@ export const legalPages = {
       'Sovereign Capital Solutions es una firma de estrategia patrimonial privada. El contenido de este sitio tiene fines informativos y educativos y no constituye asesoría legal, fiscal, contable ni una oferta de venta de instrumentos financieros.',
       'Las estrategias descritas requieren un análisis individual y su disponibilidad depende de la residencia fiscal, de la situación patrimonial y de los requisitos de suscripción de cada compañía emisora.',
       'El uso de este sitio no crea una relación de asesoría entre el usuario y Sovereign Capital Solutions. Dicha relación se establece únicamente mediante acuerdo escrito.',
-      'Las marcas Método Sovereign™ y Banca Mía™ identifican metodologías propias de la firma y no describen un producto financiero registrado.',
+      'Las marcas Método Sovereign™ y Banca Mía™ identifican metodologías propias de la firma y no describen un producto financiero registrado. Banca Mía™ es una estrategia basada en seguros de vida Whole Life participantes: no es un banco, una cuenta bancaria ni un producto de inversión.',
+      'Los productos de seguro de vida que se mencionan en este sitio son emitidos por aseguradoras autorizadas y los ofrece un agente de seguros de vida licenciado únicamente en los estados donde mantiene licencia vigente. Su contratación está sujeta a suscripción (underwriting), disponibilidad por estado y a los términos de cada contrato.',
     ],
   },
   privacidad: {
     title: 'Política de Privacidad',
-    updated: 'Última actualización: enero de 2026',
+    updated: 'Última actualización: septiembre de 2026',
     body: [
-      'Recopilamos únicamente la información que nos proporcionas voluntariamente a través de nuestros formularios de contacto: nombre, correo electrónico, teléfono y el contexto que decidas compartir.',
-      'Utilizamos esa información exclusivamente para contactarte, coordinar tu consulta y darte seguimiento. No vendemos, alquilamos ni compartimos tus datos con terceros con fines comerciales.',
+      'Recopilamos la información que nos proporcionas voluntariamente en nuestros formularios (nombre, correo electrónico, teléfono, estado de residencia y las respuestas de los diagnósticos) y datos técnicos de navegación (dirección IP, tipo de navegador, páginas visitadas y parámetros de campaña como UTM).',
+      'Utilizamos esa información para contactarte, coordinar tu consulta, enviarte el material educativo que solicitaste y darte seguimiento. Guardamos también un registro del consentimiento que otorgaste (texto aceptado, fecha, IP y navegador) como prueba de autorización.',
+      'Usamos herramientas de medición y publicidad (Meta Pixel y Conversions API, Google Analytics) para saber qué contenidos resultan útiles y medir nuestras campañas. Estas herramientas pueden usar cookies e identificadores del navegador. Los datos de contacto que se comparten con ellas viajan cifrados mediante hash.',
+      'No vendemos, alquilamos ni compartimos tus datos personales con terceros para sus propios fines de marketing. En particular, los números de teléfono y el consentimiento para mensajes de texto (SMS/WhatsApp) no se comparten con terceros ni con afiliados con fines de marketing. Sólo los tratan los proveedores que nos prestan servicios (CRM, agenda, mensajería), bajo obligación de confidencialidad.',
       'Conservamos los datos durante el tiempo necesario para atender tu solicitud y cumplir con las obligaciones legales aplicables.',
-      'Puedes solicitar en cualquier momento el acceso, la rectificación o la eliminación de tus datos escribiendo a nuestro correo de contacto. Atenderemos la solicitud dentro de los plazos legales aplicables.',
+      'Puedes solicitar en cualquier momento el acceso, la rectificación o la eliminación de tus datos escribiendo a nuestro correo de contacto, y dejar de recibir mensajes respondiendo STOP o usando el enlace de baja de cada email. Atenderemos la solicitud dentro de los plazos legales aplicables.',
+    ],
+  },
+  terminos: {
+    title: 'Términos de Uso',
+    updated: 'Última actualización: septiembre de 2026',
+    body: [
+      'Al usar este sitio aceptas estos términos. El contenido, los diagnósticos, los simuladores y las masterclasses son educativos: no constituyen una oferta, una cotización, una ilustración oficial ni asesoría legal, fiscal o financiera.',
+      'El resultado de un diagnóstico en línea es orientativo y se basa sólo en tus respuestas. La elegibilidad real para un seguro de vida la determina la aseguradora mediante su proceso de suscripción (underwriting), que puede aprobar, recargar, posponer o declinar una solicitud.',
+      'Las consultas son sin costo y sin compromiso. Si decides contratar un producto, Sovereign Capital Solutions puede recibir compensación de la aseguradora; te explicaremos cómo funciona antes de cualquier implementación.',
+      'Sólo asesoramos a residentes de los estados donde mantenemos licencia vigente. Las solicitudes de otros estados quedan en lista de espera.',
+      'Te comprometes a proporcionar información veraz y a no usar los formularios para enviar datos de terceros sin su autorización. Podemos modificar estos términos; la versión vigente es la publicada en esta página.',
+    ],
+  },
+  'consentimiento-comunicaciones': {
+    title: 'Aviso de Consentimiento de Comunicaciones',
+    updated: 'Última actualización: septiembre de 2026',
+    body: [
+      'Cuando marcas la casilla de consentimiento en nuestros formularios autorizas a Sovereign Capital Solutions a contactarte por llamada, SMS, WhatsApp y email, incluso mediante sistemas automatizados o mensajes pregrabados, al número y correo que proporcionaste, para darte información sobre seguros de vida, enviarte el material solicitado y coordinar tu consulta.',
+      'El consentimiento no es condición de compra de ningún producto o servicio. La casilla nunca viene marcada de antemano.',
+      'La frecuencia de los mensajes varía según tu interacción. Pueden aplicar tarifas de mensajes y datos de tu operador.',
+      'Puedes revocar tu consentimiento en cualquier momento: responde STOP a cualquier SMS o WhatsApp, pide que no te llamemos durante una llamada, o escríbenos a nuestro correo de contacto. Para ayuda, responde HELP.',
+      'Guardamos un registro del texto que aceptaste, su versión, la fecha, la dirección IP y el navegador desde el que lo hiciste, como prueba de consentimiento. Nunca compramos, vendemos ni compartimos listas de contactos.',
     ],
   },
   descargo: {

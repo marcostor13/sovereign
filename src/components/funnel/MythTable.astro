@@ -1,0 +1,70 @@
+---
+import Icon from '../Icon.astro';
+
+/** Mito vs realidad: tabla de dos columnas que en móvil se apila por fila. */
+interface Props {
+  heads: readonly string[];
+  rows: readonly { myth: string; truth: string }[];
+}
+
+const { heads, rows } = Astro.props;
+---
+
+<div class="myths" role="table" aria-label={`${heads[0]} y ${heads[1]}`}>
+  <div class="myths-head" role="row">
+    <span role="columnheader">{heads[0]}</span>
+    <span role="columnheader">{heads[1]}</span>
+  </div>
+
+  {rows.map((r) => (
+    <div class="myths-row" role="row">
+      <p class="is-myth" role="cell">
+        <span class="myths-ico is-x" aria-hidden="true"><Icon name="close" size={13} stroke={2.4} /></span>
+        <span><b class="visually-hidden">{heads[0]}: </b>“{r.myth}”</span>
+      </p>
+      <p class="is-truth" role="cell">
+        <span class="myths-ico is-ok" aria-hidden="true"><Icon name="check" size={13} stroke={2.4} /></span>
+        <span><b class="visually-hidden">{heads[1]}: </b>{r.truth}</span>
+      </p>
+    </div>
+  ))}
+</div>
+
+<style>
+  .myths { border: 1px solid rgba(10, 22, 40, 0.1); border-radius: 14px; overflow: hidden; background: #fff; }
+
+  .myths-head { display: none; }
+
+  .myths-row + .myths-row { border-top: 1px solid rgba(10, 22, 40, 0.08); }
+
+  .myths-row p {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    padding: 1rem clamp(1rem, 2.4vw, 1.6rem);
+    font-size: var(--step-0);
+    line-height: 1.55;
+  }
+
+  .is-myth { color: var(--ink-500); font-style: italic; background: #faf9f6; }
+  .is-truth { color: var(--ink-900); }
+
+  .myths-ico { display: grid; place-items: center; width: 24px; height: 24px; margin-top: 0.1em; border-radius: 50%; }
+  .is-x { background: rgba(180, 65, 47, 0.1); color: #a43d2c; }
+  .is-ok { background: rgba(47, 125, 91, 0.12); color: #2f7d5b; }
+
+  @media (min-width: 780px) {
+    .myths-head, .myths-row { display: grid; grid-template-columns: 2fr 3fr; }
+    .myths-head span {
+      padding: 0.9rem 1.6rem;
+      font-size: var(--step--2);
+      font-weight: 500;
+      letter-spacing: var(--tracking-wider);
+      text-transform: uppercase;
+      color: var(--ink-500);
+      background: #f4f1ea;
+    }
+    .myths-head span + span { color: var(--gold-700); }
+    .is-truth { border-left: 1px solid rgba(10, 22, 40, 0.08); }
+  }
+</style>

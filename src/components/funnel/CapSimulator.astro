@@ -1,0 +1,234 @@
+---
+import Icon from '../Icon.astro';
+import { iulSimulator as s } from '../../data/iul';
+
+/**
+ * Simulador educativo de cap, floor y participación.
+ * interés = max(floor, min(índice × participación, cap)). Nada se guarda.
+ */
+---
+
+<div class="sim" data-sim>
+  <div class="sim-controls">
+    <div class="sim-field sim-index">
+      <div class="sim-label-row">
+        <label for="sim-index">{s.index}</label>
+        <output for="sim-index" data-out="index">+12,0%</output>
+      </div>
+      <input id="sim-index" type="range" min="-20" max="25" step="0.5" value="12" data-in="index" />
+      <div class="sim-scale" aria-hidden="true"><span>−20%</span><span>0%</span><span>+25%</span></div>
+    </div>
+
+    <div class="sim-inputs">
+      <p class="sim-field">
+        <label for="sim-part">{s.participation}</label>
+        <span class="sim-num"><input id="sim-part" type="number" inputmode="decimal" min="0" max="200" step="5" value="80" data-in="part" /><i>%</i></span>
+      </p>
+      <p class="sim-field">
+        <label for="sim-cap">{s.cap}</label>
+        <span class="sim-num"><input id="sim-cap" type="number" inputmode="decimal" min="0" max="30" step="0.5" value="8" data-in="cap" /><i>%</i></span>
+      </p>
+      <p class="sim-field">
+        <label for="sim-floor">{s.floor}</label>
+        <span class="sim-num"><input id="sim-floor" type="number" inputmode="decimal" min="0" max="5" step="0.5" value="0" data-in="floor" /><i>%</i></span>
+      </p>
+    </div>
+
+    <div class="sim-examples">
+      <span>{s.examples}:</span>
+      <button type="button" data-preset="12">{s.exampleUp}</button>
+      <button type="button" data-preset="-10">{s.exampleDown}</button>
+    </div>
+  </div>
+
+  <div class="sim-result" aria-live="polite">
+    <ol class="sim-steps">
+      <li>
+        <span>Índice</span>
+        <b data-val="index">+12,0%</b>
+      </li>
+      <li>
+        <span>× participación</span>
+        <b data-val="raw">9,6%</b>
+      </li>
+      <li>
+        <span>Límites (floor / cap)</span>
+        <b data-val="limits">0% / 8%</b>
+      </li>
+    </ol>
+
+    <svg class="sim-chart" viewBox="0 0 320 120" role="img" aria-label="Comparación entre la variación del índice y el interés acreditado">
+      <line x1="0" y1="60" x2="320" y2="60" class="sim-axis" />
+      <line x1="0" x2="320" class="sim-cap-line" data-cap-line y1="44" y2="44" />
+      <text x="316" class="sim-cap-text" data-cap-text y="40" text-anchor="end">cap</text>
+      <rect x="60" width="70" class="sim-bar-index" data-bar="index" y="36" height="24" rx="3" />
+      <rect x="190" width="70" class="sim-bar-credit" data-bar="credit" y="44" height="16" rx="3" />
+      <text x="95" y="114" text-anchor="middle" class="sim-bar-label">Índice</text>
+      <text x="225" y="114" text-anchor="middle" class="sim-bar-label">Acreditado</text>
+    </svg>
+
+    <p class="sim-credit">
+      <span>{s.result}</span>
+      <strong data-val="credit">8,0%</strong>
+      <small>{s.beforeCharges}</small>
+    </p>
+    <p class="sim-explain" data-val="explain">El índice subió +12,0%. Con 80% de participación serían 9,6%, pero el cap limita el interés a 8,0%.</p>
+  </div>
+</div>
+
+<div class="lp-warn">
+  <Icon name="shield" size={20} />
+  <p set:html={s.warning} />
+</div>
+<p class="lp-legal">{s.legal}</p>
+
+<style>
+  .sim {
+    display: grid;
+    gap: clamp(1.4rem, 3vw, 2.4rem);
+    padding: clamp(1.3rem, 3vw, 2.4rem);
+    background: #fff;
+    border: 1px solid rgba(10, 22, 40, 0.1);
+    border-radius: 16px;
+    color: var(--ink-900);
+  }
+
+  .sim-controls { display: grid; gap: 1.4rem; align-content: start; }
+
+  .sim-field { display: grid; gap: 0.4rem; margin: 0; }
+  .sim-field label { font-size: var(--step--1); font-weight: 500; color: var(--ink-700); }
+
+  .sim-label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .sim-label-row output { font-family: var(--font-display); font-size: var(--step-3); color: var(--navy-850); font-variant-numeric: lining-nums tabular-nums; }
+
+  .sim input[type='range'] { width: 100%; accent-color: var(--gold-600); height: 2.2rem; cursor: pointer; }
+
+  .sim-scale { display: flex; justify-content: space-between; font-size: var(--step--2); color: var(--ink-500); }
+
+  .sim-inputs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+
+  .sim-num { position: relative; display: block; }
+  .sim-num input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.5rem 1.8rem 0.5rem 0.7rem;
+    border: 1px solid rgba(10, 22, 40, 0.16);
+    border-radius: 10px;
+    font-size: 16px;
+    color: var(--ink-900);
+    background: #fff;
+  }
+  .sim-num input:focus { outline: 2px solid var(--gold-600); outline-offset: 1px; }
+  .sim-num i { position: absolute; right: 0.7rem; top: 50%; translate: 0 -50%; font-style: normal; color: var(--ink-500); }
+
+  .sim-examples { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: var(--step--1); color: var(--ink-500); }
+  .sim-examples button {
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border: 1px solid rgba(168, 134, 47, 0.5);
+    border-radius: 99px;
+    color: var(--ink-900);
+    font-size: var(--step--1);
+  }
+  .sim-examples button:hover { background: #fffaf0; border-color: var(--gold-600); }
+
+  .sim-result { display: grid; gap: 1rem; align-content: start; padding: clamp(1rem, 2.4vw, 1.6rem); background: var(--navy-850); border-radius: 12px; color: var(--fg); }
+
+  .sim-steps { display: grid; gap: 0.35rem; list-style: none; padding: 0; margin: 0; }
+  .sim-steps li { display: flex; justify-content: space-between; gap: 1rem; font-size: var(--step--1); color: var(--fg-muted); padding-bottom: 0.35rem; border-bottom: 1px solid var(--hair-soft); }
+  .sim-steps b { color: var(--bone-100); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  .sim-chart { width: 100%; height: auto; }
+  .sim-axis { stroke: rgba(238, 241, 245, 0.35); stroke-width: 1; }
+  .sim-cap-line { stroke: var(--gold-400); stroke-width: 1; stroke-dasharray: 4 4; }
+  .sim-cap-text { fill: var(--gold-300); font-size: 10px; font-family: var(--font-sans); }
+  .sim-bar-index { fill: rgba(169, 180, 194, 0.55); transition: y 300ms var(--ease), height 300ms var(--ease); }
+  .sim-bar-credit { fill: var(--gold-500); transition: y 300ms var(--ease), height 300ms var(--ease); }
+  .sim-bar-label { fill: var(--fg-muted); font-size: 11px; font-family: var(--font-sans); }
+
+  .sim-credit { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.7rem; }
+  .sim-credit span { font-size: var(--step--1); color: var(--fg-muted); width: 100%; }
+  .sim-credit strong { font-family: var(--font-display); font-size: var(--step-5); font-weight: 500; line-height: 1; color: var(--gold-300); font-variant-numeric: lining-nums tabular-nums; }
+  .sim-credit small { font-size: var(--step--1); color: var(--fg-muted); }
+
+  .sim-explain { font-size: var(--step--1); line-height: 1.6; color: var(--bone-200); }
+
+  @media (min-width: 900px) {
+    .sim { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+  }
+</style>
+
+<script>
+  import { track } from '../../lib/client/track';
+
+  const root = document.querySelector<HTMLElement>('[data-sim]');
+
+  if (root) {
+    const $ = <T extends Element>(sel: string) => root.querySelector<T>(sel)!;
+    const input = (k: string) => $<HTMLInputElement>(`[data-in="${k}"]`);
+    const fmt = (n: number, sign = false) =>
+      `${sign && n > 0 ? '+' : ''}${n.toLocaleString('es-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }).replace('-', '−')}%`;
+    const num = (k: string, fallback: number) => {
+      const v = parseFloat(input(k).value);
+      return Number.isFinite(v) ? v : fallback;
+    };
+
+    let used = false;
+
+    // Escala del gráfico: ±25% ocupa media altura (50px).
+    const Y0 = 60;
+    const scale = (pct: number) => (Math.max(-25, Math.min(25, pct)) / 25) * 50;
+    const setBar = (el: SVGRectElement, pct: number) => {
+      const h = Math.max(Math.abs(scale(pct)), pct === 0 ? 1.5 : 0);
+      el.setAttribute('height', String(h));
+      el.setAttribute('y', String(pct >= 0 ? Y0 - h : Y0));
+    };
+
+    const update = () => {
+      const index = num('index', 0);
+      const part = Math.max(0, num('part', 80));
+      const cap = Math.max(0, num('cap', 8));
+      const floor = Math.max(0, Math.min(cap, num('floor', 0)));
+
+      const raw = (index * part) / 100;
+      const credit = Math.max(floor, Math.min(raw, cap));
+
+      $('[data-out="index"]').textContent = fmt(index, true);
+      $('[data-val="index"]').textContent = fmt(index, true);
+      $('[data-val="raw"]').textContent = fmt(raw, true);
+      $('[data-val="limits"]').textContent = `${fmt(floor)} / ${fmt(cap)}`;
+      $('[data-val="credit"]').textContent = fmt(credit);
+
+      let explain: string;
+      if (raw > cap) explain = `El índice varió ${fmt(index, true)}. Con ${part}% de participación serían ${fmt(raw)}, pero el cap limita el interés a ${fmt(cap)}.`;
+      else if (raw < floor) explain = `El índice varió ${fmt(index, true)}. El floor evita una acreditación negativa: se acredita ${fmt(floor)} antes de cargos. Los cargos de la póliza siguen descontándose.`;
+      else explain = `El índice varió ${fmt(index, true)}. Con ${part}% de participación se acredita ${fmt(credit)}, dentro de los límites del contrato.`;
+      $('[data-val="explain"]').textContent = explain;
+
+      setBar($<SVGRectElement>('[data-bar="index"]'), index);
+      setBar($<SVGRectElement>('[data-bar="credit"]'), credit);
+      const capY = String(Y0 - scale(cap));
+      $('[data-cap-line]').setAttribute('y1', capY);
+      $('[data-cap-line]').setAttribute('y2', capY);
+      $('[data-cap-text]').setAttribute('y', String(Number(capY) - 4));
+    };
+
+    const onUse = () => {
+      update();
+      if (!used) {
+        used = true;
+        track('SimuladorUso');
+      }
+    };
+
+    root.querySelectorAll('input').forEach((el) => el.addEventListener('input', onUse));
+    root.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        input('index').value = btn.dataset.preset!;
+        onUse();
+      }),
+    );
+
+    update();
+  }
+</script>

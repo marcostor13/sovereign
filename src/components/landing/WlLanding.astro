@@ -1,0 +1,388 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import Accordion from '../Accordion.astro';
+import TrustBar from '../funnel/TrustBar.astro';
+import CapitalCycle from '../funnel/CapitalCycle.astro';
+import MythTable from '../funnel/MythTable.astro';
+import FitColumns from '../funnel/FitColumns.astro';
+import Advisor from '../funnel/Advisor.astro';
+import Testimonials from '../funnel/Testimonials.astro';
+import StepForm from '../funnel/StepForm.astro';
+import StickyCta from '../funnel/StickyCta.astro';
+import type { Step } from '../../data/funnels';
+import { agent, disclosures, reviewedOn } from '../../data/compliance';
+import {
+  wlSeo, wlHeadlines, wlHero, wlTrust, wlRegistro, wlProblem, wlWhat, wlPolicy, wlCycle,
+  wlMyths, wlLearn, wlFit, wlRepeat, wlFaq, masterclass, type WlVariant,
+} from '../../data/banca-mia';
+
+/** Landing de registro a la masterclass Banca Mía™ (docs/03, sección 3). */
+interface Props {
+  variant: WlVariant;
+  primary?: boolean;
+}
+
+const { variant, primary = false } = Astro.props;
+const site = Astro.site!;
+
+const registroSteps: Step[] = [
+  { key: 'negocio', type: 'single', question: wlRegistro.negocio.question, options: [...wlRegistro.negocio.options] },
+  { key: 'estado', type: 'state', question: wlRegistro.estado.question },
+  { key: 'interes', type: 'single', question: wlRegistro.interes.question, options: [...wlRegistro.interes.options] },
+  { key: 'contacto', type: 'contact', question: 'Tus datos para el acceso' },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: wlFaq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: `Masterclass: ${masterclass.name}`,
+    description: wlSeo.description,
+    inLanguage: 'es',
+    isAccessibleForFree: true,
+    provider: { '@type': 'InsuranceAgency', name: 'Sovereign Capital Solutions', url: site.href },
+    instructor: { '@type': 'Person', name: agent.name, jobTitle: agent.title },
+    hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'online', courseWorkload: `PT${masterclass.minutes}M` },
+  },
+];
+
+const form = (id: string) => ({
+  id,
+  steps: registroSteps,
+  endpoint: '/api/leads/banca-mia/registro',
+  product: 'wl-registro',
+  variant,
+  mode: 'card' as const,
+  submit: wlHero.cta,
+  consentKind: 'wholeLife' as const,
+  startEvent: 'InicioRegistro',
+  redirect: '/banca-mia/masterclass',
+});
+---
+
+<Base
+  title={`${wlSeo.title} · Sovereign Capital Solutions`}
+  rawTitle
+  description={wlSeo.description}
+  canonicalPath="/banca-mia"
+  noIndex={!primary}
+  landing={{ cta: { label: 'Ver masterclass', href: '#registro' }, disclosure: 'wholeLife' }}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline slot="head" />
+
+  <div class="lp wl" data-landing="banca-mia" data-variant={variant}>
+    {/* 1 · HERO + registro --------------------------------------------------- */}
+    <section class="lp-hero wl-hero">
+      <div class="lp-shell lp-hero-grid wl-hero-grid">
+        <div class="lp-hero-copy">
+          <p class="lp-tag">{wlHero.eyebrow}</p>
+          <h1 class="lp-title wl-title"><Fragment set:html={wlHeadlines[variant].replace(/™/g, '<sup>™</sup>')} /></h1>
+          <p class="wl-golden">{wlHero.tag}</p>
+          <p class="lp-hero-lead">{wlHero.lead}</p>
+
+          <ul class="lp-checks">
+            {wlHero.bullets.map((b) => <li><Icon name="check" size={18} stroke={2} />{b}</li>)}
+          </ul>
+
+          <div class="lp-actions wl-mobile-cta">
+            <a class="btn btn-gold btn-lg" href="#registro-hero">
+              {wlHero.mobileCta}
+              <Icon name="arrow" size={17} />
+            </a>
+          </div>
+
+          <a class="lp-textlink wl-shortcut" href="/banca-mia/diagnostico">{wlHero.shortcut}</a>
+          <p class="lp-micro">Material educativo revisado en {reviewedOn}.</p>
+        </div>
+
+        <div class="lp-formcard wl-formcard" id="registro-hero">
+          <StepForm {...form(`wl-reg-hero-${variant.toLowerCase()}`)} title={wlHero.formTitle} lead={`${masterclass.minutes} minutos · en español · acceso inmediato`} />
+          <p class="wl-micro">{wlHero.micro}</p>
+        </div>
+      </div>
+    </section>
+
+    {/* 2 · Confianza -------------------------------------------------------- */}
+    <TrustBar items={wlTrust} />
+
+    {/* 3 · Problema --------------------------------------------------------- */}
+    <section class="lp-section lp-light">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">El problema del empresario</p>
+          <h2 class="lp-h2">{wlProblem.title}</h2>
+        </header>
+        <ul class="lp-cards" data-reveal-group>
+          {wlProblem.cards.map((c) => (
+            <li class="lp-card" data-reveal-item data-reveal>
+              <Icon name={c.icon} size={26} stroke={1.2} />
+              <h3>{c.title}</h3>
+              <p>{c.text}</p>
+            </li>
+          ))}
+        </ul>
+        <p class="lp-closing">{wlProblem.closing}</p>
+      </div>
+    </section>
+
+    {/* 4 · Qué es y qué no es ------------------------------------------------ */}
+    <section class="lp-section lp-dark">
+      <div class="lp-shell lp-narrow">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Definición</p>
+          <h2 class="lp-h2"><Fragment set:html={wlWhat.title.replace(/™/g, '<sup>™</sup>')} /></h2>
+        </header>
+        <p class="lp-prose" set:html={wlWhat.body} />
+        <aside class="wl-not">
+          <h3>{wlWhat.notTitle}</h3>
+          <p>{wlWhat.not}</p>
+        </aside>
+      </div>
+    </section>
+
+    {/* 5 · Las 4 piezas ------------------------------------------------------ */}
+    <section class="lp-section lp-white">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Anatomía de la póliza</p>
+          <h2 class="lp-h2">{wlPolicy.title}</h2>
+        </header>
+        <ol class="wl-blocks">
+          {wlPolicy.blocks.map((b, i) => (
+            <li>
+              <span class="wl-block-n">{i + 1}</span>
+              <Icon name={b.icon} size={26} stroke={1.3} />
+              <h3>{b.title}</h3>
+              <p>{b.text}</p>
+              {b.warn && <p class="wl-block-warn"><Icon name="shield" size={15} />{b.warn}</p>}
+            </li>
+          ))}
+        </ol>
+        <p class="lp-note">{wlPolicy.note}</p>
+      </div>
+    </section>
+
+    {/* 6 · Ciclo del capital -------------------------------------------------- */}
+    <section class="lp-section lp-sand">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">El ciclo del capital</p>
+          <h2 class="lp-h2">{wlCycle.title}</h2>
+        </header>
+        <CapitalCycle steps={wlCycle.steps} />
+        <div class="lp-warn">
+          <Icon name="shield" size={20} />
+          <p>{wlCycle.legend}</p>
+        </div>
+      </div>
+    </section>
+
+    {/* 7 · Mitos -------------------------------------------------------------- */}
+    <section class="lp-section lp-white">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Mitos vs realidad</p>
+          <h2 class="lp-h2">{wlMyths.title}</h2>
+        </header>
+        <MythTable heads={wlMyths.heads} rows={wlMyths.rows} />
+      </div>
+    </section>
+
+    {/* 8 · Qué aprenderás ----------------------------------------------------- */}
+    <section class="lp-section lp-deep">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Masterclass · {masterclass.minutes} min</p>
+          <h2 class="lp-h2">{wlLearn.title}</h2>
+        </header>
+        <ol class="wl-learn">
+          {wlLearn.items.map((it) => (
+            <li>
+              <span>{it.at}</span>
+              <p>{it.text}</p>
+            </li>
+          ))}
+        </ol>
+        <div class="lp-actions wl-learn-cta">
+          <a class="btn btn-gold btn-lg" href="#registro">
+            {wlLearn.cta}
+            <Icon name="arrow" size={17} />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {/* 9 · ¿Es para ti? ------------------------------------------------------ */}
+    <section class="lp-section lp-light">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Idoneidad</p>
+          <h2 class="lp-h2">{wlFit.title}</h2>
+        </header>
+        <FitColumns yesTitle={wlFit.yesTitle} yes={wlFit.yes} noTitle={wlFit.noTitle} no={wlFit.no} />
+        <p class="wl-cross">
+          {wlFit.micro} <a href="/iul">Ver IUL sin mitos <Icon name="arrow" size={14} /></a>
+        </p>
+      </div>
+    </section>
+
+    {/* 10 · Quién te enseña --------------------------------------------------- */}
+    <section class="lp-section lp-white">
+      <div class="lp-shell">
+        <Advisor eyebrow="Quién te enseña" bio={agent.bioBusiness} quote={agent.quoteWl} />
+      </div>
+    </section>
+
+    {/* 11 · Testimonios ------------------------------------------------------- */}
+    <Testimonials product="wl" title="Empresarios que ya pasaron por el diagnóstico" />
+
+    {/* 12 · Registro (repetición) -------------------------------------------- */}
+    <section class="lp-section lp-sand" id="registro">
+      <div class="lp-shell wl-repeat">
+        <header class="lp-head is-center">
+          <p class="lp-eyebrow">Acceso inmediato</p>
+          <h2 class="lp-h2">{wlRepeat.title}</h2>
+          <p class="lp-lead">{wlRepeat.lead}</p>
+        </header>
+        <div class="lp-formcard">
+          <StepForm {...form(`wl-reg-bottom-${variant.toLowerCase()}`)} />
+        </div>
+        <p class="lp-legal lp-center">{disclosures.wholeLifeShort} Sovereign Capital Solutions.</p>
+      </div>
+    </section>
+
+    {/* 13 · FAQ --------------------------------------------------------------- */}
+    <section class="lp-section lp-dark">
+      <div class="lp-shell lp-narrow">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Preguntas frecuentes</p>
+          <h2 class="lp-h2">Banca Mía™ con Whole Life, sin rodeos</h2>
+        </header>
+        <Accordion items={wlFaq} openFirst={false} />
+        <div class="lp-actions wl-faq-cta">
+          <a class="btn btn-outline" href="/banca-mia/diagnostico">
+            Ya conozco el concepto: aplicar al diagnóstico
+            <Icon name="arrow" size={16} />
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <StickyCta label="Ver la masterclass gratis" href="#registro" />
+</Base>
+
+<style>
+  .wl-hero-grid { align-items: start; }
+
+  .wl-title { font-size: var(--step-4); }
+
+  .wl-golden {
+    padding: 0.7rem 0.9rem;
+    border-left: 2px solid var(--gold-500);
+    background: rgba(201, 162, 39, 0.07);
+    border-radius: 0 8px 8px 0;
+    font-size: var(--step--1);
+    line-height: 1.5;
+    color: var(--bone-100);
+  }
+
+  .wl-shortcut { justify-self: start; color: var(--gold-300); }
+
+  .wl-formcard { position: relative; }
+  .wl-micro { margin-top: 0.8rem; font-size: var(--step--2); text-align: center; color: var(--ink-500); }
+
+  @media (min-width: 1000px) {
+    .wl-mobile-cta { display: none; }
+    .wl-hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 27rem); }
+    .wl-formcard { position: sticky; top: 5.5rem; }
+  }
+
+  .wl-not {
+    margin-top: 1.6rem;
+    padding: 1.3rem 1.5rem;
+    border: 1px solid var(--gold-500);
+    border-radius: 12px;
+    background: rgba(201, 162, 39, 0.06);
+  }
+
+  .wl-not h3 { font-size: var(--step-2); color: var(--gold-300); margin-bottom: 0.4rem; }
+  .wl-not p { color: var(--bone-100); line-height: 1.65; }
+
+  .wl-blocks {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .wl-blocks li {
+    position: relative;
+    display: grid;
+    gap: 0.55rem;
+    align-content: start;
+    padding: 1.5rem;
+    border-radius: 14px;
+    background: #f7f4ee;
+    border: 1px solid rgba(10, 22, 40, 0.08);
+  }
+
+  .wl-blocks li > :global(svg) { color: #10302a; }
+  .wl-blocks h3 { font-size: var(--step-2); color: var(--ink-900); }
+  .wl-blocks p { line-height: 1.6; color: var(--ink-500); }
+
+  .wl-block-n {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    color: rgba(168, 134, 47, 0.45);
+  }
+
+  .wl-block-warn {
+    display: flex;
+    gap: 0.45rem;
+    align-items: flex-start;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #7a5212 !important;
+  }
+
+  .wl-block-warn :global(svg) { flex: none; margin-top: 0.2em; color: #b7791f; }
+
+  .wl-learn {
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .wl-learn li {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.2rem 1.3rem;
+    border: 1px solid var(--hair);
+    border-radius: 12px;
+  }
+
+  .wl-learn span { font-size: var(--step--2); letter-spacing: var(--tracking-wider); text-transform: uppercase; color: var(--gold-400); }
+  .wl-learn p { font-family: var(--font-display); font-size: var(--step-1); line-height: 1.3; color: var(--bone-100); }
+
+  .wl-learn-cta, .wl-faq-cta { margin-top: 2rem; }
+
+  .wl-cross { margin-top: 1.5rem; color: var(--ink-500); }
+  .wl-cross a { display: inline-flex; align-items: center; gap: 0.35em; min-height: 44px; color: var(--navy-600); text-decoration: underline; }
+
+  .wl-repeat { max-width: 36rem; }
+</style>

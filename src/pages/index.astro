@@ -5,23 +5,31 @@ import Marquee from '../components/Marquee.astro';
 import Audience from '../components/Audience.astro';
 import Method from '../components/Method.astro';
 import StrategyGrid from '../components/StrategyGrid.astro';
+import FunnelPaths from '../components/FunnelPaths.astro';
 import Stats from '../components/Stats.astro';
 import AcademyTeaser from '../components/AcademyTeaser.astro';
+import Advisor from '../components/funnel/Advisor.astro';
 import FinalCta from '../components/FinalCta.astro';
 import { brand } from '../data/site';
 ---
 
 <Base
   title={`${brand.name} ${brand.surname}`}
-  description="Diseñamos estrategias patrimoniales personalizadas que protegen, preservan y fortalecen tu patrimonio. Protección, liquidez, crecimiento y legado para empresarios, profesionales, inversionistas y familias en Miami."
+  description="Estrategias patrimoniales con seguros de vida, explicadas en español y sin mitos. IUL, Banca Mía™ con Whole Life, protección y legado para empresarios, profesionales y familias. Asesor licenciado en Brickell, Miami."
   transparentHeader
 >
   <Hero />
   <Marquee />
   <Audience />
+  <FunnelPaths />
   <Method />
   <StrategyGrid />
   <Stats />
+  <section class="section">
+    <div class="shell">
+      <Advisor tone="dark" quote="Durante años diseñé estructuras donde el margen de error era mínimo. Hoy aplico esa misma disciplina a proteger lo que otros tardaron una vida en construir." />
+    </div>
+  </section>
   <AcademyTeaser />
   <FinalCta />
 </Base>

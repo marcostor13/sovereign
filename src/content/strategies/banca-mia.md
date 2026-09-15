@@ -1,17 +1,17 @@
 ---
 title: Banca Mía™
-short: 'Nuestra metodología para estructurar protección, acumulación y acceso estratégico a capital dentro de una solución diseñada alrededor de tus objetivos.'
+short: 'Nuestra estrategia de liquidez con seguro de vida Whole Life participante: protección, valor en efectivo y acceso a capital mediante préstamos sobre la póliza. No es un banco.'
 icon: lock
 order: 6
 featured: true
-lead: 'Tu capital puede hacer más que crecer. Puede convertirse en parte de tu estrategia de financiamiento.'
+lead: 'Una reserva de capital contractual, construida con un seguro de vida Whole Life y administrada con disciplina. No es un banco ni una cuenta bancaria.'
 bullets:
-  - Acumulación de capital con crecimiento definido contractualmente, manteniéndolo disponible como parte de la estrategia.
-  - Participas en el financiamiento de autos, propiedades, inventario o proyectos desde tu propia estructura.
-  - Reorientas hacia tu propia estructura parte de los intereses que hoy pagas a terceros.
-  - 'Mayor control sobre el uso del capital, dentro de las condiciones y características de la solución.'
-  - La estructura contempla la transferencia ordenada del patrimonio a la siguiente generación.
-outcome: 'Una misma estructura que integra protección, acumulación y acceso estratégico a liquidez.'
+  - Seguro de vida Whole Life participante con prima contractual, beneficio por fallecimiento y valor en efectivo garantizado si se cumplen las condiciones de la póliza.
+  - Diseño con adiciones pagadas (PUA) para acumular valor en efectivo, siempre por debajo del límite MEC.
+  - Acceso a liquidez mediante préstamos de la aseguradora con la póliza como garantía. Los préstamos generan interés y reducen el beneficio por fallecimiento.
+  - Plan explícito de repago y revisión anual de la ilustración in-force.
+  - Beneficio por fallecimiento que acompaña la transferencia ordenada del patrimonio. Los dividendos no están garantizados.
+outcome: 'Una misma póliza que integra protección, acumulación y acceso planificado a liquidez, con sus costos y riesgos a la vista.'
 forWhom:
   - Empresarios
   - Familias
@@ -20,28 +20,27 @@ forWhom:
 
 ## La pregunta que casi nadie se hace
 
-Cada vez que financias un auto, una propiedad o el inventario de tu negocio, alguien gana el interés de esa operación. La pregunta es simple: ¿por qué no puedes ser tú?
+Cada vez que financias un vehículo, equipo o el inventario de tu negocio, pasas por las condiciones de un tercero. Banca Mía™ es nuestra forma de planear esa liquidez con anticipación, usando un **seguro de vida Whole Life participante**.
 
-Banca Mía™ es la metodología con la que respondemos a esa pregunta. No es un producto financiero: es una forma de organizar tu capital para que deje de financiar el margen de un tercero.
-
-## El doble costo del modelo tradicional
-
-En el flujo convencional el dinero sale de tu patrimonio, va al banco y no vuelve. Pierdes el capital, y pierdes también todo lo que ese capital habría generado si hubiera seguido invertido.
-
-Ese segundo costo —el de oportunidad— nunca aparece en el contrato y es sistemáticamente el más caro de los dos. Una familia que financia un auto cada cinco años durante tres décadas transfiere a terceros una cantidad que suele superar el valor de todos los autos comprados.
+No es un banco, no es una cuenta bancaria y no es una inversión en el mercado. Es una metodología de administración de capital basada en la llamada Banca Infinita (Infinite Banking Concept).
 
 ## Cómo funciona
 
-La metodología utiliza una estructura de acumulación con crecimiento definido contractualmente sobre la que puedes acceder a liquidez. La particularidad técnica, y la que cambia la aritmética, es que el capital dentro de la estructura puede continuar capitalizando sobre el total mientras utilizas esos fondos fuera de ella, de acuerdo con las condiciones de la solución.
+La póliza tiene una prima base, que sostiene las garantías, y adiciones pagadas (PUA), que aumentan el valor en efectivo. Con el tiempo, ese valor en efectivo puede servir de garantía para un **préstamo de la aseguradora**, que usas para una compra planificada y repagas con un plan explícito.
 
-Tú defines el calendario de reposición dentro de las condiciones del contrato, y parte de los intereses que antes pagabas a un tercero se reorienta hacia tu propia estructura.
+- El préstamo lo otorga la aseguradora y **cobra interés**, fijo o variable según el contrato.
+- La deuda **reduce el beneficio por fallecimiento** y el valor disponible; el interés no pagado se capitaliza.
+- Los **dividendos no están garantizados** y pueden subir, bajar o ser cero.
+- El **valor de rescate puede ser bajo en los primeros años**: cancelar temprano puede generar pérdidas.
 
 ## Para quién tiene sentido
 
-Funciona especialmente bien para empresarios con necesidades recurrentes de capital de trabajo, para familias que financian bienes duraderos cada pocos años y para profesionales de altos ingresos que hoy acumulan en vehículos con arrastre fiscal alto.
+Puede ser una buena herramienta para empresarios y familias con excedente estable, fondo de emergencia, deuda cara bajo control y un horizonte de 10 a 15 años o más, que valoran las garantías y están dispuestos a revisar el plan cada año.
 
-Requiere disciplina y un horizonte largo. No es una solución para quien necesita el dinero el mes que viene ni sustituye a una cartera de inversión diversificada.
+No suele ser adecuada para quien necesita el dinero pronto, busca el mayor rendimiento de mercado o no puede sostener la prima base.
 
 ## Lo que Banca Mía™ no es
 
-No es un esquema de rendimientos extraordinarios, no convierte una póliza en un banco y no es una forma de evitar impuestos. Es una capa de arquitectura patrimonial que ordena el flujo del capital que ya tienes. Y como toda arquitectura, necesita diseñarse antes de construirse. Las características, costos y consecuencias fiscales dependen de la solución contratada y de tu situación particular.
+No es "dinero infinito", no convierte a nadie en su propio banco y no es una ventaja fiscal automática. En una póliza no-MEC bien administrada, ciertos préstamos pueden evitar impuesto corriente; si la póliza se convierte en MEC o caduca con deuda, puede haber impuestos. Consulta tu caso con un profesional fiscal.
+
+¿Quieres la explicación completa? Mira la [masterclass gratuita Banca Mía™](/banca-mia): 38 minutos, sin mitos y con la tabla honesta de quién sí y quién no.

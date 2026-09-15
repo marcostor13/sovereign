@@ -1,0 +1,63 @@
+---
+import Icon from '../Icon.astro';
+
+/** "¿Es para ti? / No es para ti": el filtro honesto que sube la calidad del lead. */
+interface Props {
+  yesTitle: string;
+  yes: readonly string[];
+  noTitle: string;
+  no: readonly string[];
+}
+
+const { yesTitle, yes, noTitle, no } = Astro.props;
+---
+
+<div class="fit">
+  <div class="fit-col is-yes">
+    <h3>{yesTitle}</h3>
+    <ul>
+      {yes.map((item) => <li><Icon name="check" size={17} stroke={2.2} />{item}</li>)}
+    </ul>
+  </div>
+
+  <div class="fit-col is-no">
+    <h3>{noTitle}</h3>
+    <ul>
+      {no.map((item) => <li><Icon name="close" size={15} stroke={2.2} />{item}</li>)}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .fit { display: grid; gap: 1rem; }
+
+  .fit-col { padding: clamp(1.4rem, 3vw, 2.2rem); border-radius: 14px; }
+
+  .fit-col h3 { font-size: var(--step-2); margin-bottom: 1.1rem; }
+
+  .fit-col ul { display: grid; gap: 0.85rem; list-style: none; padding: 0; margin: 0; }
+
+  .fit-col li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    font-size: var(--step-0);
+    line-height: 1.55;
+  }
+
+  .fit-col li :global(svg) { margin-top: 0.22em; }
+
+  .is-yes { background: #eef6f1; border: 1px solid rgba(47, 125, 91, 0.25); }
+  .is-yes h3 { color: #1d5a40; }
+  .is-yes li { color: var(--ink-700); }
+  .is-yes :global(svg) { color: #2f7d5b; }
+
+  .is-no { background: #f1f1f0; border: 1px solid rgba(10, 22, 40, 0.1); }
+  .is-no h3 { color: var(--ink-700); }
+  .is-no li { color: var(--ink-500); }
+  .is-no :global(svg) { color: #8a8f98; }
+
+  @media (min-width: 860px) {
+    .fit { grid-template-columns: 1fr 1fr; }
+  }
+</style>

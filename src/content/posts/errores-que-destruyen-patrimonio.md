@@ -7,7 +7,7 @@ read: 6
 featured: true
 ---
 
-En quince años acompañando familias patrimoniales, el patrón se repite. La pérdida rara vez viene de una mala inversión espectacular. Viene de omisiones silenciosas que nadie corrigió a tiempo.
+Cuando se revisa con calma la situación de una familia que ya construyó patrimonio, el patrón se repite. La pérdida rara vez viene de una mala inversión espectacular. Viene de omisiones silenciosas que nadie corrigió a tiempo.
 
 ## 1. Confundir rendimiento con resultado
 

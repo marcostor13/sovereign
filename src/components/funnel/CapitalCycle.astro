@@ -1,0 +1,115 @@
+---
+/**
+ * Ciclo del capital (Banca Mía™): cinco nodos sobre un círculo con flechas.
+ * SVG inline; el trazo se dibuja al entrar en pantalla (respeta
+ * prefers-reduced-motion vía el revelado global).
+ */
+interface Props {
+  steps: readonly { title: string; text: string }[];
+}
+
+const { steps } = Astro.props;
+
+const R = 150;
+const C = 200;
+const nodes = steps.map((s, i) => {
+  const angle = -Math.PI / 2 + (i * 2 * Math.PI) / steps.length;
+  return { ...s, n: i + 1, x: C + R * Math.cos(angle), y: C + R * Math.sin(angle), angle };
+});
+
+// Arcos entre nodos, recortados para no tocar los círculos (radio 30).
+const gap = 0.24;
+const arcs = nodes.map((node, i) => {
+  const a0 = node.angle + gap;
+  const a1 = node.angle + (2 * Math.PI) / steps.length - gap;
+  const p = (a: number) => `${(C + R * Math.cos(a)).toFixed(1)} ${(C + R * Math.sin(a)).toFixed(1)}`;
+  return `M ${p(a0)} A ${R} ${R} 0 0 1 ${p(a1)}`;
+});
+---
+
+<div class="cycle" data-reveal="fade">
+  <svg class="cycle-svg" viewBox="0 0 400 400" role="img" aria-labelledby="cycle-title">
+    <title id="cycle-title">Ciclo: {steps.map((s) => s.title).join(', ')}, y vuelve a empezar</title>
+    <defs>
+      <marker id="cycle-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f7d5b" />
+      </marker>
+    </defs>
+
+    <circle cx={C} cy={C} r={R} class="cycle-track" />
+    {arcs.map((d) => <path d={d} class="cycle-arc" marker-end="url(#cycle-arrow)" pathLength="1" />)}
+
+    <text x={C} y={C - 8} text-anchor="middle" class="cycle-center">Póliza</text>
+    <text x={C} y={C + 14} text-anchor="middle" class="cycle-center-sub">Whole Life</text>
+
+    {nodes.map((n) => (
+      <g>
+        <circle cx={n.x} cy={n.y} r="30" class="cycle-node" />
+        <text x={n.x} y={n.y + 6} text-anchor="middle" class="cycle-num">{n.n}</text>
+      </g>
+    ))}
+  </svg>
+
+  <ol class="cycle-list">
+    {nodes.map((n) => (
+      <li>
+        <span class="cycle-badge">{n.n}</span>
+        <div>
+          <h3>{n.title}</h3>
+          <p>{n.text}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .cycle { display: grid; gap: clamp(1.5rem, 4vw, 3rem); align-items: center; }
+
+  .cycle-svg { width: 100%; max-width: 22rem; margin-inline: auto; height: auto; }
+
+  .cycle-track { fill: none; stroke: rgba(47, 125, 91, 0.12); stroke-width: 18; }
+
+  .cycle-arc {
+    fill: none;
+    stroke: #2f7d5b;
+    stroke-width: 2.5;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1400ms var(--ease-out);
+  }
+
+  .is-in .cycle-arc { stroke-dashoffset: 0; }
+
+  .cycle-node { fill: #10302a; stroke: var(--gold-500); stroke-width: 1.5; }
+  .cycle-num { fill: var(--gold-300); font-family: var(--font-display); font-size: 20px; }
+  .cycle-center { fill: var(--ink-900); font-family: var(--font-display); font-size: 22px; }
+  .cycle-center-sub { fill: var(--ink-500); font-family: var(--font-sans); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+
+  .cycle-list { display: grid; gap: 1rem; list-style: none; padding: 0; margin: 0; }
+
+  .cycle-list li { display: grid; grid-template-columns: auto 1fr; gap: 0.9rem; align-items: start; }
+
+  .cycle-badge {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: #10302a;
+    color: var(--gold-300);
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+  }
+
+  .cycle-list h3 { font-size: var(--step-1); color: var(--ink-900); }
+  .cycle-list p { font-size: var(--step-0); line-height: 1.55; color: var(--ink-500); margin-top: 0.15rem; }
+
+  @media (min-width: 900px) {
+    .cycle { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cycle-arc { stroke-dashoffset: 0; }
+  }
+</style>

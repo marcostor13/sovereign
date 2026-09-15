@@ -1,0 +1,75 @@
+---
+import Icon from '../Icon.astro';
+
+/**
+ * CTA fijo inferior en móvil. Se oculta mientras el destino (el quiz o el
+ * formulario) está en pantalla, para no tapar lo que la persona está llenando.
+ * Con `revealAt` (segundos de video) sólo aparece cuando se le indica.
+ */
+interface Props {
+  label: string;
+  href: string;
+  text?: string;
+  /** Visible también en escritorio. */
+  always?: boolean;
+  /** Empieza oculto hasta que un script añade `.is-on`. */
+  deferred?: boolean;
+  id?: string;
+}
+
+const { label, href, text, always = false, deferred = false, id } = Astro.props;
+---
+
+<div class:list={['sticky-cta', always && 'is-always', deferred && 'is-deferred']} id={id} data-sticky-cta data-target={href}>
+  <div class="sticky-inner">
+    {text && <p class="sticky-text">{text}</p>}
+    <a class="btn btn-gold sticky-btn" href={href}>
+      {label}
+      <Icon name="arrow" size={16} />
+    </a>
+  </div>
+</div>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: calc(var(--z-header) - 1);
+    padding: 0.7rem var(--gutter) calc(0.7rem + env(safe-area-inset-bottom, 0px));
+    background: rgba(5, 12, 22, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--hair-strong);
+    transform: translateY(0);
+    transition: transform 380ms var(--ease);
+  }
+
+  .sticky-cta.is-hidden,
+  .sticky-cta.is-deferred:not(.is-on) { transform: translateY(110%); }
+
+  .sticky-inner { display: flex; align-items: center; justify-content: center; gap: 1rem; max-width: 60rem; margin-inline: auto; }
+
+  .sticky-text { display: none; font-family: var(--font-display); font-size: var(--step-1); color: var(--bone-100); }
+
+  .sticky-btn { width: 100%; min-height: 3.25rem; border-radius: 10px; }
+
+  @media (min-width: 900px) {
+    .sticky-cta:not(.is-always) { display: none; }
+    .sticky-text { display: block; }
+    .sticky-btn { width: auto; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-sticky-cta]').forEach((bar) => {
+    const target = bar.dataset.target || '';
+    if (!target.startsWith('#')) return;
+    const el = document.querySelector(target);
+    if (!el) return;
+
+    // Oculta la barra mientras el destino está visible.
+    new IntersectionObserver(([entry]) => bar.classList.toggle('is-hidden', entry.isIntersecting), {
+      threshold: 0.05,
+    }).observe(el);
+  });
+</script>

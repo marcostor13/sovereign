@@ -1,0 +1,38 @@
+---
+import Icon from '../Icon.astro';
+import { testimonials } from '../../data/funnels';
+
+/** Sólo se renderiza si hay testimonios reales para el producto. */
+interface Props {
+  product: 'iul' | 'wl';
+  title?: string;
+}
+
+const { product, title = 'Lo que dicen quienes ya pasaron por la consulta' } = Astro.props;
+const items = testimonials.filter((t) => t.product === product || t.product === 'general');
+---
+
+{items.length > 0 && (
+  <section class="lp-section lp-white">
+    <div class="lp-shell">
+      <header class="lp-head is-center">
+        <h2 class="lp-h2">{title}</h2>
+      </header>
+      <ul class="lp-cards">
+        {items.map((t) => (
+          <li class="lp-card">
+            <Icon name="quote" size={26} stroke={1.1} />
+            <p>“{t.quote}”</p>
+            <p class="tm-by"><strong>{t.name}</strong> · {t.city}{t.compensated && ' · Testimonio compensado'}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="lp-legal lp-center">Testimonios sobre la experiencia de asesoría. No reflejan resultados de pólizas ni garantizan resultados futuros.</p>
+    </div>
+  </section>
+)}
+
+<style>
+  .tm-by { font-size: var(--step--1); }
+  .tm-by strong { color: var(--ink-900); }
+</style>

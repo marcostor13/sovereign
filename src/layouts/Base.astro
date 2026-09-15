@@ -2,7 +2,11 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
+import LandingHeader from '../components/funnel/LandingHeader.astro';
+import LandingFooter from '../components/funnel/LandingFooter.astro';
 import { brand, contact, ui } from '../data/site';
+import { agent, licensedStates } from '../data/compliance';
 
 interface Props {
   title: string;
@@ -14,6 +18,15 @@ interface Props {
   ogType?: 'website' | 'article';
   publishedAt?: Date;
   noIndex?: boolean;
+  /** Ruta canónica alternativa (variantes A/B apuntan a la URL principal). */
+  canonicalPath?: string;
+  /** Título completo sin el sufijo de marca. */
+  rawTitle?: boolean;
+  /**
+   * Página de embudo: cabecera mínima sin menú y pie legal completo, como
+   * exigen las landings de anuncios.
+   */
+  landing?: { cta: { label: string; href: string }; disclosure: 'iul' | 'wholeLife' };
 }
 
 const {
@@ -24,16 +37,20 @@ const {
   ogType = 'website',
   publishedAt,
   noIndex = false,
+  canonicalPath,
+  rawTitle = false,
+  landing,
 } = Astro.props;
 
 const siteName = `${brand.name} ${brand.surname}`;
-const fullTitle = title === siteName ? `${siteName} — ${brand.descriptor}` : `${title} · ${brand.name}`;
-const canonical = new URL(Astro.url.pathname.replace(/\/+$/, '') || '/', Astro.site).href;
+const fullTitle = rawTitle ? title : title === siteName ? `${siteName} — ${brand.descriptor}` : `${title} · ${brand.name}`;
+const canonical = new URL(canonicalPath || Astro.url.pathname.replace(/\/+$/, '') || '/', Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
+const sameAs = contact.socials.map((s) => s.href).filter(Boolean);
 
 const orgSchema = {
   '@context': 'https://schema.org',
-  '@type': 'FinancialService',
+  '@type': 'InsuranceAgency',
   name: siteName,
   alternateName: brand.name,
   description: brand.descriptor,
@@ -41,22 +58,24 @@ const orgSchema = {
   url: Astro.site?.href,
   telephone: contact.phone,
   email: contact.email,
-  areaServed: 'US',
+  areaServed: licensedStates.map((s) => ({ '@type': 'State', name: s })),
+  knowsLanguage: ['es', 'en'],
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Miami',
     addressRegion: 'FL',
     addressCountry: 'US',
   },
-  sameAs: contact.socials.map((s) => s.href),
+  founder: { '@type': 'Person', name: agent.name, jobTitle: agent.role },
+  ...(sameAs.length ? { sameAs } : {}),
 };
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es-US">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="canonical" href={canonical} />
     {noIndex && <meta name="robots" content="noindex, nofollow" />}
 
@@ -71,7 +90,7 @@ const orgSchema = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content="es_ES" />
+    <meta property="og:locale" content="es_US" />
     {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -95,21 +114,23 @@ const orgSchema = {
 
     <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} is:inline />
 
+    <Analytics />
+
     {/* Datos estructurados adicionales por página (artículos, FAQ…) */}
     <slot name="head" />
   </head>
 
-  <body class={bodyClass}>
+  <body class:list={[bodyClass, landing && 'is-landing']}>
     <a class="skip-link" href="#main">{ui.skip}</a>
     <div class="scroll-progress" aria-hidden="true"><i></i></div>
 
-    <Header transparent={transparentHeader} />
+    {landing ? <LandingHeader cta={landing.cta} /> : <Header transparent={transparentHeader} />}
 
     <main id="main">
       <slot />
     </main>
 
-    <Footer />
+    {landing ? <LandingFooter disclosure={landing.disclosure} /> : <Footer />}
 
     <script>
       /* ---------------------------------------------------------------------

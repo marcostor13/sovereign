@@ -30,7 +30,7 @@ import backdrop from '../assets/img/inversionistas.jpg';
             <span class="stat-prefix">{n.prefix}</span><span
               class="stat-num"
               data-count={n.value}
-            >0</span><span class="stat-suffix">{n.suffix}</span>
+            >{n.value}</span><span class="stat-suffix">{n.suffix}</span>
           </dd>
           <p class="stat-label">{n.label}</p>
         </div>
@@ -141,7 +141,9 @@ import backdrop from '../assets/img/inversionistas.jpg';
 </style>
 
 <script>
-  /* Contadores: arrancan sólo cuando la cifra entra en pantalla. */
+  /* Contadores: arrancan sólo cuando la cifra entra en pantalla. El HTML ya
+     trae la cifra final, así que sin JavaScript (o para un rastreador) nunca
+     se lee "0". */
   const counters = document.querySelectorAll<HTMLElement>('[data-count]');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 

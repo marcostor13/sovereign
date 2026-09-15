@@ -2,6 +2,7 @@
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { footer, contact, brand, values } from '../data/site';
+import { agent, disclosures, licenseLines, licensedStatesText } from '../data/compliance';
 
 const year = new Date().getFullYear();
 ---
@@ -18,15 +19,17 @@ const year = new Date().getFullYear();
       <p class="footer-signature">{brand.signature}</p>
       <p class="footer-promise">{brand.promise}</p>
 
-      <ul class="footer-social" aria-label="Redes sociales">
-        {contact.socials.map((s) => (
-          <li>
-            <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}>
-              <Icon name={s.id} size={17} />
-            </a>
-          </li>
-        ))}
-      </ul>
+      {contact.socials.length > 0 && (
+        <ul class="footer-social" aria-label="Redes sociales">
+          {contact.socials.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}>
+                <Icon name={s.id} size={17} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
 
     <nav class="footer-cols" aria-label="Navegación del pie de página">
@@ -63,6 +66,17 @@ const year = new Date().getFullYear();
 
   <p class="footer-values shell">{values.join(' · ')}</p>
 
+  <div class="shell footer-reg">
+    <h2 class="footer-heading">{footer.regulatoryTitle}</h2>
+    <p>
+      {agent.name}, {agent.title.toLowerCase()} en {licensedStatesText}.
+      {agent.npn && <> NPN {agent.npn}.</>}
+      {licenseLines.length > 0 && <> Licencias: {licenseLines.join(', ')}.</>}
+      {' '}<a href={agent.verifyUrl} target="_blank" rel="noopener noreferrer">{agent.verifyLabel}</a>.
+    </p>
+    <p>{disclosures.general}</p>
+  </div>
+
   <div class="footer-bar">
     <div class="shell footer-bar-inner">
       <p>© {year} {brand.name} {brand.surname}. {footer.rights}</p>
@@ -72,8 +86,6 @@ const year = new Date().getFullYear();
           <li><a href={l.href}>{l.label}</a></li>
         ))}
       </ul>
-
-      <p class="footer-credit">{footer.credit}</p>
     </div>
   </div>
 </footer>
@@ -211,7 +223,24 @@ const year = new Date().getFullYear();
   .footer-legal a { transition: color var(--dur) var(--ease); }
   .footer-legal a:hover { color: var(--gold-300); }
 
-  .footer-credit { color: var(--gold-700); }
+  .footer-reg {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 0.6rem;
+    padding-block: 0 clamp(1.5rem, 3vw, 2.2rem);
+  }
+
+  .footer-reg .footer-heading { margin-bottom: 0.4rem; }
+
+  .footer-reg p {
+    max-width: 70rem;
+    font-size: max(12px, var(--step--2));
+    line-height: 1.7;
+    color: var(--fg-dim);
+  }
+
+  .footer-reg a { color: var(--gold-300); text-decoration: underline; text-underline-offset: 2px; }
 
   @media (min-width: 900px) {
     .footer-main { grid-template-columns: minmax(15rem, 20rem) 1fr; }

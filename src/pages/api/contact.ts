@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { appendFile, mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
+import { consentRecord } from '../../lib/server/leads';
 
 /**
  * Recepción de solicitudes de consulta.
@@ -90,11 +91,14 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   if (Object.keys(errors).length) return json({ ok: false, errors }, 422);
 
+  const source = request.headers.get('referer') || 'directo';
   const record = {
     ...data,
     receivedAt: new Date().toISOString(),
-    source: request.headers.get('referer') || 'directo',
+    source,
     userAgent: request.headers.get('user-agent') || '',
+    // Prueba de consentimiento (TCPA): texto exacto, versión, IP y fecha.
+    consentLog: [consentRecord('contact', request, clientAddress, source)],
   };
 
   if (WEBHOOK) {

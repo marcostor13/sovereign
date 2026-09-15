@@ -75,15 +75,17 @@ import { contactPage, contact, finalCta } from '../data/site';
             </li>
           </ul>
 
-          <ul class="side-social">
-            {contact.socials.map((s) => (
-              <li>
-                <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}>
-                  <Icon name={s.id} size={16} />
-                </a>
-              </li>
-            ))}
-          </ul>
+          {contact.socials.length > 0 && (
+            <ul class="side-social">
+              {contact.socials.map((s) => (
+                <li>
+                  <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}>
+                    <Icon name={s.id} size={16} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </aside>
     </div>

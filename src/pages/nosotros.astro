@@ -8,6 +8,7 @@ import Stats from '../components/Stats.astro';
 import FinalCta from '../components/FinalCta.astro';
 import Icon from '../components/Icon.astro';
 import { about, brand, founder, values } from '../data/site';
+import { agent, licenseLines, licensedStatesText } from '../data/compliance';
 
 /**
  * Retrato del fundador. Se resuelve con `import.meta.glob` para que el sitio
@@ -143,6 +144,10 @@ const founderPhoto = Object.values(founderPhotos)[0]?.default;
           <p class="founder-name">{founder.name}</p>
           <p class="founder-role">{founder.role}</p>
           <p class="founder-credentials">{founder.credentials}</p>
+          <p class="founder-credentials">
+            {agent.title} en {licensedStatesText}{agent.npn && ` · NPN ${agent.npn}`}{licenseLines.length > 0 && ` · Lic. ${licenseLines.join(', ')}`} ·
+            <a class="founder-verify" href={agent.verifyUrl} target="_blank" rel="noopener noreferrer">{agent.verifyLabel}</a>
+          </p>
         </div>
       </div>
 
@@ -368,6 +373,8 @@ const founderPhoto = Object.values(founderPhotos)[0]?.default;
     line-height: 1.6;
     color: var(--fg-dim);
   }
+
+  .founder-verify { color: var(--gold-300); text-decoration: underline; text-underline-offset: 2px; }
 
   .founder-copy { display: grid; gap: 1.2rem; align-content: start; }
 
