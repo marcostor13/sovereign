@@ -5,6 +5,13 @@ Traducción de `01_Analisis_y_Plan_Embudos_Sovereign.md`, `02_Landing_IUL.md` y
 
 ## Decisiones
 
+- **Sin masterclass (decisión del cliente, 16-09-2026).** Los docs 01 §7.1 y 03
+  ponían una masterclass evergreen de 38 minutos como oferta de entrada del
+  embudo Whole Life. Se descartó por no grabarla: `/banca-mia` es ahora una
+  landing de aplicación directa (la alternativa que el propio doc 03 plantea en
+  su test A/B nº 2), con el video corto del asesor en el hero, el checklist de
+  las 8 pruebas y la calculadora como material educativo. Si algún día se graba,
+  la pieza se reinserta entre la landing y el diagnóstico.
 - **Astro, no Angular/NestJS.** El sitio ya es Astro con adaptador de Node; los
   endpoints de leads viven en `src/pages/api/` sin dependencias nuevas.
   Almacenamiento: JSONL append-only (prueba de consentimiento) + webhook al CRM.
@@ -35,19 +42,21 @@ píxel/CAPI y política de no compartir datos de SMS.
 
 ## Fase 2 · Backend de embudos
 
-`/api/leads/iul`, `/api/leads/banca-mia/{registro,video-progress,diagnostico}`,
+`/api/leads/iul`, `/api/leads/banca-mia/{registro,diagnostico}`,
 `/api/leads/guia`, `/api/webhooks/booking`: validación, honeypot, límite por IP,
 Turnstile opcional, calificación en servidor, `consentLog`, CRM, Meta CAPI con
-`event_id` deduplicado, token HMAC de 30 días para la masterclass.
+`event_id` deduplicado y token HMAC de 30 días que une los dos pasos del embudo
+Whole Life.
 
 ## Fase 3 · Landings
 
 - `/iul` (+ `/iul-a|b|c`, `/iul/gracias`): las 15 secciones del doc 02, simulador
   cap/floor, quiz de 8 pasos con resultados A/B/C, guía en modal, CTA sticky.
-- `/banca-mia` (+ `/banca-mia-a|b`, `/masterclass`, `/diagnostico`, `/gracias`):
-  secciones del doc 03, regla de oro visible, ciclo del capital SVG, masterclass
-  con Vimeo SDK (25/50/75/95, reanudación, capítulos, CTA desde el minuto 20),
-  diagnóstico de 10 preguntas con resultados A/B/C/D.
+- `/banca-mia` (+ `/banca-mia-a|b`, `/diagnostico`, `/gracias`): secciones del
+  doc 03, regla de oro visible, ciclo del capital SVG, video del asesor, qué se
+  revisa en la consulta, las 8 pruebas antes de comprar, calculadora de costo de
+  oportunidad y diagnóstico de 10 preguntas con resultados A/B/C/D. El hero
+  captura el lead con 3 preguntas antes del cuestionario largo.
 - Medición: Pixel + GA4 diferidos, UTMs/fbclid en cookie de 30 días, eventos del
   doc (`QuizStart`, `LeadCalificado`, `VioMasterclass50`…).
 
@@ -62,7 +71,8 @@ navegador, incluidos los flujos completos), `astro check` sin errores, build OK.
 2. Aprobación del copy por compliance (IMO/aseguradora) y registro de la fecha.
 3. Cuenta de Cal.com/Calendly, CRM + WhatsApp API y sus variables de entorno.
 4. Pixel, token CAPI, dominio verificado en Business Manager.
-5. Grabar el video del asesor, la masterclass y los videos de gracias (Vimeo).
+5. Grabar los videos cortos del asesor (hero de cada landing y páginas de
+   gracias) y subirlos a Vimeo.
 6. Publicar los PDF "de la A a la Z" (`GUIDE_URL_*`).
 7. Perfiles de redes reales en `contact.socials`.
 8. Confirmar la marca "Banca Mía™" antes de pautar a escala.

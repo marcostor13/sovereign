@@ -12,7 +12,7 @@ import type { IconName } from './site';
 export const wlSeo = {
   title: 'Banca Infinita en español: cómo funciona realmente con Whole Life | Banca Mía™',
   description:
-    'Masterclass gratuita para empresarios: cómo funciona una póliza Whole Life para liquidez, PUA, dividendos, préstamos, MEC, costos y quién NO debería usarla. Explicado sin mitos.',
+    'Para empresarios: cómo funciona una póliza Whole Life para liquidez, PUA, dividendos, préstamos, MEC, costos y quién NO debería usarla. Explicado sin mitos, con un diagnóstico sin costo.',
 } as const;
 
 export const wlHeadlines = {
@@ -22,36 +22,28 @@ export const wlHeadlines = {
 
 export type WlVariant = keyof typeof wlHeadlines;
 
-export const masterclass = {
-  name: 'Liquidez para empresarios: cómo funciona realmente la Banca Infinita (y cuándo NO usarla)',
-  minutes: 38,
-  chapters: [
-    { at: 0, label: 'Quién te enseña y por qué una clase sin mitos' },
-    { at: 180, label: 'Por qué el capital atado es el gran problema del empresario' },
-    { at: 480, label: 'La anatomía de una póliza Whole Life diseñada para liquidez' },
-    { at: 1080, label: 'Los 4 mitos que más dinero le cuestan a la gente' },
-    { at: 1380, label: 'La tabla honesta de quién sí y quién no' },
-    { at: 1680, label: 'Un caso ilustrativo de un empresario en Florida, año por año' },
-    { at: 1980, label: 'Las 8 pruebas que debes exigir antes de comprar' },
-  ],
-  /** Segundo a partir del cual aparece la invitación al diagnóstico. */
-  ctaAt: 1200,
+/** Nombre y duración de la consulta: la oferta de entrada de este embudo. */
+export const diagnostico = {
+  name: 'Diagnóstico de Capital Banca Mía™',
+  minutes: '45–60',
 } as const;
 
 export const wlHero = {
-  eyebrow: 'Masterclass gratuita para empresarios · En español',
-  lead: 'En 38 minutos te explicamos, sin mitos, cómo funciona una póliza Whole Life participante diseñada para acumular valor en efectivo, cómo se usan los préstamos sobre la póliza, qué cuesta y en qué casos NO conviene.',
+  eyebrow: 'Diagnóstico de Capital para empresarios · En español',
+  lead: 'Te explicamos sin mitos cómo funciona una póliza Whole Life participante diseñada para acumular valor en efectivo, cómo se usan los préstamos sobre la póliza, qué cuesta y en qué casos NO conviene. Si encaja con tu negocio, lo revisamos juntos en una consulta privada sin costo.',
   tag: 'Estrategia con seguro de vida Whole Life · No es un banco ni una cuenta bancaria · Los dividendos no están garantizados',
   bullets: [
     'Base, adiciones pagadas (PUA), dividendos y préstamos, explicados con diagramas',
     'Los 5 errores que hacen fracasar una estrategia de Banca Infinita',
     'La tabla honesta de quién sí y quién no debería usarla',
   ],
-  cta: 'Ver la masterclass ahora',
-  mobileCta: 'Ver masterclass',
-  shortcut: 'Ya conozco el concepto → Aplicar al diagnóstico',
-  micro: 'Acceso inmediato · Gratis · Sin tarjeta · Tus datos son confidenciales',
-  formTitle: 'Accede gratis a la masterclass',
+  cta: 'Aplicar al Diagnóstico de Capital',
+  mobileCta: 'Aplicar al diagnóstico',
+  guide: 'Prefiero leer primero la guía',
+  micro: 'Sin costo · 3 minutos · Tus datos son confidenciales',
+  formTitle: 'Empieza tu Diagnóstico de Capital',
+  formLead: '3 preguntas aquí y 7 en el siguiente paso. Sin costo y sin compromiso.',
+  videoCaption: 'Mensaje del asesor: qué es y qué no es la Banca Infinita',
 } as const;
 
 export const wlTrust: TrustItem[] = [
@@ -136,17 +128,43 @@ export const wlMyths = {
   ],
 } as const;
 
+/** Qué pasa en la consulta privada. */
 export const wlLearn = {
-  title: 'En la masterclass verás',
+  title: 'Qué revisamos en el Diagnóstico de Capital',
+  lead: 'Una conversación privada de 45 a 60 minutos, sin costo y sin presentación de ventas. Si la estrategia no encaja contigo, te lo decimos.',
   items: [
-    { at: 'Minuto 3', text: 'Por qué el capital atado es el gran problema del empresario' },
-    { at: 'Minuto 8', text: 'La anatomía de una póliza Whole Life diseñada para liquidez' },
-    { at: 'Minuto 18', text: 'Los 4 mitos que más dinero le cuestan a la gente' },
-    { at: 'Minuto 23', text: 'La tabla honesta de quién sí y quién no' },
-    { at: 'Minuto 28', text: 'Un caso ilustrativo (hipotético) de un empresario en Florida, año por año' },
-    { at: 'Minuto 33', text: 'Las 8 pruebas que debes exigir antes de comprar' },
+    { at: 'Paso 1', text: 'El mapa de capital de tu negocio: ingresos, estacionalidad y reservas' },
+    { at: 'Paso 2', text: 'Las compras grandes previstas a 5 años y cómo las financias hoy (tasa y plazo)' },
+    { at: 'Paso 3', text: 'Tu situación personal: familia, seguros actuales, retiro y contador' },
+    { at: 'Paso 4', text: 'La explicación a tu medida, con tu propia compra recurrente como ejemplo' },
+    { at: 'Paso 5', text: 'La idoneidad honesta: quién sí, quién no y qué alternativa conviene' },
+    { at: 'Paso 6', text: 'Si encaja: dos escenarios de diseño (más cobertura vs más liquidez temprana)' },
   ],
-  cta: 'Quiero ver la masterclass',
+  cta: 'Aplicar al diagnóstico',
+} as const;
+
+/** Checklist educativo: el visitante se lleva criterio, compre o no con nosotros. */
+export const wlProof = {
+  title: 'Las 8 pruebas que debes exigir antes de comprar',
+  lead: 'Da igual con quién trabajes: si una propuesta no pasa estas ocho, pide explicaciones.',
+  items: [
+    '¿Te mostraron la columna garantizada y no sólo la proyectada?',
+    '¿Conoces la TIR (IRR) del valor de rescate en los años 1, 5, 10 y 20?',
+    '¿El diseño queda con margen por debajo del límite MEC?',
+    '¿Sabes qué parte de la prima es base obligatoria y qué parte es PUA flexible?',
+    '¿Probaron la ilustración con dividendos reducidos 1 o 2 puntos?',
+    '¿Entiendes la tasa del préstamo, si es fija o variable, y cómo se capitaliza?',
+    '¿Tienes un plan de repago explícito para cada préstamo?',
+    '¿Hay una revisión anual in-force agendada con tu asesor?',
+  ],
+  guide: 'Descargar la guía “Whole Life para Banca Infinita de la A a la Z”',
+} as const;
+
+/** Calculadora de costo de oportunidad, ya existente en /recursos. */
+export const wlCalculator = {
+  eyebrow: 'Antes de decidir',
+  title: 'Cuánto pesa el costo de oportunidad en tu horizonte',
+  lead: 'Ajusta los valores y observa la diferencia entre dos escenarios. Es un ejercicio ilustrativo de interés compuesto, no una proyección de tu póliza.',
 } as const;
 
 export const wlFit = {
@@ -173,8 +191,8 @@ export const wlFit = {
 } as const;
 
 export const wlRepeat = {
-  title: 'Mira la masterclass gratis, hoy',
-  lead: 'Acceso inmediato. 38 minutos que te ahorran años de malentendidos.',
+  title: 'Veamos si encaja con tu negocio',
+  lead: 'Empieza con 3 preguntas. Si tu perfil califica, eliges el horario de tu Diagnóstico de Capital.',
 } as const;
 
 export const wlFaq = [
@@ -189,39 +207,6 @@ export const wlFaq = [
   { q: '¿Quién califica?', a: 'La aseguradora evalúa la edad, la salud, la nicotina, el historial médico, la ocupación, las finanzas, la residencia y el monto. Puede aprobar, recargar, posponer o declinar.' },
   { q: '¿La consulta tiene costo?', a: 'No. El Diagnóstico de Capital es sin costo ni compromiso.' },
 ] as const;
-
-/* --- /banca-mia/masterclass ---------------------------------------------- */
-
-export const wlMasterclassPage = {
-  welcome: 'Bienvenido, {nombre}. Tu masterclass está lista.',
-  welcomeAnon: 'Tu masterclass está lista.',
-  chaptersTitle: 'Capítulos',
-  stickyText: '¿Crees que esto puede encajar con tu negocio?',
-  stickyCta: 'Aplicar al Diagnóstico de Capital',
-  downloadsTitle: 'Material descargable',
-  downloads: [
-    { key: 'wl', title: 'Guía “Whole Life para Banca Infinita de la A a la Z”', text: 'El respaldo escrito de la masterclass, con fuentes.' },
-  ],
-  checklistTitle: 'Checklist: 8 pruebas antes de comprar',
-  checklist: [
-    '¿Te mostraron la columna garantizada y no solo la proyectada?',
-    '¿Conoces la TIR del valor de rescate en los años 1, 5, 10 y 20?',
-    '¿El diseño queda con margen por debajo del límite MEC?',
-    '¿Sabes qué parte de la prima es base obligatoria y qué parte es PUA flexible?',
-    '¿Probaron la ilustración con dividendos reducidos 1–2 puntos?',
-    '¿Entiendes la tasa del préstamo, si es fija o variable, y cómo se capitaliza?',
-    '¿Tienes un plan de repago explícito para cada préstamo?',
-    '¿Hay una revisión anual in-force agendada con tu asesor?',
-  ],
-  calcTitle: 'Calculadora de costo de oportunidad',
-  qaTitle: 'Sesión de preguntas en vivo',
-  qaText: 'Último jueves de cada mes, por Zoom. Trae tus dudas sobre la masterclass.',
-  qaCta: 'Reservar lugar',
-  pending: 'La masterclass se está terminando de publicar. Mientras tanto, puedes aplicar al Diagnóstico de Capital o descargar la guía.',
-  noAccess: 'Para ver la masterclass, primero regístrate gratis.',
-  noAccessCta: 'Registrarme',
-  legal: 'Contenido educativo sobre seguros de vida Whole Life participantes. Caso ilustrativo e hipotético. Los dividendos no están garantizados. Los préstamos generan interés y reducen el beneficio por fallecimiento. Sujeto a suscripción (underwriting).',
-} as const;
 
 /* --- /banca-mia/diagnostico ---------------------------------------------- */
 
@@ -329,7 +314,7 @@ export const wlDiagnostico = {
       ],
     },
     { key: 'estado', type: 'state', question: '¿En qué estado resides?', hint: 'Solo asesoramos donde tenemos licencia vigente.' },
-    { key: 'contacto', type: 'contact', question: 'Confirma tus datos', hint: 'Si ya te registraste en este dispositivo, los precargamos.' },
+    { key: 'contacto', type: 'contact', question: 'Confirma tus datos', hint: 'Si ya empezaste desde este dispositivo, los precargamos.' },
   ] satisfies Step[],
   results: {
     A: {

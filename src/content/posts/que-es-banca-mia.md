@@ -35,4 +35,4 @@ También exige algo a cambio: el valor de rescate puede ser bajo en los primeros
 
 No es un banco, no es "dinero infinito", no es una inversión en el mercado y no es una ventaja fiscal automática. Es una forma de administrar un seguro de vida, y como toda arquitectura, necesita diseñarse sobre tu flujo real, tus obligaciones y tu horizonte.
 
-Si quieres entenderla a fondo, mira la [masterclass gratuita Banca Mía™](/banca-mia) o lee [la Banca Infinita explicada sin mitos](/academia/banca-infinita-sin-mitos).
+Si quieres entenderla a fondo, mira [cómo funciona Banca Mía™ paso a paso](/banca-mia) o lee [la Banca Infinita explicada sin mitos](/academia/banca-infinita-sin-mitos).

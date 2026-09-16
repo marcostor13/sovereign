@@ -28,8 +28,6 @@ const GA_NAMES: Record<string, string> = {
   SimuladorUso: 'simulator_use',
   DescargaGuia: 'download_guide',
   InicioDiagnostico: 'application_start',
-  VioMasterclass50: 'video_50',
-  VioMasterclass95: 'video_complete',
   UsoCalculadora: 'calculator_use',
   Schedule: 'book_appointment',
 };

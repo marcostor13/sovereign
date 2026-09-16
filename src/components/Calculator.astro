@@ -2,15 +2,30 @@
 import Icon from './Icon.astro';
 import { resources } from '../data/site';
 
+/**
+ * Calculadora de costo de oportunidad. En las landings de embudo el
+ * encabezado lo pone la sección y el CTA apunta al formulario de esa página.
+ */
+interface Props {
+  /** Oculta el título propio cuando la sección ya lo trae. */
+  bare?: boolean;
+  ctaHref?: string;
+  ctaLabel?: string;
+}
+
+const { bare = false, ctaHref = '/contacto', ctaLabel = 'Quiero mi cálculo real' } = Astro.props;
+
 const c = resources.calc;
 const f = c.fields;
 ---
 
 <div class="calc" id="calculadora" data-calc>
-  <div class="calc-head">
-    <h3 class="calc-title">{c.title}</h3>
-    <p class="calc-lead">{c.lead}</p>
-  </div>
+  {!bare && (
+    <div class="calc-head">
+      <h3 class="calc-title">{c.title}</h3>
+      <p class="calc-lead">{c.lead}</p>
+    </div>
+  )}
 
   <div class="calc-body">
     {/* --- Controles ---------------------------------------------------- */}
@@ -70,8 +85,8 @@ const f = c.fields;
         <strong data-val="diff" aria-live="polite">—</strong>
       </p>
 
-      <a class="btn btn-gold btn-block" href="/contacto">
-        Quiero mi cálculo real
+      <a class="btn btn-gold btn-block" href={ctaHref}>
+        {ctaLabel}
         <Icon name="arrow" size={16} />
       </a>
     </div>

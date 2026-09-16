@@ -76,7 +76,7 @@ export function qualifyIul(a: IulAnswers, licensedStates: readonly string[]): Qu
    Whole Life / Banca Mía™
    --------------------------------------------------------------------------- */
 
-/** Preguntas del registro a la masterclass (no califican: segmentan). */
+/** Preguntas del primer paso del embudo (no califican: segmentan). */
 export const WL_REGISTRO_OPTIONS = {
   negocio: ['negocio', 'independiente', 'empleado'],
   interes: ['liquidez', 'legado', 'conservadora', 'aprender'],

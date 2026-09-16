@@ -3,6 +3,9 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import Accordion from '../Accordion.astro';
 import TrustBar from '../funnel/TrustBar.astro';
+import VideoFacade from '../funnel/VideoFacade.astro';
+import Calculator from '../Calculator.astro';
+import GuideModal from '../funnel/GuideModal.astro';
 import CapitalCycle from '../funnel/CapitalCycle.astro';
 import MythTable from '../funnel/MythTable.astro';
 import FitColumns from '../funnel/FitColumns.astro';
@@ -14,10 +17,14 @@ import type { Step } from '../../data/funnels';
 import { agent, disclosures, reviewedOn } from '../../data/compliance';
 import {
   wlSeo, wlHeadlines, wlHero, wlTrust, wlRegistro, wlProblem, wlWhat, wlPolicy, wlCycle,
-  wlMyths, wlLearn, wlFit, wlRepeat, wlFaq, masterclass, type WlVariant,
+  wlMyths, wlLearn, wlProof, wlCalculator, wlFit, wlRepeat, wlFaq, diagnostico, type WlVariant,
 } from '../../data/banca-mia';
 
-/** Landing de registro a la masterclass Banca Mía™ (docs/03, sección 3). */
+/**
+ * Landing del embudo Banca Mía™ (docs/03, sección 3), en su versión de
+ * aplicación directa: el visitante entiende la estrategia en la página y
+ * aplica al Diagnóstico de Capital, sin masterclass intermedia.
+ */
 interface Props {
   variant: WlVariant;
   primary?: boolean;
@@ -25,12 +32,13 @@ interface Props {
 
 const { variant, primary = false } = Astro.props;
 const site = Astro.site!;
+const videoId = import.meta.env.PUBLIC_ADVISOR_VIDEO_WL;
 
 const registroSteps: Step[] = [
   { key: 'negocio', type: 'single', question: wlRegistro.negocio.question, options: [...wlRegistro.negocio.options] },
   { key: 'estado', type: 'state', question: wlRegistro.estado.question },
   { key: 'interes', type: 'single', question: wlRegistro.interes.question, options: [...wlRegistro.interes.options] },
-  { key: 'contacto', type: 'contact', question: 'Tus datos para el acceso' },
+  { key: 'contacto', type: 'contact', question: 'Tus datos de contacto' },
 ];
 
 const schema = [
@@ -41,14 +49,23 @@ const schema = [
   },
   {
     '@context': 'https://schema.org',
-    '@type': 'Course',
-    name: `Masterclass: ${masterclass.name}`,
-    description: wlSeo.description,
-    inLanguage: 'es',
-    isAccessibleForFree: true,
+    '@type': 'Service',
+    name: diagnostico.name,
+    serviceType: 'Consulta de planificación con seguro de vida Whole Life',
+    description: `Consulta privada de ${diagnostico.minutes} minutos, sin costo, para evaluar si una estrategia de liquidez con seguro de vida Whole Life encaja con tu negocio.`,
+    areaServed: 'US',
+    availableLanguage: ['es', 'en'],
     provider: { '@type': 'InsuranceAgency', name: 'Sovereign Capital Solutions', url: site.href },
-    instructor: { '@type': 'Person', name: agent.name, jobTitle: agent.title },
-    hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'online', courseWorkload: `PT${masterclass.minutes}M` },
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: agent.name,
+    jobTitle: agent.title,
+    worksFor: { '@type': 'InsuranceAgency', name: 'Sovereign Capital Solutions', url: site.href },
+    knowsAbout: ['Whole Life', 'Infinite Banking Concept', 'Seguro de vida', 'Liquidez para empresarios'],
+    knowsLanguage: ['es', 'en'],
   },
 ];
 
@@ -61,8 +78,10 @@ const form = (id: string) => ({
   mode: 'card' as const,
   submit: wlHero.cta,
   consentKind: 'wholeLife' as const,
-  startEvent: 'InicioRegistro',
-  redirect: '/banca-mia/masterclass',
+  startEvent: 'InicioDiagnostico',
+  // El lead queda guardado aquí: si abandona el cuestionario largo, el equipo
+  // ya puede darle seguimiento.
+  redirect: '/banca-mia/diagnostico',
 });
 ---
 
@@ -72,7 +91,7 @@ const form = (id: string) => ({
   description={wlSeo.description}
   canonicalPath="/banca-mia"
   noIndex={!primary}
-  landing={{ cta: { label: 'Ver masterclass', href: '#registro' }, disclosure: 'wholeLife' }}
+  landing={{ cta: { label: 'Aplicar al diagnóstico', href: '#registro' }, disclosure: 'wholeLife' }}
 >
   <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline slot="head" />
 
@@ -97,12 +116,17 @@ const form = (id: string) => ({
             </a>
           </div>
 
-          <a class="lp-textlink wl-shortcut" href="/banca-mia/diagnostico">{wlHero.shortcut}</a>
+          <button class="lp-textlink wl-shortcut" type="button" data-guide-open="wl">{wlHero.guide}</button>
+
+          <div class="wl-hero-video">
+            <VideoFacade videoId={videoId} caption={wlHero.videoCaption} />
+          </div>
+
           <p class="lp-micro">Material educativo revisado en {reviewedOn}.</p>
         </div>
 
         <div class="lp-formcard wl-formcard" id="registro-hero">
-          <StepForm {...form(`wl-reg-hero-${variant.toLowerCase()}`)} title={wlHero.formTitle} lead={`${masterclass.minutes} minutos · en español · acceso inmediato`} />
+          <StepForm {...form(`wl-reg-hero-${variant.toLowerCase()}`)} title={wlHero.formTitle} lead={wlHero.formLead} />
           <p class="wl-micro">{wlHero.micro}</p>
         </div>
       </div>
@@ -194,12 +218,13 @@ const form = (id: string) => ({
       </div>
     </section>
 
-    {/* 8 · Qué aprenderás ----------------------------------------------------- */}
+    {/* 8 · Qué revisamos en la consulta --------------------------------------- */}
     <section class="lp-section lp-deep">
       <div class="lp-shell">
         <header class="lp-head">
-          <p class="lp-eyebrow">Masterclass · {masterclass.minutes} min</p>
+          <p class="lp-eyebrow">Consulta privada · {diagnostico.minutes} min · sin costo</p>
           <h2 class="lp-h2">{wlLearn.title}</h2>
+          <p class="lp-lead">{wlLearn.lead}</p>
         </header>
         <ol class="wl-learn">
           {wlLearn.items.map((it) => (
@@ -215,6 +240,43 @@ const form = (id: string) => ({
             <Icon name="arrow" size={17} />
           </a>
         </div>
+      </div>
+    </section>
+
+    {/* 8b · Las 8 pruebas antes de comprar ------------------------------------ */}
+    <section class="lp-section lp-white">
+      <div class="lp-shell">
+        <header class="lp-head">
+          <p class="lp-eyebrow">Checklist</p>
+          <h2 class="lp-h2">{wlProof.title}</h2>
+          <p class="lp-lead">{wlProof.lead}</p>
+        </header>
+        <ol class="wl-proof">
+          {wlProof.items.map((item, i) => (
+            <li>
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              {item}
+            </li>
+          ))}
+        </ol>
+        <div class="lp-actions wl-learn-cta">
+          <button class="btn btn-outline" type="button" data-guide-open="wl">
+            <Icon name="download" size={16} />
+            {wlProof.guide}
+          </button>
+        </div>
+      </div>
+    </section>
+
+    {/* 8c · Calculadora de costo de oportunidad ------------------------------- */}
+    <section class="lp-section lp-dark">
+      <div class="lp-shell" data-calc-wrap>
+        <header class="lp-head">
+          <p class="lp-eyebrow">{wlCalculator.eyebrow}</p>
+          <h2 class="lp-h2">{wlCalculator.title}</h2>
+          <p class="lp-lead">{wlCalculator.lead}</p>
+        </header>
+        <Calculator bare ctaHref="#registro" ctaLabel="Aplicar al diagnóstico" />
       </div>
     </section>
 
@@ -266,8 +328,8 @@ const form = (id: string) => ({
         </header>
         <Accordion items={wlFaq} openFirst={false} />
         <div class="lp-actions wl-faq-cta">
-          <a class="btn btn-outline" href="/banca-mia/diagnostico">
-            Ya conozco el concepto: aplicar al diagnóstico
+          <a class="btn btn-outline" href="#registro">
+            Aplicar al Diagnóstico de Capital
             <Icon name="arrow" size={16} />
           </a>
         </div>
@@ -275,8 +337,29 @@ const form = (id: string) => ({
     </section>
   </div>
 
-  <StickyCta label="Ver la masterclass gratis" href="#registro" />
+  <StickyCta label={wlHero.mobileCta} href="#registro" />
+  <GuideModal />
 </Base>
+
+<script>
+  import { track } from '../../lib/client/track';
+
+  // Uso de la calculadora (una sola vez por visita).
+  document.querySelector('[data-calc-wrap]')?.addEventListener('input', () => track('UsoCalculadora'), { once: true });
+
+  // ViewContent al 50% de scroll.
+  let sent = false;
+  const onScroll = () => {
+    if (sent) return;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    if (max > 0 && scrollY / max >= 0.5) {
+      sent = true;
+      track('ViewContent', { content_name: 'landing_banca_mia' });
+      removeEventListener('scroll', onScroll);
+    }
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+</script>
 
 <style>
   .wl-hero-grid { align-items: start; }
@@ -294,6 +377,8 @@ const form = (id: string) => ({
   }
 
   .wl-shortcut { justify-self: start; color: var(--gold-300); }
+
+  .wl-hero-video { max-width: 20rem; margin-top: 0.6rem; }
 
   .wl-formcard { position: relative; }
   .wl-micro { margin-top: 0.8rem; font-size: var(--step--2); text-align: center; color: var(--ink-500); }
@@ -380,6 +465,29 @@ const form = (id: string) => ({
   .wl-learn p { font-family: var(--font-display); font-size: var(--step-1); line-height: 1.3; color: var(--bone-100); }
 
   .wl-learn-cta, .wl-faq-cta { margin-top: 2rem; }
+
+  .wl-proof {
+    display: grid;
+    gap: 0.7rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .wl-proof li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.8rem;
+    align-items: start;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid rgba(10, 22, 40, 0.1);
+    border-radius: 12px;
+    line-height: 1.5;
+    color: var(--ink-700);
+  }
+
+  .wl-proof span { font-family: var(--font-display); font-size: var(--step-1); color: var(--gold-700); line-height: 1.2; }
 
   .wl-cross { margin-top: 1.5rem; color: var(--ink-500); }
   .wl-cross a { display: inline-flex; align-items: center; gap: 0.35em; min-height: 44px; color: var(--navy-600); text-decoration: underline; }

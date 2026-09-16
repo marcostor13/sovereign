@@ -84,7 +84,7 @@ export const nav: NavItem[] = [
     href: '/academia',
     children: [
       { label: 'IUL sin mitos', href: '/iul', desc: 'Diagnóstico de 2 minutos' },
-      { label: 'Masterclass Banca Mía™', href: '/banca-mia', desc: 'Whole Life para empresarios, gratis' },
+      { label: 'Banca Mía™ con Whole Life', href: '/banca-mia', desc: 'Liquidez para empresarios, sin mitos' },
       { label: 'Academia Sovereign', href: '/academia', desc: 'Artículos y análisis' },
       { label: 'Método Sovereign™', href: '/nosotros#metodo', desc: 'Nuestras cinco etapas' },
       { label: 'Webinars', href: '/recursos#webinars', desc: 'Sesiones en vivo' },
@@ -314,17 +314,19 @@ export const resources = {
   webinarCta: 'Reservar lugar',
   calc: {
     title: 'Calculadora de costo de oportunidad',
-    lead: 'Dos puntos de rendimiento parecen poco en un estado de cuenta mensual. Ajusta los valores y observa lo que representan en tu horizonte real.',
+    lead: 'Dos puntos de diferencia parecen poco en un estado de cuenta mensual. Ajusta los supuestos y observa lo que representan en un horizonte largo. Es un ejercicio de interés compuesto, no una proyección de ningún producto.',
     fields: {
       amount: 'Capital inicial',
       contribution: 'Aporte anual',
       years: 'Horizonte',
-      rateA: 'Rendimiento neto tradicional',
-      rateB: 'Rendimiento neto con estructura eficiente',
+      rateA: 'Rendimiento neto anual · escenario A',
+      rateB: 'Rendimiento neto anual · escenario B',
     },
     years: 'años',
-    labelA: 'Enfoque tradicional',
-    labelB: 'Enfoque Sovereign',
+    // Etiquetas neutras a propósito: la calculadora compara dos supuestos de
+    // interés compuesto, no dos productos, y no insinúa un rendimiento nuestro.
+    labelA: 'Escenario A',
+    labelB: 'Escenario B',
     diff: 'Diferencia al final del horizonte',
     contributed: 'Capital aportado',
     note: 'Cálculo ilustrativo de interés compuesto anual. No constituye una proyección de resultados ni una recomendación de inversión. Los resultados reales dependen de tu situación particular, de la estructura contratada y de la legislación vigente.',
@@ -485,7 +487,7 @@ export const legalPages = {
     title: 'Términos de Uso',
     updated: 'Última actualización: septiembre de 2026',
     body: [
-      'Al usar este sitio aceptas estos términos. El contenido, los diagnósticos, los simuladores y las masterclasses son educativos: no constituyen una oferta, una cotización, una ilustración oficial ni asesoría legal, fiscal o financiera.',
+      'Al usar este sitio aceptas estos términos. El contenido, los diagnósticos, los simuladores y las calculadoras son educativos: no constituyen una oferta, una cotización, una ilustración oficial ni asesoría legal, fiscal o financiera.',
       'El resultado de un diagnóstico en línea es orientativo y se basa sólo en tus respuestas. La elegibilidad real para un seguro de vida la determina la aseguradora mediante su proceso de suscripción (underwriting), que puede aprobar, recargar, posponer o declinar una solicitud.',
       'Las consultas son sin costo y sin compromiso. Si decides contratar un producto, Sovereign Capital Solutions puede recibir compensación de la aseguradora; te explicaremos cómo funciona antes de cualquier implementación.',
       'Sólo asesoramos a residentes de los estados donde mantenemos licencia vigente. Las solicitudes de otros estados quedan en lista de espera.',

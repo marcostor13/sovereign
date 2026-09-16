@@ -39,6 +39,6 @@ No suele ser adecuada si necesitas liquidez total o ganancias rápidas, si no pu
 
 ## Cómo lo trabajamos en Sovereign
 
-En Sovereign Capital Solutions lo llamamos **Banca Mía™**: la misma idea, con disciplina, ilustraciones probadas con dividendos reducidos y revisión anual. Si quieres verlo explicado con diagramas y un caso ilustrativo, mira la [masterclass gratuita para empresarios](/banca-mia).
+En Sovereign Capital Solutions lo llamamos **Banca Mía™**: la misma idea, con disciplina, ilustraciones probadas con dividendos reducidos y revisión anual. Si quieres verlo explicado con diagramas, está en [Banca Mía™ con Whole Life](/banca-mia), junto con el Diagnóstico de Capital sin costo.
 
 *Contenido educativo sobre seguros de vida. Los dividendos no están garantizados. Los préstamos generan interés y reducen el beneficio por fallecimiento. Sujeto a suscripción (underwriting).*

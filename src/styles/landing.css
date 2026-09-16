@@ -105,6 +105,18 @@
 /* --- Botones ------------------------------------------------------------- */
 
 .lp .btn { min-height: 3.35rem; border-radius: 10px; }
+
+/* El contorno claro se pierde sobre los bloques claros. */
+.lp-light .btn-outline,
+.lp-white .btn-outline,
+.lp-sand .btn-outline {
+  color: var(--ink-900);
+  border-color: rgba(168, 134, 47, 0.7);
+}
+
+.lp-light .btn-outline:hover,
+.lp-white .btn-outline:hover,
+.lp-sand .btn-outline:hover { color: var(--navy-950); }
 .lp-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem; }
 
 .lp-textlink {

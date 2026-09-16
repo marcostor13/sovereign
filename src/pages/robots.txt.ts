@@ -13,7 +13,6 @@ export const GET: APIRoute = ({ site }) =>
       'Disallow: /api/',
       'Disallow: /iul/gracias',
       'Disallow: /banca-mia/gracias',
-      'Disallow: /banca-mia/masterclass',
       '',
       `Sitemap: ${new URL('/sitemap-index.xml', site).href}`,
       '',

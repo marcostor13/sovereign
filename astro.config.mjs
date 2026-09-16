@@ -7,7 +7,7 @@ const SITE_URL = process.env.PUBLIC_SITE_URL || 'https://sovereigncapitalsolutio
 
 // Páginas que no deben anunciarse: legales, variantes A/B y pasos internos de
 // los embudos (todas llevan noindex).
-const NOT_IN_SITEMAP = [/\/legal\//, /\/iul-[a-z]\/?$/, /\/banca-mia-[a-z]\/?$/, /\/gracias\/?$/, /\/masterclass\/?$/, /\/diagnostico\/?$/];
+const NOT_IN_SITEMAP = [/\/legal\//, /\/iul-[a-z]\/?$/, /\/banca-mia-[a-z]\/?$/, /\/gracias\/?$/, /\/diagnostico\/?$/];
 
 // Static-first: every marketing page is prerendered at build time.
 // The Node adapter exists so `src/pages/api/*` can run on the server

@@ -188,6 +188,7 @@ const record = (name, ok, detail = '') => {
   await page.goto(`${base}/banca-mia`, { waitUntil: 'domcontentloaded' });
 
   record('WL: la regla de oro aparece en el hero', (await page.locator('.wl-golden').textContent())?.includes('No es un banco'));
+  record('WL: checklist de las 8 pruebas', await page.locator('.wl-proof li').count() === 8);
 
   const form = page.locator('#registro-hero [data-stepform]');
   await form.locator('label:has(input[value="negocio"])').click();
@@ -197,11 +198,9 @@ const record = (name, ok, detail = '') => {
   await form.locator('[name="email"]').fill('wl@ejemplo.com');
   await form.locator('[name="telefono"]').fill('3055559876');
   await form.locator('.sf-check-text').click({ position: { x: 5, y: 5 } });
-  await Promise.all([page.waitForURL(/\/banca-mia\/masterclass\?t=/, { timeout: 8000 }).catch(() => {}), form.locator('[data-submit]').click()]);
-  record('WL: el registro lleva a la masterclass con token', /\/banca-mia\/masterclass\?t=/.test(page.url()), new URL(page.url()).pathname);
-  record('WL: la masterclass saluda por nombre', (await page.locator('[data-welcome]').textContent())?.includes('Empresaria'));
+  await Promise.all([page.waitForURL(/\/banca-mia\/diagnostico\?t=/, { timeout: 8000 }).catch(() => {}), form.locator('[data-submit]').click()]);
+  record('WL: el primer paso lleva al diagnóstico con token', /\/banca-mia\/diagnostico\?t=/.test(page.url()), new URL(page.url()).pathname);
 
-  await page.goto(`${base}/banca-mia/diagnostico`, { waitUntil: 'domcontentloaded' });
   const dg = page.locator('[data-stepform]');
   const pick = async (sel) => {
     await dg.locator(`fieldset:not([hidden]) label:has(${sel})`).first().click();

@@ -1,7 +1,8 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
 /**
- * Token de acceso a la masterclass (HMAC-SHA256, 30 días).
+ * Token de continuidad del lead entre los dos pasos del embudo Banca Mía™
+ * (HMAC-SHA256, 30 días).
  *
  * Sólo transporta el `leadId` y la expiración: nunca datos personales, porque
  * viaja en la URL. Firmado con `LEAD_TOKEN_SECRET`; sin secreto configurado se

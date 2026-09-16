@@ -43,4 +43,4 @@ No suele ser adecuada para quien necesita el dinero pronto, busca el mayor rendi
 
 No es "dinero infinito", no convierte a nadie en su propio banco y no es una ventaja fiscal automática. En una póliza no-MEC bien administrada, ciertos préstamos pueden evitar impuesto corriente; si la póliza se convierte en MEC o caduca con deuda, puede haber impuestos. Consulta tu caso con un profesional fiscal.
 
-¿Quieres la explicación completa? Mira la [masterclass gratuita Banca Mía™](/banca-mia): 38 minutos, sin mitos y con la tabla honesta de quién sí y quién no.
+¿Quieres la explicación completa? En [Banca Mía™ con Whole Life](/banca-mia) está el detalle: los diagramas de la póliza, el ciclo del capital, los mitos y la tabla honesta de quién sí y quién no.

@@ -7,7 +7,8 @@ import { eventIdFrom, guard, pageUrlFrom } from '../../../../lib/server/funnel';
 import { WL_REGISTRO_OPTIONS as REGISTRO_OPTIONS, isOption } from '../../../../lib/funnels/qualify';
 import { licensedStates, usStates } from '../../../../data/compliance';
 
-/** Registro a la masterclass Banca Mía™ (landing /banca-mia). */
+/** Primer paso del embudo Banca Mía™ (landing /banca-mia): captura el lead
+ *  antes del cuestionario largo del diagnóstico. */
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
@@ -42,7 +43,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const inState = licensedStates.includes(answers.estado);
 
   const stored = await recordLead({
-    type: 'registro_masterclass',
+    type: 'registro',
     leadId,
     producto: 'WL',
     stage: 'registrado',
@@ -70,7 +71,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       fbp: tracking.fbp,
       fbc: tracking.fbc,
     },
-    custom: { content_name: 'masterclass_banca_mia' },
+    custom: { content_name: 'banca_mia_registro' },
   });
 
   console.log(`[banca-mia] registro ${leadId}`);

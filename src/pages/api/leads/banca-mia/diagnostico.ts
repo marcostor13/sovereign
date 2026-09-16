@@ -45,7 +45,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   if (Object.keys(errors).length) return json({ ok: false, errors }, 422);
 
-  // Si llega desde la masterclass, se continúa el mismo lead.
+  // Si llega desde el primer paso de la landing, se continúa el mismo lead.
   const tokenLead = readToken(payload.token);
   const leadId = tokenLead || newLeadId();
   const q = qualifyWholeLife(answers, licensedStates);

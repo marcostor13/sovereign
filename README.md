@@ -140,9 +140,8 @@ Especificación en `docs/01`–`03`; resumen de lo implementado en
 | `/iul` | Landing IUL sin mitos + Diagnóstico de 2 minutos | Sí |
 | `/iul-a`, `/iul-b`, `/iul-c` | Variantes del titular (test A/B) | No (canónica `/iul`) |
 | `/iul/gracias` | Tras agendar | No |
-| `/banca-mia` | Landing de registro a la masterclass | Sí |
+| `/banca-mia` | Landing educativa + primer paso del Diagnóstico de Capital | Sí |
 | `/banca-mia-a`, `/banca-mia-b` | Variantes del titular | No |
-| `/banca-mia/masterclass` | Video con progreso, capítulos y CTA desde el minuto 20 | No |
 | `/banca-mia/diagnostico` | Diagnóstico de Capital (10 preguntas) | No |
 | `/banca-mia/gracias` | Tras agendar | No |
 
@@ -154,8 +153,12 @@ Especificación en `docs/01`–`03`; resumen de lo implementado en
   navegador y servidor). Tests: `npm test`.
 - **Testimonios** → `testimonials` en `src/data/funnels.ts`; vacía = sección oculta.
 
+En `/banca-mia` el formulario del hero captura el lead con tres preguntas y lo
+lleva a `/banca-mia/diagnostico` con los datos precargados: si abandona el
+cuestionario largo, el equipo ya puede darle seguimiento.
+
 Endpoints (servidor): `POST /api/leads/iul`, `/api/leads/banca-mia/registro`,
-`/api/leads/banca-mia/video-progress`, `/api/leads/banca-mia/diagnostico`,
+`/api/leads/banca-mia/diagnostico`,
 `/api/leads/guia` y `POST /api/webhooks/booking` (Cal.com). Cada uno valida,
 recalcula la calificación, guarda el consentimiento (texto, versión, IP, fecha)
 en `LEADS_LOG_PATH`, reenvía al CRM (`LEADS_WEBHOOK_URL`) y envía Meta
@@ -174,12 +177,12 @@ Copia `.env.example` a `.env` y ajusta:
 | `CONTACT_WEBHOOK_URL` | No | Reenvío de las solicitudes de contacto |
 | `CONTACT_LOG_PATH` | No | Archivo donde se registran las solicitudes |
 | `LEADS_WEBHOOK_URL` / `LEADS_LOG_PATH` | No | CRM y registro de los embudos |
-| `LEAD_TOKEN_SECRET` | Sí en producción | Firma del acceso a la masterclass |
+| `LEAD_TOKEN_SECRET` | Sí en producción | Firma del token que une los dos pasos del embudo WL |
 | `PUBLIC_BOOKING_URL_IUL` / `_WL` | Recomendada | Agenda embebida (Cal.com/Calendly) |
 | `CAL_WEBHOOK_SECRET` | No | Webhook de citas → CRM + evento `Schedule` |
 | `PUBLIC_META_PIXEL_ID` · `META_CAPI_TOKEN` · `PUBLIC_GA4_ID` | Antes de pautar | Medición |
 | `PUBLIC_TURNSTILE_SITE_KEY` · `TURNSTILE_SECRET_KEY` | No | Antispam |
-| `PUBLIC_MASTERCLASS_VIMEO_ID` y demás videos | Antes de pautar | Videos de los embudos |
+| `PUBLIC_ADVISOR_VIDEO_IUL` / `_WL` y videos de gracias | Antes de pautar | Videos del asesor |
 
 La lista completa y comentada está en `.env.example`. Las `PUBLIC_*` se hornean
 en el build (en Coolify, como build args).
