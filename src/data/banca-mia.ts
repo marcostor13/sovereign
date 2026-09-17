@@ -47,11 +47,17 @@ export const wlHero = {
 } as const;
 
 export const wlTrust: TrustItem[] = [
-  { icon: 'shield', label: 'Agente licenciado' },
-  { icon: 'pin', label: 'Brickell, Miami' },
+  { icon: 'shield', label: 'Licencia en los 50 estados' },
+  { icon: 'pin', label: 'Oficina en Miami, FL', detail: 'Atención en todo EE.UU.' },
   { icon: 'user', label: '100% en español' },
   { icon: 'doc', label: 'Educación antes que venta' },
 ];
+
+export const wlCoverage = {
+  title: 'Tu negocio puede estar en cualquier estado. Tu asesor, también.',
+  lead: 'Tenemos licencia vigente de seguros de vida en los 50 estados y el Distrito de Columbia. El Diagnóstico de Capital es por videollamada, en español, y la póliza la emite una aseguradora autorizada en tu estado.',
+  ctaLabel: 'Aplicar al Diagnóstico de Capital',
+} as const;
 
 export const wlRegistro = {
   negocio: {
@@ -205,6 +211,7 @@ export const wlFaq = [
   { q: '¿Qué pasa si un año no puedo pagar las PUA?', a: 'Parte de la prima es obligatoria (base) y parte flexible (PUA). Lo diseñamos para que la base sea sostenible.' },
   { q: '¿Whole Life o IUL?', a: 'Whole Life: prima fija y más garantías. IUL: más flexibilidad y potencial ligado a un índice, con cargos variables. Tienes la explicación completa del IUL en /iul.' },
   { q: '¿Quién califica?', a: 'La aseguradora evalúa la edad, la salud, la nicotina, el historial médico, la ocupación, las finanzas, la residencia y el monto. Puede aprobar, recargar, posponer o declinar.' },
+  { q: '¿Atienden a empresarios fuera de Florida?', a: 'Sí. Tenemos licencia vigente en los 50 estados y el Distrito de Columbia. El Diagnóstico de Capital se hace por videollamada y la póliza la emite una aseguradora autorizada en tu estado; la disponibilidad de cada producto varía según el estado y la aseguradora.' },
   { q: '¿La consulta tiene costo?', a: 'No. El Diagnóstico de Capital es sin costo ni compromiso.' },
 ] as const;
 
@@ -313,7 +320,7 @@ export const wlDiagnostico = {
         { value: 'no', label: 'No' },
       ],
     },
-    { key: 'estado', type: 'state', question: '¿En qué estado resides?', hint: 'Solo asesoramos donde tenemos licencia vigente.' },
+    { key: 'estado', type: 'state', question: '¿En qué estado resides?', hint: 'Tenemos licencia en los 50 estados y DC: te asesoramos por videollamada estés donde estés.' },
     { key: 'contacto', type: 'contact', question: 'Confirma tus datos', hint: 'Si ya empezaste desde este dispositivo, los precargamos.' },
   ] satisfies Step[],
   results: {
@@ -333,7 +340,7 @@ export const wlDiagnostico = {
     },
     C: {
       title: 'Gracias, {nombre}. Aún no atendemos tu estado.',
-      text: 'Solo podemos asesorarte donde tenemos licencia vigente. Te sumamos a la lista de espera y te avisaremos en cuanto podamos atenderte.',
+      text: 'Tenemos licencia en los 50 estados y DC, pero todavía no en tu territorio. Te sumamos a la lista de espera y te avisaremos en cuanto podamos atenderte.',
       guide: 'Descargar guía',
     },
   },

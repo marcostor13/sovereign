@@ -5,8 +5,7 @@
  * página vive aquí: agencia, agente, licencias, estados atendidos, textos de
  * consentimiento y advertencias. Las plantillas sólo lo renderizan.
  *
- * ⚠️ Antes de pautar: completar `agent.npn`, `licenses[].number` y revisar
- * `licensedStates`. Mientras falten, el build lo avisa en consola y las
+ * ⚠️ Antes de pautar: completar `agent.npn` y `licenses[].number`. Mientras falten, el build lo avisa en consola y las
  * plantillas ocultan la línea en vez de mostrar un marcador.
  */
 
@@ -20,9 +19,13 @@ export interface License {
 
 export const agency = {
   name: 'Sovereign Capital Solutions',
-  city: 'Miami',
+  street: '6355 NW 36th St',
+  suite: 'Suite 405',
+  city: 'Virginia Gardens',
   region: 'FL',
-  area: 'Brickell, Miami, FL',
+  postalCode: '33166',
+  /** Dirección completa en una línea (pies legales, contacto). */
+  address: '6355 NW 36th St, Suite 405, Virginia Gardens, FL 33166',
 } as const;
 
 export const agent = {
@@ -36,17 +39,18 @@ export const agent = {
   bioBusiness: 'Viene del mundo de la construcción y los bienes raíces: conoce de primera mano el flujo de caja irregular, las compras de equipo y la dependencia del crédito. Por eso explica la estrategia con el lenguaje del negocio y con sus costos a la vista.',
   quoteIul: 'Prefiero perder una venta que venderte algo que no entiendes.',
   quoteWl: 'La estrategia se administra: no funciona en piloto automático.',
-  /** Búsqueda pública de licencias del Florida DFS. */
+  /** Búsqueda pública de licencias del Florida DFS (estado de residencia). */
   verifyUrl: 'https://licenseesearch.fldfs.com/',
   verifyLabel: 'Verificar licencia en el Florida DFS',
 } as const;
 
+/**
+ * Licencia de residente (Florida). Es la opción rápida del paso "estado" de
+ * los formularios y la que se muestra con número cuando exista.
+ */
 export const licenses: License[] = [
   { code: 'FL', name: 'Florida', number: '' },
 ];
-
-/** Estados donde hay licencia vigente: alimentan los formularios y la calificación. */
-export const licensedStates = licenses.map((l) => l.code);
 
 export const usStates: { code: string; name: string }[] = [
   ['AL', 'Alabama'], ['AK', 'Alaska'], ['AZ', 'Arizona'], ['AR', 'Arkansas'], ['CA', 'California'],
@@ -63,13 +67,26 @@ export const usStates: { code: string; name: string }[] = [
   ['WV', 'Virginia Occidental'], ['WI', 'Wisconsin'], ['WY', 'Wyoming'],
 ].map(([code, name]) => ({ code, name }));
 
+/**
+ * Cobertura nacional: licencia de residente en Florida y de no residente en el
+ * resto del país. Los territorios (Puerto Rico) requieren licencia propia y
+ * quedan fuera: sus solicitudes van a lista de espera.
+ */
+export const coverage = {
+  excluded: ['PR'],
+  /** Forma corta para sellos y titulares. */
+  short: '50 estados + DC',
+  /** Forma larga para frases: "licenciado en …". */
+  long: 'los 50 estados y el Distrito de Columbia',
+} as const;
+
+/** Estados donde hay licencia vigente: alimentan los formularios y la calificación. */
+export const licensedStates = usStates.map((s) => s.code).filter((c) => !(coverage.excluded as readonly string[]).includes(c));
+
 export const stateName = (code: string) => usStates.find((s) => s.code === code)?.name ?? code;
 
-/** "Florida" · "Florida y Texas" · "Florida, Texas y Georgia" */
-export const licensedStatesText = (() => {
-  const names = licenses.map((l) => l.name);
-  return names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : names[0] ?? '';
-})();
+/** "agente … licenciado en {licensedStatesText}" */
+export const licensedStatesText = coverage.long;
 
 /** Líneas de licencia listas para mostrar; omite las que aún no tienen número. */
 export const licenseLines = licenses.filter((l) => l.number).map((l) => `${l.code} #${l.number}`);
@@ -100,7 +117,7 @@ export const legalLinks = {
    --------------------------------------------------------------------------- */
 
 export const disclosures = {
-  general: 'Los productos de seguro de vida son emitidos por aseguradoras autorizadas y están sujetos a la aprobación de la suscripción (underwriting), a la disponibilidad por estado y a los términos del contrato. Sovereign Capital Solutions no es un banco ni una firma de inversión. El contenido de este sitio es educativo y no sustituye la póliza, una ilustración oficial ni asesoría legal, fiscal o financiera. Consulte a un profesional fiscal.',
+  general: 'Los productos de seguro de vida son emitidos por aseguradoras autorizadas en el estado de residencia del cliente y están sujetos a la aprobación de la suscripción (underwriting), a la disponibilidad por estado y a los términos del contrato. Sovereign Capital Solutions no es un banco ni una firma de inversión. El contenido de este sitio es educativo y no sustituye la póliza, una ilustración oficial ni asesoría legal, fiscal o financiera. Consulte a un profesional fiscal.',
   iul: 'Un IUL es un seguro de vida universal indexado; no es una inversión en valores ni una cuenta bursátil. Las tasas de interés acreditadas, los caps, las tasas de participación y los cargos pueden cambiar según el contrato. Las ilustraciones son proyecciones no garantizadas. Los préstamos y retiros reducen el valor en efectivo y el beneficio por fallecimiento, y pueden generar consecuencias fiscales.',
   wholeLife: 'Banca Mía™ es una metodología educativa y de planificación de Sovereign Capital Solutions basada en seguros de vida Whole Life participantes. No es un banco, una cuenta bancaria ni un producto de inversión. Los dividendos no están garantizados. Los préstamos sobre la póliza generan interés, reducen el valor en efectivo y el beneficio por fallecimiento, y pueden provocar la caducidad de la póliza y consecuencias fiscales. Cancelar en los primeros años puede generar pérdidas. Las primas personales normalmente no son deducibles.',
   iulShort: 'Seguro de vida universal indexado. No es una inversión directa en el mercado. Sujeto a aprobación de la aseguradora. Resultados no garantizados.',

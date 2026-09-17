@@ -25,6 +25,8 @@ export interface Step {
 export interface TrustItem {
   icon: IconName;
   label: string;
+  /** Línea secundaria. En el primer ítem, por defecto, el número de licencia o la cobertura. */
+  detail?: string;
 }
 
 /**

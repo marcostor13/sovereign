@@ -9,7 +9,7 @@
  * como colecciones de contenido (Markdown) porque crecen con el tiempo.
  */
 
-import { consent } from './compliance';
+import { agency, consent } from './compliance';
 
 export type IconName =
   | 'shield' | 'drop' | 'growth' | 'legacy' | 'lock' | 'target' | 'scale'
@@ -39,7 +39,7 @@ export const contact = {
   phone: '(305) 587-4200',
   phoneHref: 'tel:+13055874200',
   email: 'sovereigncapitalsolutions@gmail.com',
-  address: 'Brickell, Miami, Florida',
+  address: agency.address,
   hours: 'Lunes a viernes · 9:00 – 18:00 EST',
   /**
    * Perfiles reales de la firma. Un ícono que lleva a la portada genérica de la
@@ -468,7 +468,7 @@ export const legalPages = {
       'Las estrategias descritas requieren un análisis individual y su disponibilidad depende de la residencia fiscal, de la situación patrimonial y de los requisitos de suscripción de cada compañía emisora.',
       'El uso de este sitio no crea una relación de asesoría entre el usuario y Sovereign Capital Solutions. Dicha relación se establece únicamente mediante acuerdo escrito.',
       'Las marcas Método Sovereign™ y Banca Mía™ identifican metodologías propias de la firma y no describen un producto financiero registrado. Banca Mía™ es una estrategia basada en seguros de vida Whole Life participantes: no es un banco, una cuenta bancaria ni un producto de inversión.',
-      'Los productos de seguro de vida que se mencionan en este sitio son emitidos por aseguradoras autorizadas y los ofrece un agente de seguros de vida licenciado únicamente en los estados donde mantiene licencia vigente. Su contratación está sujeta a suscripción (underwriting), disponibilidad por estado y a los términos de cada contrato.',
+      'Los productos de seguro de vida que se mencionan en este sitio son emitidos por aseguradoras autorizadas y los ofrece un agente de seguros de vida con licencia vigente en los 50 estados de EE.UU. y el Distrito de Columbia. Su contratación está sujeta a suscripción (underwriting), disponibilidad por estado y a los términos de cada contrato.',
     ],
   },
   privacidad: {
@@ -490,7 +490,7 @@ export const legalPages = {
       'Al usar este sitio aceptas estos términos. El contenido, los diagnósticos, los simuladores y las calculadoras son educativos: no constituyen una oferta, una cotización, una ilustración oficial ni asesoría legal, fiscal o financiera.',
       'El resultado de un diagnóstico en línea es orientativo y se basa sólo en tus respuestas. La elegibilidad real para un seguro de vida la determina la aseguradora mediante su proceso de suscripción (underwriting), que puede aprobar, recargar, posponer o declinar una solicitud.',
       'Las consultas son sin costo y sin compromiso. Si decides contratar un producto, Sovereign Capital Solutions puede recibir compensación de la aseguradora; te explicaremos cómo funciona antes de cualquier implementación.',
-      'Sólo asesoramos a residentes de los estados donde mantenemos licencia vigente. Las solicitudes de otros estados quedan en lista de espera.',
+      'Asesoramos a residentes de los 50 estados de EE.UU. y del Distrito de Columbia, donde mantenemos licencia vigente. La disponibilidad de cada producto y de sus características varía según el estado y la aseguradora. Las solicitudes de territorios donde aún no tenemos licencia (como Puerto Rico) quedan en lista de espera.',
       'Te comprometes a proporcionar información veraz y a no usar los formularios para enviar datos de terceros sin su autorización. Podemos modificar estos términos; la versión vigente es la publicada en esta página.',
     ],
   },

@@ -13,11 +13,12 @@ import Advisor from '../funnel/Advisor.astro';
 import Testimonials from '../funnel/Testimonials.astro';
 import StepForm from '../funnel/StepForm.astro';
 import StickyCta from '../funnel/StickyCta.astro';
+import NationalCoverage from '../funnel/NationalCoverage.astro';
 import type { Step } from '../../data/funnels';
 import { agent, disclosures, reviewedOn } from '../../data/compliance';
 import {
   wlSeo, wlHeadlines, wlHero, wlTrust, wlRegistro, wlProblem, wlWhat, wlPolicy, wlCycle,
-  wlMyths, wlLearn, wlProof, wlCalculator, wlFit, wlRepeat, wlFaq, diagnostico, type WlVariant,
+  wlMyths, wlLearn, wlProof, wlCalculator, wlFit, wlCoverage, wlRepeat, wlFaq, diagnostico, type WlVariant,
 } from '../../data/banca-mia';
 
 /**
@@ -53,7 +54,7 @@ const schema = [
     name: diagnostico.name,
     serviceType: 'Consulta de planificación con seguro de vida Whole Life',
     description: `Consulta privada de ${diagnostico.minutes} minutos, sin costo, para evaluar si una estrategia de liquidez con seguro de vida Whole Life encaja con tu negocio.`,
-    areaServed: 'US',
+    areaServed: { '@type': 'Country', name: 'United States' },
     availableLanguage: ['es', 'en'],
     provider: { '@type': 'InsuranceAgency', name: 'Sovereign Capital Solutions', url: site.href },
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
@@ -303,6 +304,9 @@ const form = (id: string) => ({
 
     {/* 11 · Testimonios ------------------------------------------------------- */}
     <Testimonials product="wl" title="Empresarios que ya pasaron por el diagnóstico" />
+
+    {/* 11b · Cobertura nacional ---------------------------------------------- */}
+    <NationalCoverage {...wlCoverage} ctaHref="#registro" />
 
     {/* 12 · Registro (repetición) -------------------------------------------- */}
     <section class="lp-section lp-sand" id="registro">

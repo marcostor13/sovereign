@@ -34,7 +34,7 @@ const photo = Object.values(photos)[0]?.default;
         src={photo}
         alt={`${agent.name}, ${agent.title.toLowerCase()} de Sovereign Capital Solutions`}
         widths={[360, 540, 720]}
-        sizes="(min-width: 900px) 22rem, 80vw"
+        sizes="(min-width: 900px) 22rem, calc(100vw - 32px)"
         loading="lazy"
         quality={80}
         format="avif"
@@ -72,6 +72,9 @@ const photo = Object.values(photos)[0]?.default;
   .adv-media :global(img), .adv-plate {
     width: 100%;
     max-width: 22rem;
+    /* Sin height: auto, el atributo height del <Image> (px intrínsecos) gana a
+       aspect-ratio y la foto queda como una tira recortada. */
+    height: auto;
     aspect-ratio: 4 / 5;
     object-fit: cover;
     object-position: 50% 25%;

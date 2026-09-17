@@ -14,11 +14,12 @@ import StepForm from '../funnel/StepForm.astro';
 import BookingEmbed from '../funnel/BookingEmbed.astro';
 import GuideModal from '../funnel/GuideModal.astro';
 import StickyCta from '../funnel/StickyCta.astro';
+import NationalCoverage from '../funnel/NationalCoverage.astro';
 import { contact } from '../../data/site';
 import { agent, disclosures, licensedStatesText, reviewedOn } from '../../data/compliance';
 import {
   iulSeo, iulHeadlines, iulHero, iulTrust, iulProblem, iulWhat, iulFlow, iulSimulator,
-  iulMyths, iulFit, iulMethod, iulQuiz, iulFaq, iulFinal, type IulVariant,
+  iulMyths, iulFit, iulMethod, iulCoverage, iulQuiz, iulFaq, iulFinal, type IulVariant,
 } from '../../data/iul';
 
 /**
@@ -36,7 +37,7 @@ const site = Astro.site!;
 
 const faqItems = [
   ...iulFaq,
-  { q: '¿Atienden en todo EE.UU.?', a: `Solo en los estados donde tenemos licencia vigente: ${licensedStatesText}.` },
+  { q: '¿Atienden en todo EE.UU.?', a: `Sí. Tenemos licencia vigente en ${licensedStatesText}. La consulta es por videollamada y la póliza la emite una aseguradora autorizada en tu estado; la disponibilidad de cada producto varía según el estado y la aseguradora.` },
 ];
 
 const schema = [
@@ -212,6 +213,9 @@ const schema = [
 
     {/* 11 · Testimonios (sólo si existen) ------------------------------------ */}
     <Testimonials product="iul" />
+
+    {/* 11b · Cobertura nacional ---------------------------------------------- */}
+    <NationalCoverage {...iulCoverage} ctaHref="#diagnostico" />
 
     {/* 12 · Diagnóstico ------------------------------------------------------- */}
     <section class="lp-section lp-sand" id="diagnostico">

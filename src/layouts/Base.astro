@@ -6,7 +6,7 @@ import Analytics from '../components/Analytics.astro';
 import LandingHeader from '../components/funnel/LandingHeader.astro';
 import LandingFooter from '../components/funnel/LandingFooter.astro';
 import { brand, contact, ui } from '../data/site';
-import { agent, licensedStates } from '../data/compliance';
+import { agency, agent } from '../data/compliance';
 
 interface Props {
   title: string;
@@ -58,12 +58,14 @@ const orgSchema = {
   url: Astro.site?.href,
   telephone: contact.phone,
   email: contact.email,
-  areaServed: licensedStates.map((s) => ({ '@type': 'State', name: s })),
+  areaServed: { '@type': 'Country', name: 'United States' },
   knowsLanguage: ['es', 'en'],
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Miami',
-    addressRegion: 'FL',
+    streetAddress: `${agency.street}, ${agency.suite}`,
+    addressLocality: agency.city,
+    addressRegion: agency.region,
+    postalCode: agency.postalCode,
     addressCountry: 'US',
   },
   founder: { '@type': 'Person', name: agent.name, jobTitle: agent.role },

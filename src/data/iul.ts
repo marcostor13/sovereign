@@ -28,7 +28,7 @@ export const iulHero = {
   bullets: [
     'Explicación clara de cap, floor, participación y cargos',
     'Ilustraciones probadas en escenarios conservadores, no optimistas',
-    'Asesor con licencia, en español, sin costo y sin compromiso',
+    'Asesor con licencia en los 50 estados, en español, sin costo y sin compromiso',
   ],
   cta: 'Hacer mi diagnóstico IUL',
   ctaAlt: 'Prefiero descargar la guía gratuita',
@@ -37,11 +37,17 @@ export const iulHero = {
 } as const;
 
 export const iulTrust: TrustItem[] = [
-  { icon: 'shield', label: 'Agente licenciado' },
-  { icon: 'pin', label: 'Brickell, Miami' },
+  { icon: 'shield', label: 'Licencia en los 50 estados' },
+  { icon: 'pin', label: 'Oficina en Miami, FL', detail: 'Atención en todo EE.UU.' },
   { icon: 'user', label: '100% en español' },
   { icon: 'calendar', label: 'Consulta de 45 min sin costo' },
 ];
+
+export const iulCoverage = {
+  title: 'Vivas donde vivas en Estados Unidos, te podemos asesorar.',
+  lead: 'Tenemos licencia vigente de seguros de vida en los 50 estados y el Distrito de Columbia. El diagnóstico y la consulta son a distancia, en español, y la póliza la emite una aseguradora autorizada en tu estado.',
+  ctaLabel: 'Hacer mi diagnóstico IUL',
+} as const;
 
 export const iulProblem = {
   title: 'Quieres proteger a tu familia y hacer crecer tu dinero, pero…',
@@ -162,7 +168,7 @@ export const iulQuiz = {
         { value: '66+', label: '66 o más' },
       ],
     },
-    { key: 'estado', type: 'state', question: '¿En qué estado vives?', hint: 'Solo asesoramos donde tenemos licencia vigente.' },
+    { key: 'estado', type: 'state', question: '¿En qué estado vives?', hint: 'Tenemos licencia en los 50 estados y DC: te asesoramos por videollamada estés donde estés.' },
     {
       key: 'aporte',
       type: 'single',
@@ -222,7 +228,7 @@ export const iulQuiz = {
     },
     C: {
       title: 'Gracias, {nombre}. Aún no atendemos tu estado.',
-      text: 'Solo podemos asesorarte donde tenemos licencia vigente. Te sumamos a la lista de espera y te avisaremos cuando podamos atenderte. Mientras tanto, la guía “IUL de la A a la Z” te ayudará a evaluar cualquier propuesta con criterio.',
+      text: 'Tenemos licencia en los 50 estados y DC, pero todavía no en tu territorio. Te sumamos a la lista de espera y te avisaremos cuando podamos atenderte. Mientras tanto, la guía “IUL de la A a la Z” te ayudará a evaluar cualquier propuesta con criterio.',
       guide: 'Descargar guía',
     },
   },
