@@ -17,7 +17,7 @@ const ATTR_COOKIE = 'sov_attr';
 const ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid'] as const;
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
-const STANDARD_META = new Set(['PageView', 'ViewContent', 'Lead', 'Schedule', 'CompleteRegistration']);
+const STANDARD_META = new Set(['PageView', 'ViewContent', 'Lead', 'Schedule', 'CompleteRegistration', 'Contact']);
 
 const GA_NAMES: Record<string, string> = {
   ViewContent: 'scroll_50',
@@ -30,6 +30,7 @@ const GA_NAMES: Record<string, string> = {
   InicioDiagnostico: 'application_start',
   UsoCalculadora: 'calculator_use',
   Schedule: 'book_appointment',
+  Contact: 'whatsapp_click',
 };
 
 /** Eventos que sólo van a GA4 (demasiado granulares para Meta). */

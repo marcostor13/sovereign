@@ -20,6 +20,10 @@ const { cta } = Astro.props;
         <Icon name="phone" size={16} />
         <span>{contact.phone}</span>
       </a>
+      <a class="lh-wa" href={contact.whatsappHref} target="_blank" rel="noopener" data-whatsapp="header" aria-label="Escríbenos por WhatsApp">
+        <Icon name="whatsapp" size={18} />
+        <span>WhatsApp</span>
+      </a>
       <a class="btn btn-outline lh-cta" href={cta.href}>{cta.label}</a>
     </div>
   </div>
@@ -55,11 +59,35 @@ const { cta } = Astro.props;
   .lh-phone :global(svg) { color: var(--gold-400); }
   .lh-phone:hover { color: var(--gold-300); }
 
+  .lh-wa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 1em;
+    border-radius: 999px;
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: #fff;
+    background: #1f9d55;
+    transition: background 200ms var(--ease);
+  }
+
+  .lh-wa:hover { background: #188a49; }
+
   .lh-cta { --btn-py: 0.9em; --btn-px: 1.2em; font-size: var(--step--2); border-radius: 8px; white-space: nowrap; }
 
   @media (max-width: 640px) {
     .lh-phone span { display: none; }
     .lh-phone { border: 1px solid var(--hair); border-radius: 50%; }
+    .lh-wa span { display: none; }
+    .lh-wa { padding: 0; }
+  }
+
+  @media (min-width: 641px) and (max-width: 900px) {
+    .lh-phone span { display: none; }
   }
 
   @media (max-width: 400px) {

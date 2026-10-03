@@ -310,6 +310,17 @@ a { color: inherit; text-decoration: none; }
 
 .btn-outline:hover::before { transform: scaleY(1); }
 
+/* WhatsApp: verde de la marca, sin competir con el CTA dorado */
+.btn-whatsapp {
+  color: #fff;
+  background: #1f9d55;
+  font-weight: 600;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.btn-whatsapp:hover { background: #188a49; transform: translateY(-2px); }
+.btn-whatsapp:hover svg { transform: none; }
+
 .on-light .btn-outline { color: var(--ink-900); border-color: rgba(201, 162, 39, 0.6); }
 .on-light .btn-outline:hover { color: var(--navy-950); }
 

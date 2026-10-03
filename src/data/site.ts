@@ -36,8 +36,10 @@ export const brand = {
 } as const;
 
 export const contact = {
-  phone: '(305) 587-4200',
-  phoneHref: 'tel:+13055874200',
+  phone: '(305) 690-1289',
+  phoneHref: 'tel:+13056901289',
+  /** Chat de WhatsApp con un mensaje inicial ya escrito. */
+  whatsappHref: `https://wa.me/13056901289?text=${encodeURIComponent('Hola, vengo de la página de Sovereign Capital Solutions y quiero hablar con un asesor.')}`,
   email: 'sovereigncapitalsolutions@gmail.com',
   address: agency.address,
   hours: 'Lunes a viernes · 9:00 – 18:00 EST',

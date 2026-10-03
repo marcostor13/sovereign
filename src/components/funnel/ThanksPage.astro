@@ -25,7 +25,6 @@ interface Props {
 }
 
 const { product, copy, guideLabel, videoId } = Astro.props;
-const whatsapp = import.meta.env.PUBLIC_WHATSAPP_NUMBER as string | undefined;
 const eventTitle = product === 'iul' ? 'Consulta estratégica IUL · Sovereign Capital Solutions' : 'Diagnóstico de Capital Banca Mía™ · Sovereign Capital Solutions';
 ---
 
@@ -51,12 +50,10 @@ const eventTitle = product === 'iul' ? 'Consulta estratégica IUL · Sovereign C
             <Icon name="download" size={16} />
             Outlook / iCal
           </button>
-          {whatsapp && (
-            <a class="btn btn-outline" href={`https://wa.me/${whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener">
-              <Icon name="phone" size={16} />
-              Guardar nuestro WhatsApp
-            </a>
-          )}
+          <a class="btn btn-whatsapp" href={contact.whatsappHref} target="_blank" rel="noopener" data-whatsapp="thanks">
+            <Icon name="whatsapp" size={16} />
+            Guardar nuestro WhatsApp
+          </a>
         </div>
 
         {videoId && (

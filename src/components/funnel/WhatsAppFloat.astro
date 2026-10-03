@@ -1,0 +1,46 @@
+---
+import Icon from '../Icon.astro';
+import { contact } from '../../data/site';
+
+/**
+ * Botón flotante de WhatsApp de las landings. En móvil, si la página ya tiene
+ * la barra fija inferior (que incluye su propio botón de WhatsApp), se oculta
+ * para no duplicarlo ni tapar el CTA.
+ */
+---
+
+<a class="wa-float" href={contact.whatsappHref} target="_blank" rel="noopener" data-whatsapp="float" aria-label="Escríbenos por WhatsApp">
+  <Icon name="whatsapp" size={28} />
+  <span class="wa-float-label">¿Dudas? Escríbenos</span>
+</a>
+
+<style>
+  .wa-float {
+    position: fixed;
+    right: clamp(1rem, 2.5vw, 1.75rem);
+    bottom: calc(clamp(1rem, 2.5vw, 1.75rem) + env(safe-area-inset-bottom, 0px));
+    z-index: calc(var(--z-header) - 2);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    min-width: 3.5rem;
+    min-height: 3.5rem;
+    padding: 0 0.875rem;
+    border-radius: 999px;
+    color: #fff;
+    background: #1f9d55;
+    box-shadow: 0 14px 34px -12px rgba(0, 0, 0, 0.55);
+    transition: background 200ms var(--ease), transform 200ms var(--ease);
+  }
+
+  .wa-float:hover { background: #188a49; transform: translateY(-2px); }
+
+  .wa-float-label { display: none; font-size: var(--step--1); font-weight: 500; padding-right: 0.3em; }
+
+  :global(body:has([data-sticky-cta])) .wa-float { display: none; }
+
+  @media (min-width: 900px) {
+    :global(body:has([data-sticky-cta])) .wa-float { display: inline-flex; }
+    .wa-float-label { display: inline; }
+  }
+</style>

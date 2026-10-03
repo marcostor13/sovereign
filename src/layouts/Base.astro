@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import Analytics from '../components/Analytics.astro';
 import LandingHeader from '../components/funnel/LandingHeader.astro';
 import LandingFooter from '../components/funnel/LandingFooter.astro';
+import WhatsAppFloat from '../components/funnel/WhatsAppFloat.astro';
 import { brand, contact, ui } from '../data/site';
 import { agency, agent } from '../data/compliance';
 
@@ -133,6 +134,7 @@ const orgSchema = {
     </main>
 
     {landing ? <LandingFooter disclosure={landing.disclosure} /> : <Footer />}
+    {landing && <WhatsAppFloat />}
 
     <script>
       /* ---------------------------------------------------------------------

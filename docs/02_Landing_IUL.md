@@ -51,7 +51,7 @@ CTA fijo en móvil (sticky bottom bar): **"Hacer mi diagnóstico (2 min)"** → 
 ### 0. Barra superior
 
 - Logo Sovereign Capital Solutions (a la izquierda), sin enlaces de salida
-- A la derecha: `(305) 587-4200` (click-to-call) + botón secundario "Agendar consulta"
+- A la derecha: `(305) 690-1289` (click-to-call) + botón secundario "Agendar consulta"
 
 ### 1. HERO
 
@@ -281,7 +281,7 @@ else:
 
 ### 15. Footer legal (completo, visible, fuente de al menos 12 px)
 
-> **Sovereign Capital Solutions** · Brickell, Miami, FL · (305) 587-4200 · [email]
+> **Sovereign Capital Solutions** · Brickell, Miami, FL · (305) 690-1289 · [email]
 > [Nombre del agente], agente de seguros de vida licenciado. NPN [XXXX]. Licencias: FL #[XXXX], TX #[XXXX]…
 > Los productos de seguro de vida son emitidos por aseguradoras autorizadas y están sujetos a la aprobación de la suscripción (underwriting), a la disponibilidad por estado y a los términos del contrato. Un IUL es un seguro de vida universal indexado; no es una inversión en valores ni una cuenta bursátil. Las tasas de interés acreditadas, los caps, las tasas de participación y los cargos pueden cambiar según el contrato. Las ilustraciones son proyecciones no garantizadas. Los préstamos y retiros reducen el valor en efectivo y el beneficio por fallecimiento, y pueden generar consecuencias fiscales. Este contenido es educativo y no sustituye la póliza, una ilustración oficial ni asesoría legal, fiscal o financiera. Consulte a un profesional fiscal.
 > [Política de Privacidad] · [Términos] · [Aviso de consentimiento de comunicaciones] · © 2026

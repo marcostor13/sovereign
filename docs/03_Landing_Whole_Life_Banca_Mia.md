@@ -64,7 +64,7 @@ Atajo: en `/banca-mia` hay un CTA secundario **"Ya conozco el concepto → Aplic
 
 ### 0. Barra superior
 
-Logo + `(305) 587-4200` + botón "Ver masterclass". Sin menú.
+Logo + `(305) 690-1289` + botón "Ver masterclass". Sin menú.
 
 ### 1. HERO
 
@@ -233,7 +233,7 @@ Mismo formulario de la sección 1 (componente reutilizado) + "Acceso inmediato".
 
 ### 14. Footer legal
 
-> **Sovereign Capital Solutions** · Brickell, Miami, FL · (305) 587-4200 · [email]
+> **Sovereign Capital Solutions** · Brickell, Miami, FL · (305) 690-1289 · [email]
 > [Nombre del agente], agente de seguros de vida licenciado. NPN [XXXX]. Licencias: FL #[XXXX]…
 > Banca Mía™ es una metodología educativa y de planificación de Sovereign Capital Solutions basada en seguros de vida Whole Life participantes. No es un banco, una cuenta bancaria ni un producto de inversión. Los productos son emitidos por aseguradoras autorizadas y están sujetos a suscripción (underwriting), disponibilidad por estado y términos del contrato. Los dividendos no están garantizados. Los préstamos sobre la póliza generan interés, reducen el valor en efectivo y el beneficio por fallecimiento, y pueden provocar la caducidad de la póliza y consecuencias fiscales. Cancelar en los primeros años puede generar pérdidas. Las primas personales normalmente no son deducibles. Contenido educativo; no sustituye la póliza, una ilustración oficial ni asesoría legal, fiscal o financiera. Consulte a un profesional fiscal.
 > [Política de Privacidad] · [Términos] · [Aviso de consentimiento de comunicaciones] · © 2026
