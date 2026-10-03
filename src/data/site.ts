@@ -295,6 +295,17 @@ export const founder = {
   quote: 'Durante años diseñé estructuras donde el margen de error era mínimo. Hoy aplico esa misma disciplina al diseño de estrategias para proteger patrimonio, crear liquidez y construir legado.',
 } as const;
 
+/** Equipo de asesores. `photo` es el nombre del archivo en `src/assets/img/team/`. */
+export const team = {
+  eyebrow: 'El equipo',
+  title: 'Las personas que te acompañan',
+  lead: 'Un equipo que comparte el mismo método: entender primero tu caso y diseñar después la estrategia.',
+  members: [
+    { name: 'Adrián Erazo', role: 'Asesor', photo: 'adrian-erazo.jpg' },
+    { name: 'Yordalys Fernández', role: 'Asesor', photo: 'yordalys-fernandez.jpg' },
+  ],
+} as const;
+
 export const resources = {
   eyebrow: 'Recursos',
   title: 'Herramientas para decidir mejor',
