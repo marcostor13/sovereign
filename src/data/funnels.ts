@@ -84,7 +84,7 @@ export const formUi = {
   invalidPhone: 'Revisa el número (10 dígitos en EE.UU.)',
   consentRequired: 'Necesitamos tu autorización para contactarte',
   sending: 'Enviando…',
-  error: 'No pudimos enviar tus respuestas. Inténtalo de nuevo o llámanos al',
+  error: 'No pudimos enviar tus respuestas. Inténtalo de nuevo o escríbenos por WhatsApp al',
   privacy: 'Política de Privacidad',
   terms: 'Términos',
 } as const;

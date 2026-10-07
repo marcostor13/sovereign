@@ -56,9 +56,9 @@ const config = JSON.stringify({ pixelId: pixelId || '', gaId: gaId || '' });
   import { captureAttribution, track } from '../lib/client/track';
   captureAttribution();
 
-  // Clics a WhatsApp (cabecera, barra fija, botón flotante, resultados).
+  // Clics a WhatsApp (cabecera, barra fija, botón flotante, resultados, número de teléfono).
   document.addEventListener('click', (e) => {
-    const link = (e.target as Element | null)?.closest<HTMLElement>('[data-whatsapp]');
-    if (link) track('Contact', { channel: 'whatsapp', placement: link.dataset.whatsapp, page: location.pathname });
+    const link = (e.target as Element | null)?.closest<HTMLElement>('[data-whatsapp], a[href^="https://wa.me/"]');
+    if (link) track('Contact', { channel: 'whatsapp', placement: link.dataset.whatsapp ?? 'cta', page: location.pathname });
   });
 </script>

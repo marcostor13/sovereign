@@ -16,7 +16,7 @@ const { cta } = Astro.props;
     <span class="lh-logo"><Logo size={40} /></span>
 
     <div class="lh-actions">
-      <a class="lh-phone" href={contact.phoneHref} aria-label={`Llamar al ${contact.phone}`}>
+      <a class="lh-phone" href={contact.whatsappHref} target="_blank" rel="noopener" data-whatsapp="phone" aria-label={`Escríbenos por WhatsApp al ${contact.phone}`}>
         <Icon name="phone" size={16} />
         <span>{contact.phone}</span>
       </a>

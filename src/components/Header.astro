@@ -55,7 +55,7 @@ const isActive = (href: string) => {
     </nav>
 
     <div class="header-actions">
-      <a class="header-phone" href={contact.phoneHref} aria-label={`Llamar al ${contact.phone}`}>
+      <a class="header-phone" href={contact.whatsappHref} target="_blank" rel="noopener" data-whatsapp="phone" aria-label={`Escríbenos por WhatsApp al ${contact.phone}`}>
         <Icon name="phone" size={15} />
         <span>{contact.phone}</span>
       </a>
@@ -120,7 +120,7 @@ const isActive = (href: string) => {
       </a>
 
       <div class="drawer-contact">
-        <a href={contact.phoneHref}><Icon name="phone" size={15} />{contact.phone}</a>
+        <a href={contact.whatsappHref} target="_blank" rel="noopener" data-whatsapp="phone" aria-label={`Escríbenos por WhatsApp al ${contact.phone}`}><Icon name="phone" size={15} />{contact.phone}</a>
         <a href={`mailto:${contact.email}`}><Icon name="mail" size={15} />{contact.email}</a>
       </div>
 

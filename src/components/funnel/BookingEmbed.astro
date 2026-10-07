@@ -20,9 +20,9 @@ const { note } = Astro.props;
   <div class="booking-fallback" data-booking-fallback hidden>
     <p><strong>Un asesor te llamará en los próximos minutos</strong> (lunes a viernes, 9:00–18:00 EST) para elegir juntos el horario de tu consulta.</p>
     <p>¿Prefieres adelantarte?</p>
-    <a class="btn btn-gold" href={contact.phoneHref}>
+    <a class="btn btn-gold" href={contact.whatsappHref} target="_blank" rel="noopener" data-whatsapp="phone">
       <Icon name="phone" size={16} />
-      Llamar al {contact.phone}
+      Escríbenos al {contact.phone}
     </a>
   </div>
 

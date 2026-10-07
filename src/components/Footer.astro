@@ -48,7 +48,7 @@ const year = new Date().getFullYear();
         <h2 class="footer-heading">{footer.contactTitle}</h2>
         <ul class="footer-contact">
           <li>
-            <a href={contact.phoneHref}><Icon name="phone" size={15} /><span>{contact.phone}</span></a>
+            <a href={contact.whatsappHref} target="_blank" rel="noopener" data-whatsapp="phone" aria-label={`Escríbenos por WhatsApp al ${contact.phone}`}><Icon name="phone" size={15} /><span>{contact.phone}</span></a>
           </li>
           <li>
             <a href={`mailto:${contact.email}`}><Icon name="mail" size={15} /><span>{contact.email}</span></a>
