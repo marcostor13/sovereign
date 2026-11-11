@@ -49,10 +49,16 @@ const canonical = new URL(canonicalPath || Astro.url.pathname.replace(/\/+$/, ''
 const ogImage = new URL('/og.png', Astro.site).href;
 const sameAs = contact.socials.map((s) => s.href).filter(Boolean);
 
+const orgId = new URL('/#organization', Astro.site).href;
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'InsuranceAgency',
+  '@id': orgId,
   name: siteName,
+  logo: new URL('/apple-touch-icon.png', Astro.site).href,
+  image: ogImage,
+  priceRange: 'Consulta sin costo',
+  availableLanguage: ['Spanish', 'English'],
   alternateName: brand.name,
   description: brand.descriptor,
   slogan: brand.signature,
@@ -69,8 +75,18 @@ const orgSchema = {
     postalCode: agency.postalCode,
     addressCountry: 'US',
   },
-  founder: { '@type': 'Person', name: agent.name, jobTitle: agent.role },
+  founder: { '@type': 'Person', name: agent.name, jobTitle: agent.role, url: new URL('/nosotros', Astro.site).href },
   ...(sameAs.length ? { sameAs } : {}),
+};
+
+// Entidad "sitio web" para buscadores y motores de IA (nombre de marca en resultados).
+const siteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteName,
+  url: Astro.site?.href,
+  inLanguage: 'es-US',
+  publisher: { '@id': orgId },
 };
 ---
 
@@ -116,6 +132,7 @@ const orgSchema = {
     />
 
     <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} is:inline />
+    {Astro.url.pathname === '/' && <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} is:inline />}
 
     <Analytics />
 

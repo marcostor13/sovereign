@@ -48,8 +48,8 @@ export const contact = {
    */
   socials: [
     { id: 'linkedin' as IconName, label: 'LinkedIn', href: '' },
-    { id: 'instagram' as IconName, label: 'Instagram', href: '' },
-    { id: 'facebook' as IconName, label: 'Facebook', href: '' },
+    { id: 'instagram' as IconName, label: 'Instagram', href: 'https://www.instagram.com/sovereigncapitalsolutions/' },
+    { id: 'facebook' as IconName, label: 'Facebook', href: 'https://www.facebook.com/1308865965637093' },
     { id: 'youtube' as IconName, label: 'YouTube', href: '' },
   ].filter((s) => s.href),
 };

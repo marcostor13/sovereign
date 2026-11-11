@@ -48,8 +48,21 @@ const articleSchema = {
   dateModified: reviewed.toISOString(),
   articleSection: d.category,
   inLanguage: 'es-US',
-  author: { '@type': 'Person', name: agent.name, jobTitle: agent.title },
-  publisher: { '@type': 'Organization', name: `${brand.name} ${brand.surname}` },
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
+  image: new URL('/og.png', Astro.site).href,
+  author: {
+    '@type': 'Person',
+    name: agent.name,
+    jobTitle: agent.title,
+    url: new URL('/nosotros', Astro.site).href,
+    knowsLanguage: ['es', 'en'],
+  },
+  publisher: {
+    '@type': 'Organization',
+    '@id': new URL('/#organization', Astro.site).href,
+    name: `${brand.name} ${brand.surname}`,
+    logo: { '@type': 'ImageObject', url: new URL('/apple-touch-icon.png', Astro.site).href },
+  },
 };
 
 const sections = headings.filter((h) => h.depth === 2);

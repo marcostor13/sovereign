@@ -3,7 +3,10 @@ import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
 
-const SITE_URL = process.env.PUBLIC_SITE_URL || 'https://sovereigncapitalsolutions.com';
+// Dominio oficial único. Va fijo en el código (no se lee de PUBLIC_SITE_URL)
+// porque un build arg equivocado en Coolify publicó canónicas, sitemap y
+// Open Graph con un dominio de pruebas y Google indexaba el dominio incorrecto.
+const SITE_URL = 'https://sovereigncapitalsolutions.com';
 
 // Páginas que no deben anunciarse: legales, variantes A/B y pasos internos de
 // los embudos (todas llevan noindex).
